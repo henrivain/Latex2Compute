@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!-- These docs belong to Henri Vainio -->
+
+<!-- 
+
+List of all common operator tag numbers that appear in operator algorithms
+and TranslationHelpers used to present operator name in ti-nspire.
+All tags will be translated in end edit if needed.
+
+These use numbers, because some characters will be removed during translation 
+and is easier to present as number tags.
+
+-->
+
+<Documentation>
+	<CommonOperatorCodes>
+		
+		<Logarithm>
+			<log>#111#</log>						<!-- means "log"		-->
+			<ln>#112#</ln>							<!-- means "ln"			-->
+		</Logarithm>
+		
+		<System>
+			<id>#121#</id>							<!-- means "system"		-->
+			<lineDivider>#122#</lineDivider>		<!-- means ","			-->
+		</System>
+
+		<Trigonometry>
+			<arcsin>#131#</arcsin>					<!-- means "arcsin"		-->
+			<sin>#132#</sin>						<!-- means "sin"		-->
+			<arccos>#133#</arccos>					<!-- means "arccos"		-->
+			<cos>#134#</cos>						<!-- means "cos"		-->
+			<arctan>#135#</arctan>					<!-- means "arctan"		-->
+			<tan>#136#</tan>						<!-- means "tan"		-->
+		</Trigonometry>
+
+		<Root>
+			<nthRoot>#141#</nthRoot>				<!-- means "root"	-->
+			<sqrt>#142#</sqrt>						<!-- means "sqrt"	-->
+		</Root>
+
+		<Limit>
+			<lim>#151#</lim>						<!-- means "lim"		-->
+		</Limit>
+
+		<Pi>
+			<pi>#161#</pi>							<!-- means "pi"-->
+		</Pi>
+		
+	</CommonOperatorCodes>
+</Documentation>

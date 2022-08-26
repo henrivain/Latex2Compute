@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <Version>3.1.6.0</Version>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>MekTranslationLatexLibrary</Title>
+    <Authors>Henri Vainio</Authors>
+    <Company>Matikkaeditorinkääntäjä</Company>
+    <Description>Translate LaTeX into calculator form</Description>
+    <PackageProjectUrl>https://github.com/matikkaeditorinkaantaja/MekLatexTranslationLibrary</PackageProjectUrl>
+    <PackageIcon>logo 1280x640.png</PackageIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Update="Resources\logo 1280x640.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+</Project>

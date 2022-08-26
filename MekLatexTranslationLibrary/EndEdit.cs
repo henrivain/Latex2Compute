@@ -34,7 +34,7 @@ static internal class EndEdit
             inp = inp.Replace("}", "");
         }
         // remove not useful
-        inp.Replace("\\", "");
+        inp = inp.Replace("\\", "");
 
         if (item.Settings.AutoSeparateOperators)
         {
@@ -90,6 +90,8 @@ static internal class EndEdit
             @"\(\^[0-9]\)/\(\)",            // (^2)/()      2 can be any number
             @"\(\^[0-9]\)/\(\^[0-9]\)",     // (^2)/(^2)      
             @"\(\)/\(\^[0-9]\)",            // ()/(^2)
+            @"\(\)/\([0-9]\)",              // ()/(2)
+            @"\([0-9]\)/\(\)",              // (2)/()
             @"\^[0-9]/\^[0-9]",             // ^2/^2
             @"\^[0-9]/",                    // ^2/
             @"/\^[0-9]",                    // /^2

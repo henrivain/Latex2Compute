@@ -24,7 +24,7 @@ public static class OperatorAlgorithms
         if (item.Latex.Contains("\\begin{cases}"))
         {
             //while loop inside method
-            item = System(item);
+            item = CasesBuilder.Build(item);
         }
         
         item = Logarithm(item);
@@ -35,25 +35,20 @@ public static class OperatorAlgorithms
         }
         while (item.Latex.Contains("\\sqrt["))
         {
-            item = NthRoot(item);
+            item = RootBuilder.Build(item);
         }
         while (item.Latex.Contains("\\lim"))
         {
-            item = Limit(item);
+            item = LimitBuilder.Build(item);
         }
         while (item.Latex.Contains("\\sum"))
         {
             item = Sum(item);
         }
-        while (item.Latex.Contains("\\int"))
-        {
-            item = IntIntegral(item);
-        }
 
-        if (item.Latex.Contains("\\sin") || item.Latex.Contains("\\cos") || item.Latex.Contains("\\tan"))
-        {
-            item = TrigonometricOperators(item);
-        }
+        // error 25 does not exist anymore
+        item.Latex = IntegralBuilder.BuildAllInside(item.Latex);
+        item = TrigonBuilder.Build(item);
 
         //keep power last
         while (item.Latex.Contains("^{"))
@@ -133,21 +128,8 @@ public static class OperatorAlgorithms
         return item;
     }
 
-    private static TranslationItem System(TranslationItem item)
-    {
-        return CasesBuilder.Build(item);
-    }
+  
 
-    private static TranslationItem Limit(TranslationItem item)
-    {
-        return LimitBuilder.Build(item);
-    }
-
-    private static TranslationItem TrigonometricOperators(TranslationItem item)
-    {
-        // change trigonometric functions to ti-form
-        return TrigonBuilder.Build(item);
-    }
 
     private static TranslationItem SquareRoot(TranslationItem item)
     {
@@ -172,15 +154,8 @@ public static class OperatorAlgorithms
         return item;
     }
 
-    private static TranslationItem NthRoot(TranslationItem item)
-    {
-        return RootBuilder.Build(item);
-    }
-
     private static TranslationItem Sum(TranslationItem item)
     {
-        
-        
         // translate \\sum_{x}^{y}z => sum(z,x,y)
         string inp = item.Latex;
 
@@ -192,26 +167,7 @@ public static class OperatorAlgorithms
         return item;
     }
 
-    private static TranslationItem IntIntegral(TranslationItem item)
-    {
-        // What does this do? 
-        string inp = item.Latex;
-
-        int startIndex = inp.IndexOf("\\int");
-        inp = inp.Remove(startIndex, 4);
-
-        if (inp.Length >= startIndex + 6)
-        {
-            item.Latex = IntegralBuilder.Build(inp, startIndex);
-            return item;
-        }
-
-        // inp ends too soon => skip
-        item.ErrorCodes += "virhe25";
-        Helper.DevPrintTranslationError("virhe25");
-
-        return item;
-    }
+   
 
     private static TranslationItem MethodTemplate(TranslationItem item)
     {

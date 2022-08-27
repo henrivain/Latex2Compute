@@ -110,7 +110,7 @@ namespace MekLatexTranslationLibrary.Helpers
             return symbol switch
             {
                 "log" => "10",
-                "lim" => "å",
+                "lim" => "x",
                 "int" => "",
                 "sumS" => "ö",
                 "sumE" => "å",

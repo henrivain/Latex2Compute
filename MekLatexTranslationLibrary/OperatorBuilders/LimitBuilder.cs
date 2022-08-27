@@ -6,6 +6,8 @@ namespace MekLatexTranslationLibrary.OperatorBuilders;
 
 internal static class LimitBuilder
 {
+    // call recursion after bracketContentInfo.Content is initialized (like integral)
+
     internal static TranslationItem Build(TranslationItem item)
     {
         // Find limit and translate it "\\lim_(x\to y)(z)" => lim(z,x,y)
@@ -18,12 +20,9 @@ internal static class LimitBuilder
         string bottom = bottomInfo.Content;
         int bottomEnd = bottomInfo.End;
         int separatorIndex;
-        if (bottomEnd == -1)
+        if (bottomEnd is -1)
         {
-            // no bottom ending bracket "\\right)" 
-            // possible bottom => content
-            bottom = "x,å";
-            bottomEnd = start;
+            bottomEnd = start - 1;
             item.ErrorCodes += "virhe6";
             Helper.DevPrintTranslationError("virhe6");
         }
@@ -40,12 +39,29 @@ internal static class LimitBuilder
             bottom = bottom.Remove(separatorIndex, 3);
             bottom = bottom.Insert(separatorIndex, ",");
         }
+        
+       
+        if (Slicer.GetSpanSafely(bottom, ^1..) == ",")
+        {
+            bottom += "å";
+        }
+        if (Slicer.GetSpanSafely(bottom, ..1) == ",")
+        {
+            bottom = $"x{bottom}";
+        }
+        if (bottom.IndexOf(",") is -1)
+        {
 
-        ContentAndEnd bracketContentInfo = HelperAlgorithms.GetExpressionAfterOperator(inp[(bottomEnd + 1)..]);
-            
+            bottom += ",å";
+        }
+        string body = inp[(bottomEnd + 1)..];
+        ContentAndEnd bracketContentInfo = HelperAlgorithms.GetExpressionAfterOperator(body);
+       
             //HandleBracket.GetCharsBetweenBrackets(inp, bottomEnd + 1);
         string content = bracketContentInfo.Content;
         int end = bracketContentInfo.End;
+
+
 
         if (end != -1)
         {

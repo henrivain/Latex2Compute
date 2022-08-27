@@ -18,7 +18,8 @@ public class IntegralTests
     [Theory]
     [InlineData("\\int _{ }^{ }", "∫(y,x)")]
     [InlineData("2\\int _{ }^{ }", "2∫(y,x)")]
-    public void EmptyIntegral_ShouldAdd_XAsArgument_YAsBody(string input, string expectedResult)
+    public void EmptyIntegral_ShouldAdd_XAsArgument_YAsBody(
+        string input, string expectedResult)
     {
         // Arrange
         var normalItem = new TranslationItem(input, _normalArgs);
@@ -32,7 +33,6 @@ public class IntegralTests
         Assert.Equal(expectedResult, normalResult.Result);
         Assert.Equal(expectedResult, physicsResult.Result);
     }
-
 
     [Theory]
     [InlineData("\\int _a^b2x^2\\ dx", "∫(2x^2,x,a,b)")]
@@ -55,7 +55,7 @@ public class IntegralTests
 
     [Theory]
     [InlineData("\\int _{ }^{ }x\\ dx", "∫(x,x)")]
-    [InlineData("\\int _{ }^{ }t\\ ddt", "∫(t,dt)")]
+    [InlineData("\\int _{ }^{ }t\\ dxt", "∫(t,xt)")]
     public void UnDefinedIntegral_ShouldBeTranslated_WithoutDefinisionRange_Always(
         string input, string expectedResult)
     {
@@ -94,6 +94,24 @@ public class IntegralTests
     [Theory]
     [InlineData("\\int _{12}^{13}tft", "∫(tft,x,12,13)")]
     public void DefinedIntegral_WithoutDSeparator_ShouldAdd_XInTheEnd_Always(
+        string input, string expectedResult)
+    {
+        // Arrange
+        var normalItem = new TranslationItem(input, _normalArgs);
+        var physicsItem = new TranslationItem(input, _physicsArgs);
+
+        // Act
+        var normalResult = Translation.MakeNormalTranslation(normalItem);
+        var physicsResult = Translation.MakeNormalTranslation(physicsItem);
+
+        // Assert
+        Assert.Equal(expectedResult, normalResult.Result);
+        Assert.Equal(expectedResult, physicsResult.Result);
+    }
+
+    [Theory]
+    [InlineData("\\int _{ }^{ }\\int _{ }^{ }2y\\ dy\\ dx", "∫(∫(2y,y),x)")]
+    public void MultipleIntegrals_ShouldTranslate_All_Always(
         string input, string expectedResult)
     {
         // Arrange

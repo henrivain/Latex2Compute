@@ -2,13 +2,13 @@
 
 bool canContinue = true;
 Console.OutputEncoding = System.Text.Encoding.UTF8;
+
 while (canContinue)
 {
     canContinue = RunTranslationProcess();
 }
 Console.WriteLine("exit");
 Console.ReadKey();
-
 
 
 static bool RunTranslationProcess()

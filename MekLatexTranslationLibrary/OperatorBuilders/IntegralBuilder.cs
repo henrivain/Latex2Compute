@@ -10,14 +10,36 @@ namespace MekLatexTranslationLibrary.OperatorBuilders;
 internal class IntegralBuilder
 {
     private static string Tag { get; } = "#181#";
+    private static string OperatorStart { get; } = "\\int";
 
     /// <summary>
-    /// Translate one Integral starting from startIndex
+    /// Translate all integrals inside input 
+    /// (this is also called recursively as part of integral build process)
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns>input with all integrals translated</returns>
+    internal static string BuildAllInside(string input)
+    {
+        while (true)
+        {
+            int startIndex = input.IndexOf(OperatorStart);
+            if (startIndex < 0) break;
+            input = input.Remove(startIndex, OperatorStart.Length);
+            if (CanHaveDefinitiveRange(input, startIndex))
+            {
+                input = Build(input, startIndex);
+            }
+        }
+        return input;
+    }
+
+    /// <summary>
+    /// Translate first integral from startindex and all integrals inside it
     /// </summary>
     /// <param name="inp"></param>
     /// <param name="startIndex"></param>
-    /// <returns>inp with one Integral translated</returns>
-    internal static string Build(string inp, int startIndex)
+    /// <returns>inp with some Integral translated</returns>
+    private static string Build(string inp, int startIndex)
     {
         if (IsUndefinedIntegral(inp, startIndex))
         {
@@ -36,20 +58,18 @@ internal class IntegralBuilder
     private static TwoStrings ReadIntegralBody(string inp, int startIndex)
     {
         string integralBody = inp[startIndex..];
-        int dIndex = integralBody.IndexOf('d');
+        int dIndex = integralBody.LastIndexOf('d');
         if (dIndex is -1) dIndex = integralBody.Length;
         return SeparateBodyAndArgument(integralBody, dIndex);
     }
     private static TwoStrings SeparateBodyAndArgument(string input, int dIndex)
     {
-        string integralBody = Slicer.GetSpanSafely(input, ..dIndex);
+        string integralBody = BuildAllInside(Slicer.GetSpanSafely(input, ..dIndex));
         string integralArgument = Slicer.GetSpanSafely(input, (dIndex + 1)..);
-
         if (string.IsNullOrWhiteSpace(integralBody)) integralBody = "y";
         if (string.IsNullOrWhiteSpace(integralArgument)) integralArgument = "x";
-
         return new(integralBody, integralArgument);
     }
     private static bool IsUndefinedIntegral(string input, int startIndex) => Slicer.GetSpanSafely(input, startIndex, 6) is "_{}^{}";
-
+    private static bool CanHaveDefinitiveRange(string input, int startIndex) => input.Length >= startIndex + 6;
 }

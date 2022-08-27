@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!-- this document might not have list of all available errors-->
+<Errors>
+	<AvailableErrors>
+		
+	</AvailableErrors>
+	<RemovedErrors>
+		<!-- these error are removed from code -->
+		<Error25>Integral does not have definitive range</Error25>
+	</RemovedErrors>
+</Errors>

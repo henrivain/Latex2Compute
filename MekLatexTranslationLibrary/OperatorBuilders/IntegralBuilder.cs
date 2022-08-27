@@ -9,10 +9,7 @@ namespace MekLatexTranslationLibrary.OperatorBuilders;
 /// </summary>
 internal class IntegralBuilder
 {
-    private static bool IsUndefinedIntegral(string input, int startIndex)
-    {
-        return Slicer.GetSpanSafely(input, startIndex, 6) is "_{}^{}";
-    }
+    private static string Tag { get; } = "#181#";
 
     /// <summary>
     /// Translate one Integral starting from startIndex
@@ -24,50 +21,25 @@ internal class IntegralBuilder
     {
         if (IsUndefinedIntegral(inp, startIndex))
         {
-            return BuildUndefinedIntegral(inp, startIndex);
-        }
-        return BuildDefinedIntegral(inp, startIndex);
-    }
-
-    private static string BuildUndefinedIntegral(string inp, int startIndex)
-    {
-        // if no lower and upper values  "indefinite integral" --> ∫(c,e)
-
-        string end = inp[(startIndex + 6)..];
-        int dIndex = end.IndexOf('d');
-        if (dIndex is not -1)
-        {
-            TwoStrings divided = SeparateBodyAndArgument(end, dIndex);
-            return $"{inp[..startIndex]}∫({divided.First},{divided.Second})";
+            // "indefinite integral" --> ∫(c,e)
+            var divided = ReadIntegralBody(inp, startIndex + 6);
+            return $"{inp[..startIndex]}{Tag}({divided.First},{divided.Second})";
         }
 
-        end = (end == string.Empty) ? "y" : end;
-        return $"{inp[..startIndex]}∫({end},x)";
+        // "definite integral" --> ∫(c,e,b,a)
+        ComplexSymbolReader definedRange = new(inp, startIndex, "integral");
+        var body = ReadIntegralBody(inp, definedRange.End + 1);
+        
+        return $"{definedRange.TextBefore}{Tag}({body.First},{body.Second}," +
+               $"{definedRange.BottomContent},{definedRange.TopContent})";
     }
-
-    private static string BuildDefinedIntegral(string inp, int start)
+    private static TwoStrings ReadIntegralBody(string inp, int startIndex)
     {
-        //if includes lower and upper values "defined integral" --> ∫(c,e,b,a)
-
-        IntegralInfo integralInfo = new();
-
-        ComplexSymbolReader reader = new(inp, start, "integral");
-
-        integralInfo.SetReaderInfo(reader);
-
-        string integralBody = inp[(reader.End + 1)..];
-
+        string integralBody = inp[startIndex..];
         int dIndex = integralBody.IndexOf('d');
-        dIndex = (dIndex == -1) ? integralBody.Length : dIndex;
-
-        TwoStrings bodyAndArgument = SeparateBodyAndArgument(integralBody, dIndex);
-
-        integralInfo.BeforeD = bodyAndArgument.First;
-        integralInfo.AfterD = bodyAndArgument.Second;
-
-        return $"{integralInfo.TextBefore}∫({bodyAndArgument.First},{bodyAndArgument.Second},{integralInfo.Bottom},{integralInfo.Top})";
+        if (dIndex is -1) dIndex = integralBody.Length;
+        return SeparateBodyAndArgument(integralBody, dIndex);
     }
-
     private static TwoStrings SeparateBodyAndArgument(string input, int dIndex)
     {
         string integralBody = Slicer.GetSpanSafely(input, ..dIndex);
@@ -78,4 +50,6 @@ internal class IntegralBuilder
 
         return new(integralBody, integralArgument);
     }
+    private static bool IsUndefinedIntegral(string input, int startIndex) => Slicer.GetSpanSafely(input, startIndex, 6) is "_{}^{}";
+
 }

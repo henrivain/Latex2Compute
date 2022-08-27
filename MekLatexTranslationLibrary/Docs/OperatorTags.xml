@@ -36,8 +36,8 @@ and is easier to present as number tags.
 		</Trigonometry>
 
 		<Root>
-			<nthRoot>#141#</nthRoot>				<!-- means "root"	-->
-			<sqrt>#142#</sqrt>						<!-- means "sqrt"	-->
+			<nthRoot>#141#</nthRoot>				<!-- means "root"		-->
+			<sqrt>#142#</sqrt>						<!-- means "sqrt"		-->
 		</Root>
 
 		<Limit>
@@ -45,8 +45,16 @@ and is easier to present as number tags.
 		</Limit>
 
 		<Pi>
-			<pi>#161#</pi>							<!-- means "pi"-->
+			<pi>#161#</pi>							<!-- means "pi"			-->
 		</Pi>
+
+		<Abs>
+			<abs>#171#</abs>						<!-- means "abs"		-->
+		</Abs>
+		
+		<Integral>
+			<integral>#181#</integral>				<!-- means "∫"			-->
+		</Integral>
 		
 	</CommonOperatorCodes>
 </Documentation>

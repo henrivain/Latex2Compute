@@ -118,29 +118,3 @@ internal struct SumInfo
     public string Top { get; set; } = string.Empty;
     public string TextAfter { get; set; } = string.Empty;
 }
-
-/// <summary>
-/// Save data during integral translation
-/// </summary>
-/// <returns>[all string] TextBefore, BeforeD, AfterD, Bottom, Top, TextAfter</returns>
-internal struct IntegralInfo
-{
-    public IntegralInfo() { }
-
-    /// <summary>
-    /// Set Start, Bottom and Top values automatically from given ComplexSymbolReader
-    /// </summary>
-    /// <param name="reader"></param>
-    internal void SetReaderInfo(ComplexSymbolReader reader)
-    {
-        TextBefore = reader.TextBefore;
-        Bottom = reader.BottomContent;
-        Top = reader.TopContent;
-    }
-    internal string TextBefore { get; set; } = string.Empty;
-    internal string BeforeD { get; set; } = string.Empty;
-    internal string AfterD { get; set; } = string.Empty;
-    internal string Bottom { get; set; } = string.Empty;
-    internal string Top { get; set; } = string.Empty;
-    internal string TextAfter { get; set; } = string.Empty;
-}

@@ -26,7 +26,7 @@ internal static class RootBuilder
         {
             int startBracket = closingBracket + 2;
 
-            string nextChar = HelperAlgorithms.CheckNextCharsSafely(inp[(closingBracket + 1)..], 1);
+            string nextChar = HelperAlgorithms.GetNextCharsSafely(inp[(closingBracket + 1)..], 1);
 
             switch (nextChar)
             {

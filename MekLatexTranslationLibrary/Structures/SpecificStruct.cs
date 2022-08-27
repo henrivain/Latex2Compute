@@ -137,10 +137,10 @@ internal struct IntegralInfo
         Bottom = reader.BottomContent;
         Top = reader.TopContent;
     }
-    internal string TextBefore = String.Empty;
-    internal string BeforeD = String.Empty;
-    internal string AfterD = String.Empty;
-    internal string Bottom = String.Empty;
-    internal string Top = String.Empty;
-    internal string TextAfter = String.Empty;
+    internal string TextBefore { get; set; } = string.Empty;
+    internal string BeforeD { get; set; } = string.Empty;
+    internal string AfterD { get; set; } = string.Empty;
+    internal string Bottom { get; set; } = string.Empty;
+    internal string Top { get; set; } = string.Empty;
+    internal string TextAfter { get; set; } = string.Empty;
 }

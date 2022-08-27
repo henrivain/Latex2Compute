@@ -24,13 +24,13 @@ namespace MekLatexTranslationLibrary.Helpers
             string shortSeparator = GetShortSeparator(separator);
 
             //check if starts with long version
-            if (CheckNextCharsSafely(input, 2, startIndex) == separator)
+            if (GetNextCharsSafely(input, 2, startIndex) == separator)
             {
                 return LongInconsistentStart(input, startIndex, symbol);
             }
 
             //check if starts with short version
-            if (CheckNextCharsSafely(input, 1, startIndex) == shortSeparator)
+            if (GetNextCharsSafely(input, 1, startIndex) == shortSeparator)
             {
                 return ShortInconsistentStart(input, startIndex, symbol);
             }
@@ -49,7 +49,7 @@ namespace MekLatexTranslationLibrary.Helpers
         {
             startIndex++;   // exclude _ or ^ from input
             
-            string content = CheckNextCharsSafely(input, 1, startIndex);
+            string content = GetNextCharsSafely(input, 1, startIndex);
 
             if (content is null)
             {
@@ -161,7 +161,7 @@ namespace MekLatexTranslationLibrary.Helpers
         /// <param name="startIndex"></param>
         /// <param name="span"></param>
         /// <returns>substring of input or null, if IndexOutOfRange</returns>
-        internal static string CheckNextCharsSafely(string input, short span, int startIndex = 0)
+        internal static string GetNextCharsSafely(string input, short span, int startIndex = 0)
         {
             try
             {
@@ -170,7 +170,7 @@ namespace MekLatexTranslationLibrary.Helpers
             catch (ArgumentOutOfRangeException)
             {
                 if (Translation.LatexInDevelopment) Console.WriteLine($"[Builders.CheckNextCharsSafely] Input span ArgumentOutOfRange; input: {input}, span: {span}, startIndex: {startIndex}");
-                return null;
+                return string.Empty;
             }
         }
 

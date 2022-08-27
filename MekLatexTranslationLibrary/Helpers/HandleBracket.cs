@@ -55,7 +55,7 @@ namespace MekLatexTranslationLibrary.Helpers
         /// <returns>string[insides, int end index as string], if end not found, end = -1</returns>
         public static ContentAndEnd GetCharsBetweenBrackets(string inp, int startIndex)
         {
-            string startChars = HelperAlgorithms.CheckNextCharsSafely(inp, 6, startIndex);
+            string startChars = HelperAlgorithms.GetNextCharsSafely(inp, 6, startIndex);
 
             if (startChars is "\\left(")
             {

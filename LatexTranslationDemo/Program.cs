@@ -1,7 +1,7 @@
 ﻿using MekLatexTranslationLibrary;
 
 bool canContinue = true;
-
+Console.OutputEncoding = System.Text.Encoding.UTF8;
 while (canContinue)
 {
     canContinue = RunTranslationProcess();

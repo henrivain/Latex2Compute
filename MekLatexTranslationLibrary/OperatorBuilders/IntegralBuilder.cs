@@ -9,6 +9,10 @@ namespace MekLatexTranslationLibrary.OperatorBuilders;
 /// </summary>
 internal class IntegralBuilder
 {
+    private static bool IsUndefinedIntegral(string input, int startIndex)
+    {
+        return Slicer.GetSpanSafely(input, startIndex, 6) is "_{}^{}";
+    }
 
     /// <summary>
     /// Translate one Integral starting from startIndex
@@ -18,11 +22,10 @@ internal class IntegralBuilder
     /// <returns>inp with one Integral translated</returns>
     internal static string Build(string inp, int startIndex)
     {
-        if (HelperAlgorithms.CheckNextCharsSafely(inp, 6, startIndex) is "_{}^{}")
+        if (IsUndefinedIntegral(inp, startIndex))
         {
             return BuildUndefinedIntegral(inp, startIndex);
         }
-        //if includes lower and upper values "defined integral" --> ∫(c,e,b,a)
         return BuildDefinedIntegral(inp, startIndex);
     }
 
@@ -32,22 +35,20 @@ internal class IntegralBuilder
 
         string end = inp[(startIndex + 6)..];
         int dIndex = end.IndexOf('d');
-
         if (dIndex is not -1)
         {
-            // split d in end
-            TwoStrings divided = CheckIntegralContents(end, dIndex);
-            return $"{inp[..startIndex]}∫{divided.First},{divided.Second})";
+            TwoStrings divided = SeparateBodyAndArgument(end, dIndex);
+            return $"{inp[..startIndex]}∫({divided.First},{divided.Second})";
         }
 
-        // no d in end
-        end = (end is "") ? "y" : end;
-
+        end = (end == string.Empty) ? "y" : end;
         return $"{inp[..startIndex]}∫({end},x)";
     }
 
     private static string BuildDefinedIntegral(string inp, int start)
     {
+        //if includes lower and upper values "defined integral" --> ∫(c,e,b,a)
+
         IntegralInfo integralInfo = new();
 
         ComplexSymbolReader reader = new(inp, start, "integral");
@@ -59,28 +60,22 @@ internal class IntegralBuilder
         int dIndex = integralBody.IndexOf('d');
         dIndex = (dIndex == -1) ? integralBody.Length : dIndex;
 
-        TwoStrings halved = CheckIntegralContents(integralBody, dIndex);
+        TwoStrings bodyAndArgument = SeparateBodyAndArgument(integralBody, dIndex);
 
-        integralInfo.BeforeD = halved.First;
-        integralInfo.AfterD = halved.Second;
-        // compile
+        integralInfo.BeforeD = bodyAndArgument.First;
+        integralInfo.AfterD = bodyAndArgument.Second;
 
-        return $"{integralInfo.TextBefore}∫({integralInfo.BeforeD},{integralInfo.AfterD},{integralInfo.Bottom},{integralInfo.Top})";
+        return $"{integralInfo.TextBefore}∫({bodyAndArgument.First},{bodyAndArgument.Second},{integralInfo.Bottom},{integralInfo.Top})";
     }
 
-    private static TwoStrings CheckIntegralContents(string input, int index)
+    private static TwoStrings SeparateBodyAndArgument(string input, int dIndex)
     {
-        string firstPart = input[..index];
-        string SecondPart = input[(index + 1)..];
+        string integralBody = Slicer.GetSpanSafely(input, ..dIndex);
+        string integralArgument = Slicer.GetSpanSafely(input, (dIndex + 1)..);
 
-        if (firstPart == "")
-        {
-            firstPart = "y";
-        }
-        if (SecondPart == "")
-        {
-            SecondPart = "x";
-        }
-        return new(firstPart, SecondPart);
+        if (string.IsNullOrWhiteSpace(integralBody)) integralBody = "y";
+        if (string.IsNullOrWhiteSpace(integralArgument)) integralArgument = "x";
+
+        return new(integralBody, integralArgument);
     }
 }

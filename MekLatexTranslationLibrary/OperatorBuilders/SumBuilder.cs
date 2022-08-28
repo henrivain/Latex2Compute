@@ -42,7 +42,7 @@ internal static class SumBuilder
         {
             ContentAndEnd endEquation = HelperAlgorithms.GetExpressionAfterOperator(inp[(reader.End + 1)..]);
             sumInfo.Equation = endEquation.Content;
-            sumInfo.TextAfter = inp[(reader.End + endEquation.End + 1)..];
+            sumInfo.TextAfter = inp[(reader.End + endEquation.EndIndex + 1)..];
             return;
         }
         // don't add anything

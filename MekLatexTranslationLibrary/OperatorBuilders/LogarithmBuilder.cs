@@ -24,10 +24,10 @@ internal static class LogarithmBuilder
         ContentAndEnd baseInfo = GetBase(inp, lsi, ref item);
         logItem.Base = baseInfo.Content;
 
-        ContentAndEnd antilogInfo = HelperAlgorithms.GetExpressionAfterOperator(inp[(baseInfo.End)..]);    // increment by one to skip to next char
+        ContentAndEnd antilogInfo = HelperAlgorithms.GetExpressionAfterOperator(inp[(baseInfo.EndIndex)..]);    // increment by one to skip to next char
 
         logItem.Antilog = antilogInfo.Content;
-        logItem.TextAfter = inp[(antilogInfo.End + baseInfo.End)..];    // starting from the end of antilog end
+        logItem.TextAfter = inp[(antilogInfo.EndIndex + baseInfo.EndIndex)..];    // starting from the end of antilog end
 
         item.Latex = $"{logItem.TextBefore}#111#({logItem.Antilog},{logItem.Base}){logItem.TextAfter}";
         return item;
@@ -42,7 +42,7 @@ internal static class LogarithmBuilder
         ContentAndEnd antilogInfo = HelperAlgorithms.GetExpressionAfterOperator(inp[lsi.Index..]);
         
         logItem.Antilog = antilogInfo.Content;
-        logItem.TextAfter = inp[(antilogInfo.End + lsi.Index)..];
+        logItem.TextAfter = inp[(antilogInfo.EndIndex + lsi.Index)..];
 
         item.Latex = $"{logItem.TextBefore}#112#({logItem.Antilog}){logItem.TextAfter}";
         return item;
@@ -54,7 +54,7 @@ internal static class LogarithmBuilder
     /// <param name="inp"></param>
     /// <param name="lsi"></param>
     /// <param name="item"></param>
-    /// <returns>(Content, End)</returns>
+    /// <returns>(Content, EndIndex)</returns>
     private static ContentAndEnd GetBase(string inp, LogStartInfo lsi, ref TranslationItem item)
     {
         // gets logarithm base from input string
@@ -69,10 +69,10 @@ internal static class LogarithmBuilder
     private static ContentAndEnd ValidateBase(ContentAndEnd temp, LogStartInfo lsi, ref TranslationItem item)
     {
         // validates or edits base if needed
-        if (temp.End != -1)
+        if (temp.EndIndex != -1)
         {
             // move to next index from start
-            return new ContentAndEnd(temp.End + 1, temp.Content);
+            return new ContentAndEnd(temp.EndIndex + 1, temp.Content);
         }
         item.ErrorCodes += "virhe5";
         if (Translation.LatexInDevelopment) Console.WriteLine("virhe5");

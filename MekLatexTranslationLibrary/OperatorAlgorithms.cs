@@ -13,8 +13,7 @@ public static class OperatorAlgorithms
     public static TranslationItem RunAll(TranslationItem item)
     {
         //runs operator change algorithms with instructions from settings
-
-        //ready to use
+        List<TranslationError> errors = Enumerable.Empty<TranslationError>().ToList();
 
         while (item.Latex.Contains("\\frac{") || item.Latex.Contains("\\dfrac{"))
         {
@@ -23,7 +22,6 @@ public static class OperatorAlgorithms
         
         if (item.Latex.Contains("\\begin{cases}"))
         {
-            //while loop inside method
             item = CasesBuilder.Build(item);
         }
         
@@ -37,10 +35,9 @@ public static class OperatorAlgorithms
         {
             item = RootBuilder.Build(item);
         }
-        while (item.Latex.Contains("\\lim"))
-        {
-            item = LimitBuilder.Build(item);
-        }
+
+        item.Latex = LimitBuilder.BuildAll(item.Latex, ref errors);
+
         while (item.Latex.Contains("\\sum"))
         {
             item = Sum(item);

@@ -112,9 +112,9 @@ public class LimTests
 
 
     [Theory]
-    [InlineData("\\lim _{x\\to å}\\left(\\lim _{y\\to o}g\\right)", "lim(lim(g,y,o),x,å)")]
-    [InlineData("\\lim _{x\\to å}\\left(\\lim _{y\\to o}\\left(g\\right)\\right)", "lim(lim(g,y,o),x,å)")]
-    //[InlineData("\\lim _{x\\to å}\\left(3\\cdot x\\right)\\lim _{y\\to å}\\left(3\\cdot y\\right)", "lim(3*x,x,å)lim(3*y,y,å)")]
+    [InlineData("\\lim _{x\\to å}\\left(\\lim _{y\\to o}b\\right)", "lim(lim(b,y,o),x,å)")]
+    [InlineData("\\lim _{x\\to å}\\left(\\lim _{y\\to o}\\left(b\\right)\\right)", "lim(lim(b,y,o),x,å)")]
+    [InlineData("\\lim _{x\\to å}\\left(3\\cdot x\\right)\\lim _{y\\to å}\\left(3\\cdot y\\right)", "lim(3*x,x,å)lim(3*y,y,å)")]
     public void Lim_WithLim_ShouldBeTranslated_Normally_Always(string input, string expectedResult)
     {
         // Arrange

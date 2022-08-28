@@ -12,7 +12,7 @@ namespace MekLatexTranslationLibrary.Helpers
         /// <param name="startIndex"></param>
         /// <param name="symbol"></param>
         /// <param name="separator"></param>
-        /// <returns>(int End, string Content), if no content, returns (Length or -1, Placeholder / inputEnd)</returns>
+        /// <returns>(int EndIndex, string Content), if no content, returns (Length or -1, Placeholder / inputEnd)</returns>
         internal static ContentAndEnd CheckAndGetInconsistentStart(string input, int startIndex, string symbol, string separator = "_{")
         {
             /*  get starting of more complex operators, for example log, lim, integral, sum.
@@ -44,7 +44,7 @@ namespace MekLatexTranslationLibrary.Helpers
         /// </summary>
         /// <param name="input"></param>
         /// <param name="startIndex"></param>
-        /// <returns>(int End, string Content), if no content, returns (Length, Placeholder) </returns>
+        /// <returns>(int EndIndex, string Content), if no content, returns (Length, Placeholder) </returns>
         private static ContentAndEnd ShortInconsistentStart(string input, int startIndex, string symbol)
         {
             startIndex++;   // exclude _ or ^ from input
@@ -65,7 +65,7 @@ namespace MekLatexTranslationLibrary.Helpers
         /// <param name="input"></param>
         /// <param name="startIndex"></param>
         /// <param name="symbol"></param>
-        /// <returns>(int End, string Content), if no content, returns (Length or -1, Placeholder) </returns>
+        /// <returns>(int EndIndex, string Content), if no content, returns (Length or -1, Placeholder) </returns>
         private static ContentAndEnd LongInconsistentStart(string input, int startIndex, string symbol)
         {
             startIndex += 2;    // exclude  ^{ or _{ from string 
@@ -145,13 +145,13 @@ namespace MekLatexTranslationLibrary.Helpers
         /// <para/>"23=4" => "23"
         /// </remarks>
         /// <param name="croppedInput"></param>
-        /// <returns>(int end, string content) if found, else substring of inp and length of inp</returns>
+        /// <returns>(int endIndex, string content) if found, else substring of inp and length of inp (endIndex is always 0 or bigger)</returns>
         internal static ContentAndEnd GetExpressionAfterOperator(string croppedInput)
         {
 
             ContentAndEnd info = HandleBracket.GetCharsBetweenBrackets(croppedInput, 0);
-            if (info.End != -1) return info;
-            return HelperAlgorithms.SeparateByOperator(croppedInput);
+            if (info.EndIndex != -1) return info;
+            return SeparateByOperator(croppedInput);
         }
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace MekLatexTranslationLibrary.Helpers
         /// Get text until next =, &lt; or &gt; operator
         /// </summary>
         /// <param name="inp"></param>
-        /// <returns>(int End, string content) if found, else returns input length and input</returns>
+        /// <returns>(int EndIndex, string content) if found, else returns input length and input</returns>
         private static ContentAndEnd SeparateByOperator(string inp)
         {
 
@@ -210,8 +210,6 @@ namespace MekLatexTranslationLibrary.Helpers
                 string content = inp[..end];
                 return new(end, content);
             }
-
-
             return new(inp.Length, inp);
         }
     }

@@ -7,7 +7,7 @@ namespace MekLatexTranslationLibrary.Helpers;
 /// Read complex Latex structure and return contents and end index ( compile structure "_{}^{}" ) 
 /// <para/>symbolType use: "sum" or "integral"
 /// </summary>
-/// <returns>int End, string FirstContent, string SecondContent, string TextBefore</returns>
+/// <returns>int EndIndex, string FirstContent, string SecondContent, string TextBefore</returns>
 internal class ComplexSymbolReader
 {
     internal int End { get; private set; } = -1;
@@ -22,15 +22,15 @@ internal class ComplexSymbolReader
     /// <param name="inp"></param>
     /// <param name="start"></param>
     /// <param name="symbolType"></param>
-    /// <returns>int End, string FirstContent, string SecondContent, string TextBefore</returns>
+    /// <returns>int EndIndex, string FirstContent, string SecondContent, string TextBefore</returns>
     internal ComplexSymbolReader(string inp, int start, string symbolType)
     {
         TwoStrings types = GetSymbolType(symbolType);
         ContentAndEnd bottomInfo = HelperAlgorithms.CheckAndGetInconsistentStart(inp, start, types.First, "_{");
-        int bottomEndIndex = (bottomInfo.End is -1) ? start : bottomInfo.End;
+        int bottomEndIndex = (bottomInfo.EndIndex is -1) ? start : bottomInfo.EndIndex;
         ContentAndEnd topInfo = HelperAlgorithms.CheckAndGetInconsistentStart(inp, bottomEndIndex + 1, types.Second, "^{");
 
-        End = (topInfo.End is -1) ? bottomEndIndex : topInfo.End;
+        End = (topInfo.EndIndex is -1) ? bottomEndIndex : topInfo.EndIndex;
         TextBefore = inp[..start];
         BottomContent = bottomInfo.Content;
         TopContent = topInfo.Content;

@@ -13,7 +13,7 @@ namespace MekLatexTranslationLibrary.Helpers
         {
             if (Translation.LatexInDevelopment)
             {
-                Console.WriteLine(error);
+                Console.WriteLine($"[TranslationError] {error}");
             }
         }
 

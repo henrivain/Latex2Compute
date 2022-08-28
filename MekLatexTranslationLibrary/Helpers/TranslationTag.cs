@@ -258,7 +258,7 @@ internal static class TranslationTag
     {
         ContentAndEnd contentInfo = HelperAlgorithms.GetExpressionAfterOperator(input[startIndex..]);
 
-        input = $"{input[..startIndex]}({contentInfo.Content}){input[(startIndex + contentInfo.End)..]}";
+        input = $"{input[..startIndex]}({contentInfo.Content}){input[(startIndex + contentInfo.EndIndex)..]}";
 
         return input;
     }

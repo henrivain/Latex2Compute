@@ -28,21 +28,21 @@ internal struct Bracket
 /// <summary>
 /// Info about where string element content ends and what it is
 /// </summary>
-/// <returns>int end, string content</returns>
+/// <returns>int endIndex, string content</returns>
 internal struct ContentAndEnd
 {
     /// <summary>
-    /// Info about end point and content in string element
+    /// Info about endIndex point and content in string element
     /// </summary>
-    /// <param name="end"></param>
+    /// <param name="endIndex"></param>
     /// <param name="content"></param>
-    internal ContentAndEnd(int end, string content)
+    internal ContentAndEnd(int endIndex, string content)
     {
-        End = end;
+        EndIndex = endIndex;
         Content = content;
     }
 
-    internal int End { get; private set; }
+    internal int EndIndex { get; private set; }
     internal string Content { get; private set; }
 }
 
@@ -67,8 +67,8 @@ internal struct TwoStrings
         First = first;
         Second = last;
     }
-    internal string First { get; private set; } = string.Empty;
-    internal string Second { get; private set; } = string.Empty;
+    internal string First { get; init; } = string.Empty;
+    internal string Second { get; init; } = string.Empty;
 }
 
 

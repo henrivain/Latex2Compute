@@ -36,11 +36,8 @@ public static class OperatorAlgorithms
         }
 
         item.Latex = LimitBuilder.BuildAll(item.Latex, ref errors);
+        item.Latex = SumBuilder.BuildAll(item.Latex, ref errors);
 
-        while (item.Latex.Contains("\\sum"))
-        {
-            item = Sum(item);
-        }
 
         // error 25 does not exist anymore
         item.Latex = IntegralBuilder.BuildAllInside(item.Latex);
@@ -133,18 +130,7 @@ public static class OperatorAlgorithms
         return item;
     }
 
-    private static TranslationItem Sum(TranslationItem item)
-    {
-        // translate \\sum_{x}^{y}z => sum(z,x,y)
-        string inp = item.Latex;
-
-        int startIndex = inp.IndexOf("\\sum");
-        inp = inp.Remove(startIndex, 4);
-
-        item.Latex = SumBuilder.Build(inp, startIndex, ref item);
-
-        return item;
-    }
+  
 
    
 

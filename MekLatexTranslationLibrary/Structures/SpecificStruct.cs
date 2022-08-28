@@ -87,30 +87,23 @@ internal struct SumInfo
     /// <para/>Changes bottom to right format to use variable
     /// </summary>
     /// <param name="reader"></param>
-    internal void SetReaderInfo(ComplexSymbolReader reader, ref TranslationItem item)
+    internal SumInfo SetReaderInfo(ComplexSymbolReader reader, ref List<TranslationError> errors)
     {
         TextBefore = reader.TextBefore;            
         Top = reader.TopContent;
-        SetBottom(reader.BottomContent, ref item);
-    }
-
-    /// <summary>
-    /// Set Bottom with extracted variable
-    /// </summary>
-    /// <param name="bottomContent"></param>
-    /// <param name="item"></param>
-    private void SetBottom(string bottomContent, ref TranslationItem item)
-    {
-        int equalDivider = bottomContent.IndexOf('=');
+        
+        int equalDivider = reader.BottomContent.IndexOf('=');
         if (equalDivider is -1)
         {
-            if (Translation.LatexInDevelopment) Console.WriteLine("[SumInfo.SetBottom] virhe11");
-            Bottom = $"n,{bottomContent}";
-            item.ErrorCodes += "virhe11";
-            return;
+            Helper.DevPrintTranslationError(nameof(TranslationError.Sum_NoVariableFound));
+            Bottom = $"n,{reader.BottomContent}";
+            errors.Add(TranslationError.Sum_NoVariableFound);
+            return this;
         }
-        Bottom = $"{bottomContent[..equalDivider]},{bottomContent[(equalDivider + 1)..]}";
+        Bottom = $"{reader.BottomContent[..equalDivider]},{reader.BottomContent[(equalDivider + 1)..]}";
+        return this;
     }
+
 
     public string TextBefore { get; set; } = string.Empty;
     public string Equation { get; set; } = string.Empty;

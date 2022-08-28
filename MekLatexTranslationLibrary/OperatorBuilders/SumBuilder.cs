@@ -6,27 +6,28 @@ namespace MekLatexTranslationLibrary.OperatorBuilders;
 
 internal static class SumBuilder
 {
-    /// <summary>
-    /// Translate one Sum
-    /// </summary>
-    /// <param name="inp"></param>
-    /// <param name="startIndex"></param>
-    /// <param name="item"></param>
-    /// <returns>inp with one more translated Sum</returns>
-    internal static string Build(string inp, int startIndex, ref TranslationItem item)
+    const string OperatorStart = "\\sum";
+    const string Tag = "∑";
+
+    private static string Build(string input, int startIndex, ref List<TranslationError> errors)
     {
-        // removed er codes: virhe10
-
-        SumInfo sumInfo = new();
-
-        // get textBefore, bottom and top
-        ComplexSymbolReader reader = new(inp, startIndex, "sum");
-        sumInfo.SetReaderInfo(reader, ref item);    // ref item for error: "virhe11", means "no var in bottom" => use n as var
-        DefineExpressionAfter(inp, ref sumInfo, reader);
-
-        return $"{sumInfo.TextBefore}∑({sumInfo.Equation},{sumInfo.Bottom},{sumInfo.Top}){sumInfo.TextAfter}";
+        ComplexSymbolReader reader = new(input, startIndex, "sum");
+        SumInfo sumInfo = new SumInfo().SetReaderInfo(reader, ref errors);
+        sumInfo = AddExpressionAfter(input, sumInfo, reader, ref errors);
+        return $"{sumInfo.TextBefore}{Tag}({sumInfo.Equation},{sumInfo.Bottom},{sumInfo.Top}){sumInfo.TextAfter}";
     }
 
+    internal static string BuildAll(string input, ref List<TranslationError> errors)
+    {
+        while (true)
+        {
+            int startIndex = input.IndexOf(OperatorStart);
+            if (startIndex < 0) return input;
+
+            input = input.Remove(startIndex, 4);
+            input = Build(input, startIndex, ref errors);
+        }
+    }
 
     /// <summary>
     /// Checks if input can be read onward
@@ -35,16 +36,15 @@ internal static class SumBuilder
     /// <param name="sumInfo"></param>
     /// <param name="reader"></param>
     /// <returns>updated sumInfo if needed</returns>
-    private static void DefineExpressionAfter(string inp, ref SumInfo sumInfo, ComplexSymbolReader reader)
+    private static SumInfo AddExpressionAfter(
+        string inp, SumInfo sumInfo, ComplexSymbolReader reader, ref List<TranslationError> errors)
     {
-        // if input can be read onward
         if (inp.Length > reader.End + 1)
         {
             ContentAndEnd endEquation = HelperAlgorithms.GetExpressionAfterOperator(inp[(reader.End + 1)..]);
-            sumInfo.Equation = endEquation.Content;
+            sumInfo.Equation = BuildAll(endEquation.Content, ref errors);
             sumInfo.TextAfter = inp[(reader.End + endEquation.EndIndex + 1)..];
-            return;
         }
-        // don't add anything
+        return sumInfo;
     }
 } 

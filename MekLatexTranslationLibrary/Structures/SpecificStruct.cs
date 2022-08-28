@@ -7,14 +7,14 @@ namespace MekLatexTranslationLibrary.Structures;
 /// Store values to during the logarithm translation
 /// </summary>
 /// <returns>
-/// string TextBefore, string Basis, string Antilog, string TextAfter
+/// string TextBefore, string Basis, string Body, string TextAfter
 /// </returns>
 internal struct LogItem
 {
     public LogItem() { }
     internal string TextBefore { get; set; } = string.Empty;
     internal string Base { get; set; } = string.Empty;
-    internal string Antilog { get; set; } = string.Empty;
+    internal string Body { get; set; } = string.Empty;
     internal string TextAfter { get; set; } = string.Empty;
 }
 

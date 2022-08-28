@@ -1,7 +1,6 @@
 ﻿/// Copyright 2021 Henri Vainio 
 using MekLatexTranslationLibrary.Helpers;
 using MekLatexTranslationLibrary.OperatorBuilders;
-using MekLatexTranslationLibrary.Structures;
 
 namespace MekLatexTranslationLibrary;
 
@@ -24,8 +23,8 @@ public static class OperatorAlgorithms
         {
             item = CasesBuilder.Build(item);
         }
-        
-        item = Logarithm(item);
+
+        item.Latex = LogarithmBuilder.BuildAll(item.Latex, ref errors);
 
         while (item.Latex.Contains("\\sqrt{"))
         {
@@ -110,23 +109,6 @@ public static class OperatorAlgorithms
         item.Latex = inp;
         return item;
     }
-
-    private static TranslationItem Logarithm(TranslationItem item)
-    {
-        // find \log_x(y) and translate to #ot#(x,y)
-        
-        LogStartInfo lsi = new(item.Latex);
-
-        while (lsi.IsFound)
-        {
-            item = LogarithmBuilder.Build(item, lsi);
-            lsi = new(item.Latex);
-        }
-        return item;
-    }
-
-  
-
 
     private static TranslationItem SquareRoot(TranslationItem item)
     {

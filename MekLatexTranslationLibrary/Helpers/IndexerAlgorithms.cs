@@ -17,7 +17,7 @@ namespace MekLatexTranslationLibrary.Helpers
         private static readonly string[] OtherSeparators = { "#", "\\s", "\\c", "\\t" };     // system line change = #122#, \\s = sin, \\c = cos, \\t = tan
 
         /// <summary>
-        /// Get first indexes of operators =, &lt;, &gt;, +, -, * or ], ), } if no pair for them
+        /// Get first indexes of operators =, &lt;, &gt;, +, -, * or ], ), }, #, \\s, \\c, \\t if no pair for them
         /// </summary>
         /// <param name="inp"></param>
         /// <returns>int list of indexes, returns empty list if none</returns>

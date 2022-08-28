@@ -2,5 +2,6 @@
 namespace MekLatexTranslationLibrary;
 public enum TranslationError
 {
-    Lim_NoApproachValue = 6
+    Log_BasisNotFound = 5,
+    Lim_NoApproachValue = 6,
 }

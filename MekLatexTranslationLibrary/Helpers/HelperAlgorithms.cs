@@ -195,7 +195,7 @@ namespace MekLatexTranslationLibrary.Helpers
         }
 
         /// <summary>
-        /// Get text until next =, &lt; or &gt; operator
+        /// Get text until next =, &lt;, &gt;, +, -, * or ], ), } operator
         /// </summary>
         /// <param name="inp"></param>
         /// <returns>(int EndIndex, string content) if found, else returns input length and input</returns>

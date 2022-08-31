@@ -17,7 +17,7 @@ namespace MekLatexTranslationLibrary.Helpers
         private static readonly string[] OtherSeparators = { "#", "\\s", "\\c", "\\t" };     // system line change = #122#, \\s = sin, \\c = cos, \\t = tan
 
         /// <summary>
-        /// Get first indexes of operators =, &lt;, &gt;, +, -, * or ], ), }, #, \\s, \\c, \\t if no pair for them
+        /// GetBottom first indexes of operators =, &lt;, &gt;, +, -, * or ], ), }, #, \\s, \\c, \\t if no pair for them
         /// </summary>
         /// <param name="inp"></param>
         /// <returns>int list of indexes, returns empty list if none</returns>
@@ -49,7 +49,7 @@ namespace MekLatexTranslationLibrary.Helpers
         }
 
         /// <summary>
-        /// Get IEnumerable of first appearances of given string operator
+        /// GetBottom IEnumerable of first appearances of given string operator
         /// </summary>
         /// <param name="inp"></param>
         /// <returns>IEnumerable of indexes, returns Empty list if none found</returns>
@@ -65,7 +65,7 @@ namespace MekLatexTranslationLibrary.Helpers
         }
 
         /// <summary>
-        /// Get IEnumerable of first appearances of given char operator
+        /// GetBottom IEnumerable of first appearances of given char operator
         /// </summary>
         /// <param name="inp"></param>
         /// <returns>IEnumerable of indexes, returns Empty list if none found</returns>
@@ -81,7 +81,7 @@ namespace MekLatexTranslationLibrary.Helpers
         }
 
         /// <summary>
-        /// Get Index of pairless brackets. Checks every bracket type.
+        /// GetBottom Index of pairless brackets. Checks every bracket type.
         /// </summary>
         /// <param name="inp"></param>
         /// <returns>IEnumerable of indexes, returns Empty list if none found</returns>
@@ -90,7 +90,7 @@ namespace MekLatexTranslationLibrary.Helpers
             List <int> indexes = new();
             foreach (var op in Bracket.All)
             {
-                int index = HandleBracket.FindBrackets(inp, op);
+                int index = BracketHandler.FindBrackets(inp, op);
                 CheckUndef(index, ref indexes);
             }
             return indexes;

@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace MekLatexTranslationLibrary.Helpers;
 
-internal static class HandleBracket
+internal static class BracketHandler
 {
     const string LeftBracket = "\\left(";
     const string RightBracket = "\\right)";
@@ -30,7 +30,7 @@ internal static class HandleBracket
     /// <param name="type"></param>
     /// <param name="startPoint"></param>
     /// <returns>index of ending bracket, -1 if not found</returns>
-    public static int FindBrackets(string input, BracketType type, int startIndex = 0)
+    public static int FindBrackets(string input, BracketType type = BracketType.Curly, int startIndex = 0)
     {
         (string opening, string closing) = GetBracketsFromType(type);
         

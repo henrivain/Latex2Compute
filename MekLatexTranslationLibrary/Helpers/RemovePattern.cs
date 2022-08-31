@@ -25,7 +25,7 @@ namespace MekLatexTranslationLibrary.Helpers
             {
                 int startIndex = inp.IndexOf(pattern);
                 inp = inp.Remove(startIndex, pattern.Length);
-                int endIndex = HandleBracket.FindBrackets(inp, bracketType, startIndex);
+                int endIndex = BracketHandler.FindBrackets(inp, bracketType, startIndex);
                 if (endIndex is not -1)
                 {
                     inp = inp.Remove(endIndex, 1);

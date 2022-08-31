@@ -155,7 +155,7 @@ internal static class TranslationTag
     }
 
     /// <summary>
-    /// Get Tag start before first wildcard
+    /// GetBottom Tag start before first wildcard
     /// <para/>"#12N#" => "#12" ( N is wild card)
     /// </summary>
     /// <param name="tag"></param>

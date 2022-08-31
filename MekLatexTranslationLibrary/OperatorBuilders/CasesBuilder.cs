@@ -35,7 +35,7 @@ internal static class CasesBuilder
     {
         // can't reach this point if doesn't have both: \begin and \end
         int start = inp.IndexOf(newCasesStart);
-        int end = HandleBracket.FindBrackets(inp, "¤&", start + 1);
+        int end = BracketHandler.FindBrackets(inp, "¤&", start + 1);
         if (end != -1)
         {
             //compile normal

@@ -58,7 +58,7 @@ internal static class LogarithmBuilder
     }
 
     /// <summary>
-    /// Get Base
+    /// GetBottom Base
     /// </summary>
     /// <param name="inp"></param>
     /// <param name="lsi"></param>

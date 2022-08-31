@@ -196,7 +196,7 @@ static internal class EndEdit
     }
 
     /// <summary>
-    /// Get first character that appears to be in inp (x, y and z are checked first)
+    /// GetBottom first character that appears to be in inp (x, y and z are checked first)
     /// </summary>
     /// <param name="inp"></param>
     /// <returns>char "variable" or null if no chars in inp</returns>
@@ -216,7 +216,7 @@ static internal class EndEdit
     }
 
     /// <summary>
-    /// Get array of all lower case chars
+    /// GetBottom array of all lower case chars
     /// </summary>
     /// <returns></returns>
     private static char[] GetLowerCaseChars()

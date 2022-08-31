@@ -16,7 +16,7 @@ public class BracketAlgorithmTests
         string input, int expectedIndex)
     {
         // Arrange & Act
-        int result = HandleBracket.FindBrackets(input, BracketType.RoundLong);
+        int result = BracketHandler.FindBrackets(input, BracketType.RoundLong);
 
         // Assert
         Assert.Equal(expectedIndex, result);
@@ -32,12 +32,12 @@ public class BracketAlgorithmTests
         string input)
     {
         // Arrange & Act
-        int roundLongResult = HandleBracket.FindBrackets(input, BracketType.RoundLong);
-        int roundResult = HandleBracket.FindBrackets(input, BracketType.Round);
-        int curlyLongResult = HandleBracket.FindBrackets(input, BracketType.CurlyLong);
-        int curlyResult = HandleBracket.FindBrackets(input, BracketType.Curly);
-        int squareLongResult = HandleBracket.FindBrackets(input, BracketType.SquareLong);
-        int squareResult = HandleBracket.FindBrackets(input, BracketType.Square);
+        int roundLongResult = BracketHandler.FindBrackets(input, BracketType.RoundLong);
+        int roundResult = BracketHandler.FindBrackets(input, BracketType.Round);
+        int curlyLongResult = BracketHandler.FindBrackets(input, BracketType.CurlyLong);
+        int curlyResult = BracketHandler.FindBrackets(input, BracketType.Curly);
+        int squareLongResult = BracketHandler.FindBrackets(input, BracketType.SquareLong);
+        int squareResult = BracketHandler.FindBrackets(input, BracketType.Square);
 
         // Assert
         Assert.Equal(-1, roundLongResult);
@@ -59,7 +59,7 @@ public class BracketAlgorithmTests
     string input, int startIndex, string expected, int expectedIndex)
     {
         // Arrange & Act
-        ContentAndEnd result = HandleBracket.GetCharsBetweenBrackets(input, startIndex);
+        ContentAndEnd result = BracketHandler.GetCharsBetweenBrackets(input, startIndex);
   
         // Assert
         Assert.Equal(expected, result.Content);

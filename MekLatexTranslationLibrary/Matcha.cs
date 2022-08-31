@@ -49,7 +49,7 @@ public static class Matcha
     private static TranslationItem RemoveConstructorArgs(TranslationItem item, int start)
     {
         // remove arguments from macha io document constructors or math field definers
-        int end = HandleBracket.FindBrackets(item.Latex, "{}", start);
+        int end = BracketHandler.FindBrackets(item.Latex, "{}", start);
 
         if (end == -1)
         {

@@ -6,7 +6,7 @@ namespace MekLatexTranslationLibrary.Helpers
     internal static class HelperAlgorithms
     {
         /// <summary>
-        /// Get content and end index of latex span (example _{34} => (5, 34))
+        /// GetBottom content and end index of latex span (example _{34} => (5, 34))
         /// </summary>
         /// <param name="input"></param>
         /// <param name="startIndex"></param>
@@ -40,7 +40,7 @@ namespace MekLatexTranslationLibrary.Helpers
         }
 
         /// <summary>
-        /// Get short version of inconsistent start (startsWith _ or ^ )
+        /// GetBottom short version of inconsistent start (startsWith _ or ^ )
         /// </summary>
         /// <param name="input"></param>
         /// <param name="startIndex"></param>
@@ -60,7 +60,7 @@ namespace MekLatexTranslationLibrary.Helpers
         }
 
         /// <summary>
-        /// Get long version of inconsistent start (startsWith _{ or ^{ )
+        /// GetBottom long version of inconsistent start (startsWith _{ or ^{ )
         /// </summary>
         /// <param name="input"></param>
         /// <param name="startIndex"></param>
@@ -70,7 +70,7 @@ namespace MekLatexTranslationLibrary.Helpers
         {
             startIndex += 2;    // exclude  ^{ or _{ from string 
 
-            int endPoint = HandleBracket.FindBrackets(input, "{}", startIndex);
+            int endPoint = BracketHandler.FindBrackets(input, "{}", startIndex);
             
             if (endPoint is -1)
             {
@@ -135,7 +135,7 @@ namespace MekLatexTranslationLibrary.Helpers
         }
 
         /// <summary>
-        /// Get expression that belongs to some Latex operator 
+        /// GetBottom expression that belongs to some Latex operator 
         /// <para/> DO NOT INCLUDE START! (wrong: "\log_2(234)" right: "(234)" ) use inp[index..]
         /// </summary>
         /// <remarks>
@@ -149,13 +149,13 @@ namespace MekLatexTranslationLibrary.Helpers
         internal static ContentAndEnd GetExpressionAfterOperator(string croppedInput)
         {
 
-            ContentAndEnd info = HandleBracket.GetCharsBetweenBrackets(croppedInput, 0);
+            ContentAndEnd info = BracketHandler.GetCharsBetweenBrackets(croppedInput, 0);
             if (info.EndIndex != -1) return info;
             return SeparateByOperator(croppedInput);
         }
 
         /// <summary>
-        /// Get Substring with given length and startindex
+        /// GetBottom Substring with given length and startindex
         /// </summary>
         /// <param name="input"></param>
         /// <param name="startIndex"></param>
@@ -195,7 +195,7 @@ namespace MekLatexTranslationLibrary.Helpers
         }
 
         /// <summary>
-        /// Get text until next =, &lt;, &gt;, +, -, * or ], ), } operator
+        /// GetBottom text until next =, &lt;, &gt;, +, -, * or ], ), } operator
         /// </summary>
         /// <param name="inp"></param>
         /// <returns>(int EndIndex, string content) if found, else returns input length and input</returns>

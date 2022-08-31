@@ -19,7 +19,7 @@ internal struct LogItem
 }
 
 /// <summary>
-/// Get information of next Latex logarithm start inside given start
+/// GetBottom information of next Latex logarithm start inside given start
 /// </summary>
 /// <returns>bool IsFound, bool HasBase, int Index, string StartType, string Base</returns>
 internal struct LogStartInfo

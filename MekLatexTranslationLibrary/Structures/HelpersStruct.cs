@@ -19,7 +19,7 @@ internal struct Bracket
     internal const string Round = "()";
     
     /// <summary>
-    /// Get all Latex bracket types
+    /// GetBottom all Latex bracket types
     /// </summary>
     /// <returns>{ Curly, Square, Round }</returns>
     internal static readonly string[] All = { "{}", "[]", "()" };

@@ -20,7 +20,7 @@ internal static class RootBuilder
         int start = inp.IndexOf("\\sqrt[");
         inp = inp.Remove(start, 6);
 
-        int closingBracket = HandleBracket.FindBrackets(inp, "[]", start);
+        int closingBracket = BracketHandler.FindBrackets(inp, "[]", start);
 
         if (closingBracket != -1)
         {
@@ -69,7 +69,7 @@ internal static class RootBuilder
     private static void Compile(ref string inp, ref string erCodes, int start, int closingBracket, int startBracket)
     {
         // complile final result
-        int end = HandleBracket.FindBrackets(inp, "{}", startBracket);
+        int end = BracketHandler.FindBrackets(inp, "{}", startBracket);
 
         if (end != -1)
         {

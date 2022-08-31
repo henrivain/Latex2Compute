@@ -16,7 +16,8 @@ static bool RunTranslationProcess()
     Console.Write("leave empty to exit or give input: ");
     var input = Console.ReadLine();
     if (string.IsNullOrWhiteSpace(input)) return false;
-    
+   
+
 
     TranslationItem item = new(input, new());
 

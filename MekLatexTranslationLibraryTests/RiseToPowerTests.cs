@@ -18,6 +18,7 @@ public class RiseToPowerTests
 
     [Theory]
     [InlineData("2^2", "2^2")]
+    [InlineData("2^{}", "2^()")]
     [InlineData("2^{34}", "2^(34)")]
     [InlineData("2^{3}", "2^(3)")]
     [InlineData("2^{3}4", "2^(3)4")]

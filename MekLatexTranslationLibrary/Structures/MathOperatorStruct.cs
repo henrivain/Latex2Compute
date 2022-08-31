@@ -3,7 +3,7 @@
 namespace MekLatexTranslationLibrary.Structures;
 
 /// <summary>
-/// Get char array of some type of basic math operator
+/// GetBottom char array of some type of basic math operator
 /// <para/>EqualSigns, BasicMathOperators, StartBrackets, EndBrackets
 /// </summary>
 internal struct CommonOperators

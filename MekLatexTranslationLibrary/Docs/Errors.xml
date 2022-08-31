@@ -8,5 +8,6 @@
 	<RemovedErrors>
 		<!-- these error are removed from code -->
 		<Error25>Integral does not have definitive range</Error25>
+		<Error22>Fraction does not continue after first end bracket, cant read end</Error22>
 	</RemovedErrors>
 </Errors>

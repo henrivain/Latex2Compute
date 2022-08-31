@@ -155,7 +155,7 @@ internal static class SymbolTranslations
         // remove vector "\overline" element
         int start = inp.IndexOf(overline);
         inp = inp.Remove(start, 10);
-        int end = HandleBracket.FindBrackets(inp, "{}", start);
+        int end = BracketHandler.FindBrackets(inp, "{}", start);
         if (end != -1)
         {
             inp = inp.Remove(end, 1);

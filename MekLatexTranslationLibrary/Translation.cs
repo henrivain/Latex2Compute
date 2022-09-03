@@ -1,6 +1,5 @@
 ﻿/// Copyright 2021 Henri Vainio 
 using MekLatexTranslationLibrary.OperatorBuilders;
-using System.Collections;
 
 /// <summary>
 /// Call LaTeX translation and get results

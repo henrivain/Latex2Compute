@@ -1,0 +1,144 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MekLatexTranslationLibraryTests;
+public class TranslationArgumentTests
+{
+    readonly TranslationArgs _normalArgs = new()
+    {
+        MathMode = true,
+        PhysicsMode1 = false,
+        PhysicsMode2 = false,
+        GeometryMode = true
+    };
+
+    readonly TranslationArgs _physicsArgs = new()
+    {
+        MathMode = false,
+        PhysicsMode1 = true,
+        PhysicsMode2 = false,
+        GeometryMode = true
+    };
+
+    // Physics mode and math mode are both enabled in most of these tests, to make the highest possiblity to break tests
+    // Both modes should not be enabled in production code at the same time
+
+
+
+    [Theory]
+    [InlineData("x=0", "solve(x=0,x)")]
+    [InlineData("b=0", "solve(b=0)")]   // only xyz are recognized as variable => b is not set as var at the end
+    [InlineData("=y", "solve(=y,y)")]
+    [InlineData("xyz", "xyz")]
+    [InlineData("3\\cdotx<0", "solve(3*x<0,x)")]
+    [InlineData("3x<=0", "solve(3x<=0,x)")]
+    [InlineData("55\\cdotx>0", "solve(55*x>0,x)")]
+    [InlineData("55x>=0", "solve(55x>=0,x)")]
+    public void AutoSolve_ShouldAdd_Solve_AndVariable_IfHasEqualityOperator_AndVariable(string input, string expectedResult)
+    {
+        // Arrange
+        var normalItem = new TranslationItem(input, new()
+        {
+            PhysicsMode1 = true,
+            MathMode = true,
+            AutoSolve = true,
+        });
+
+        // Act
+        var result = Translation.MakeNormalTranslation(normalItem);
+
+        // Assert
+        Assert.Equal(expectedResult, result.Result);
+    }
+
+
+    [Theory]
+    [InlineData("Dx^2", "derivative(x^2,x)")]
+    [InlineData("D14b", "derivative(14b,b)")]
+    [InlineData("D14abx", "derivative(14abx,x)")]   // xyz are chosen first
+    [InlineData("14abx", "14abx")]   // no D
+    public void AutoDerivative_ShouldAdd_Derivative_AndVariable_IfStartsWithD(string input, string expectedResult)
+    {
+        // Arrange
+        var normalItem = new TranslationItem(input, new()
+        {
+            PhysicsMode1 = true,
+            MathMode = true,
+        });
+
+        // Act
+        var result = Translation.MakeNormalTranslation(normalItem);
+
+        // Assert
+        Assert.Equal(expectedResult, result.Result);
+    }
+
+    [Theory]
+    [InlineData("x^2", "derivative(x^2,x)")]
+    [InlineData("14b", "derivative(14b,b)")]
+    [InlineData("14abx", "derivative(14abx,x)")]   // xyz are chosen first
+    [InlineData("14", "derivative(14,)")]   // no D
+    public void AutoDerivativeSetting_DerivatesAlways(string input, string expectedResult)
+    {
+        // Arrange
+        var normalItem = new TranslationItem(input, new()
+        {
+            PhysicsMode1 = true,
+            MathMode = true,
+            AutoDerivative = true,
+        });
+
+        // Act
+        var result = Translation.MakeNormalTranslation(normalItem);
+
+        // Assert
+        Assert.Equal(expectedResult, result.Result);
+    }
+
+
+    [Theory]
+    [InlineData("\\pi\\tan\\left(2\\right)", "pi*tan(2)")]
+    [InlineData("\\pi=\\tan\\left(2\\right)", "pi=tan(2)")]     // has operator symbol in front
+    public void AutoSeparateOperators_ShouldSeparateOperators_ByAsterisk(string input, string expectedResult)
+    {
+        // Arrange
+        var normalItem = new TranslationItem(input, new()
+        {
+            PhysicsMode1 = true,
+            MathMode = true,
+            AutoSeparateOperators = true
+        });
+
+        // Act
+        var result = Translation.MakeNormalTranslation(normalItem);
+
+        // Assert
+        Assert.Equal(expectedResult, result.Result);
+    }    
+    
+    
+    [Theory]
+    [InlineData("\\frac{}{}", "")]
+    [InlineData("\\frac{mol}{\\frac{km}{h}}", "")]
+    public void EmptyFracs_ShouldBeRemoved_IfEndChanges_IsAll(string input, string expectedResult)
+    {
+        // Arrange
+        var normalItem = new TranslationItem(input, new()
+        {
+            PhysicsMode1 = true,
+            MathMode = true,
+            EndChanges = "all"
+        });
+
+        // Act
+        var result = Translation.MakeNormalTranslation(normalItem);
+
+        // Assert
+        Assert.Equal(expectedResult, result.Result);
+    }
+
+
+}

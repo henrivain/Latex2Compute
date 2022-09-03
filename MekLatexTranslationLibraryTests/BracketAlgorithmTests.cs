@@ -52,6 +52,7 @@ public class BracketAlgorithmTests
 
     [Theory]
     [InlineData("", 0, "", -1)]
+    [InlineData("", 4, "", -1)]
     [InlineData("\\left(\\left(g\\right)\\right)", 0, "\\left(g\\right)", 27)]
     [InlineData("\\left(g\\right)", 0, "g", 14)]
     [InlineData("\\left(g\\right)\\left(g\\right)", 14, "g", 28)]
@@ -59,12 +60,32 @@ public class BracketAlgorithmTests
     string input, int startIndex, string expected, int expectedIndex)
     {
         // Arrange & Act
-        ContentAndEnd result = BracketHandler.GetCharsBetweenBrackets(input, startIndex);
+        ContentAndEnd result = BracketHandler.GetCharsBetweenBrackets(input, BracketType.RoundLong, startIndex);
   
         // Assert
-        Assert.Equal(expected, result.Content);
         Assert.Equal(expectedIndex, result.EndIndex);
+        Assert.Equal(expected, result.Content);
+
+    }
+
+    [Theory]
+    [InlineData("", 0, "", -1)]
+    [InlineData("", 4, "", -1)]
+    [InlineData("((g))", 0, "(g)", 5)]
+    [InlineData("(g)", 0, "g", 3)]
+    [InlineData("(g)(y)", 0, "g", 3)]
+    [InlineData("(g)(y)", 3, "y", 6)]
+    [InlineData("(gy", 0, "gy", 3)]
+    public void GetCharsBetweenBrackets_ShouldReturn_ExpectedSubstring_WithDifferentBracketTypeRound(
+        string input, int startIndex, string expected, int expectedIndex)
+    {
+        // Arrange & Act
+        ContentAndEnd result = BracketHandler.GetCharsBetweenBrackets(input, BracketType.Round, startIndex);
   
+        // Assert
+        Assert.Equal(expectedIndex, result.EndIndex);
+        Assert.Equal(expected, result.Content);
+
     }
 
 }

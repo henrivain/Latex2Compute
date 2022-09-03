@@ -25,11 +25,14 @@ internal static class BracketHandler
 
     /// <summary>
     /// Find index of matching end bracket
+    /// <para/>example: input='log(33)', bracketType.Round, startIndex=5 => returns 8
+    /// <para/>return index if end index + 1, because it makes reading spans easier (it is start of next span and end of this one)
+    /// <para/>START BRACKET SHOULD NOT BE INCLUDED IN INPUT (or startIndex should be start bracket index + 1)
     /// </summary>
     /// <param name="input">The string which is looped throught</param>
     /// <param name="type"></param>
     /// <param name="startPoint"></param>
-    /// <returns>index of ending bracket, -1 if not found</returns>
+    /// <returns>index of ending bracket+1, returns -1 if not found</returns>
     public static int FindBrackets(string input, BracketType type = BracketType.Curly, int startIndex = 0)
     {
         (string opening, string closing) = GetBracketsFromType(type);
@@ -41,7 +44,6 @@ internal static class BracketHandler
             string next2 = Slicer.GetSpanSafely(input, i, closing.Length);
             if (next == opening)
             {
-                // You don't need to read the rest of the opening
                 i += opening.Length - 1;
                 x++;
             }
@@ -49,7 +51,7 @@ internal static class BracketHandler
             {
                 x--;
                 i += closing.Length - 1;
-                if (x is 0) return i + 1;
+                if (x is 0) return i + 1;   // offset by one for easier span handling
             }
         }
         return -1;
@@ -96,31 +98,29 @@ internal static class BracketHandler
         return endBracket;
     }
 
-
-
     /// <summary>
-    /// get everything inside \left( \right) brackets
+    /// get everything inside brackets ( ) and end index of closing bracket (+1)
+    /// <para/>Include opening bracket in input     example: '(33)/()', startIndex = 0, BracketType.Round => returns ('33', 4)
     /// </summary>
     /// <param name="input"></param>
     /// <param name="startIndex"></param>
-    /// <returns>string[insides, int end index as string], if end not found, end = -1</returns>
-    public static ContentAndEnd GetCharsBetweenBrackets(string input, int startIndex)
+    /// <returns>default: (content, index of end bracket+1)
+    /// <para/>if end bracket not found: (input[startIndex..], input.Length)
+    /// <para/>if no start bracket: (-1, string.Empty)</returns>
+    public static ContentAndEnd GetCharsBetweenBrackets(string input, BracketType type = BracketType.RoundLong, int startIndex = 0)
     {
-        // leave opening bracket
-        if (Slicer.GetSpanSafely(input, startIndex, LeftBracket.Length) is LeftBracket)
+        (string opening, string closing) = GetBracketsFromType(type);
+
+        // leave opening bracket in input
+        if (Slicer.GetSpanSafely(input, startIndex, opening.Length) == opening)
         {
-            startIndex += LeftBracket.Length;
-            input = input[startIndex..];
-            int endBracket = FindBrackets(input, BracketType.RoundLong);
-            if (endBracket is -1)
-            {
-                return new(input.Length, input);
-            }
-            int endIndex = startIndex + endBracket;
-            string output = input[..(endBracket - RightBracket.Length)];
+            int endIndex = FindBrackets(input, type, startIndex + opening.Length);
+            if (endIndex < 0) return new(input.Length, input[(startIndex + 1)..]);
+
+            string output = input[(startIndex + opening.Length)..(endIndex - closing.Length)];
             return new(endIndex, output);
         }
         // if is not continuing or does not start with bracket
-        return new(-1, "");
+        return new(-1, string.Empty);
     }
 }

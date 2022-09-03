@@ -54,4 +54,23 @@ public class NthRootTests
         Assert.Equal(expectedResult, normalResult.Result);
         Assert.Equal(expectedResult, physicsResult.Result);
     }
+
+    [Theory]
+    [InlineData("\\sqrt[12]{99", "root(99,12)")]
+    [InlineData("\\sqrt[12]99", "root(99,12)")]
+    [InlineData("\\sqrt[1299", "root(,1299)")]
+    public void NthRoot_WithBadInput_ShouldTranslate_Always(string input, string expectedResult)
+    {
+        // Arrange
+        var normalItem = new TranslationItem(input, _normalArgs);
+        var physicsItem = new TranslationItem(input, _physicsArgs);
+
+        // Act
+        var normalResult = Translation.MakeNormalTranslation(normalItem);
+        var physicsResult = Translation.MakeNormalTranslation(physicsItem);
+
+        // Assert
+        Assert.Equal(expectedResult, normalResult.Result);
+        Assert.Equal(expectedResult, physicsResult.Result);
+    }
 }

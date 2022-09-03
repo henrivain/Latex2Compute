@@ -1,6 +1,7 @@
 ﻿namespace MekLatexTranslationLibrary.Helpers;
 internal static class Slicer
 {
+    /// <returns>substring of input, if fails returns ""</returns>
     internal static string GetSpanSafely(string input, Range range)
     {
         try
@@ -13,6 +14,9 @@ internal static class Slicer
             return string.Empty;
         }
     }
+
+
+    /// <returns>substring of input, if fails returns ""</returns>
     internal static string GetSpanSafely(string input, int startIndex, int length)
     {
         return GetSpanSafely(input, startIndex..(startIndex + length));

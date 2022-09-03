@@ -5,80 +5,67 @@ namespace MekLatexTranslationLibrary.OperatorBuilders;
 
 internal static class RootBuilder
 {
-    /// <summary>
-    /// Translate Latex "\sqrt[]{}" to #141#(,) => translate later root(,)
-    /// </summary>
-    /// <param name="item"></param>
-    /// <returns></returns>
-    internal static TranslationItem Build(TranslationItem item)
+    struct Root
     {
-        // Find and change "\\sqrt[x]{y}" => "root(x,y)"
-        string inp = item.Latex;
-
-        bool inpContinues = true;
-
-        int start = inp.IndexOf("\\sqrt[");
-        inp = inp.Remove(start, 6);
-
-        int closingBracket = BracketHandler.FindBrackets(inp, "[]", start);
-
-        if (closingBracket != -1)
-        {
-            int startBracket = closingBracket + 2;
-
-            string nextChar = HelperAlgorithms.GetNextCharsSafely(inp[(closingBracket + 1)..], 1);
-
-            switch (nextChar)
-            {
-                case null:
-                    // inp end in first closing bracket => skip translation
-                    item.ErrorCodes += "virhe24";
-                    Helper.DevPrintTranslationError("virhe24");
-                    inpContinues = false;
-                    break;
-
-                case "{":
-                    // everything ok
-                    break;
-
-                default:
-                    // no "{" -bracket => take that char to count too
-                    item.ErrorCodes += "virhe23";
-                    Helper.DevPrintTranslationError("virhe23");
-                    startBracket = closingBracket + 1;
-                    break;
-            }
-
-            if (inpContinues)
-            {
-                string erCodes = item.ErrorCodes;
-                Compile(ref inp, ref erCodes, start, closingBracket, startBracket);
-                item.ErrorCodes = erCodes;
-            }
-            item.Latex = inp;
-            return item;
-        }
-
-        // no first closing bracket => skip
-        item.ErrorCodes += "virhe16";
-        Helper.DevPrintTranslationError("virhe16");
-        item.Latex = inp;
-        return item;
+        public Root() { }
+        public string TextBefore { get; set; } = string.Empty;
+        public string TopText { get; set; } = string.Empty;
+        public string Body { get; set; } = string.Empty;
+        public string TextAfter { get; set; } = string.Empty;
+        public override string ToString() => $"{TextBefore}{Tag}({Body},{TopText}){TextAfter}";
     }
 
-    private static void Compile(ref string inp, ref string erCodes, int start, int closingBracket, int startBracket)
-    {
-        // complile final result
-        int end = BracketHandler.FindBrackets(inp, "{}", startBracket);
+    const string OperatorStart = "\\sqrt[";
+    const string Tag = "#141#";
 
-        if (end != -1)
+    internal static string BuildAll(string input, ref List<TranslationError> errors)
+    {
+        int startIndex;
+        while (true)
         {
-            inp = $"{ inp[..start] }#141#({ inp[startBracket..end] },{ inp[start..closingBracket] }){ inp[(end + 1)..] }";
-            return;
+            startIndex = input.IndexOf(OperatorStart);
+            if (startIndex < 0) return input;
+            input = input.Remove(startIndex, OperatorStart.Length - 1);
+            input = Build(input, startIndex, ref errors);
         }
-        // no ending bracket => [end = inp.end]
-        erCodes += "virhe17";
-        Helper.DevPrintTranslationError("virhe17");
-        inp = $"{ inp[..start] }#141#({ inp[startBracket..] },{ inp[start..closingBracket] })";
+    }
+
+    internal static string Build(string input, int startIndex, ref List<TranslationError> errors)
+    {
+        // Find and change "\\sqrt[x]{y}" => "root(y,x)"
+        Root root = new()
+        {
+            TextBefore = input[..startIndex]
+        };
+
+        var topInfo = BracketHandler.GetCharsBetweenBrackets(input, BracketType.Square, startIndex);
+        if (topInfo.EndIndex < 0)
+        {
+            Helper.TranslationError(TranslationError.NthRoot_NoFirstClosingBracket, ref errors);
+         
+            topInfo.Content = input[(startIndex + 1)..];
+            topInfo.EndIndex = input.Length;
+        }
+
+        root.TopText = topInfo.Content;
+        
+        var bodyInfo = BracketHandler.GetCharsBetweenBrackets(input, BracketType.Curly, topInfo.EndIndex);
+        if (bodyInfo.EndIndex < 0)
+        {
+            Helper.TranslationError(TranslationError.NthRoot_NoSecondStartBracket, ref errors);
+
+            bodyInfo.EndIndex = BracketHandler.FindBrackets(input, BracketType.Curly, topInfo.EndIndex);
+            if (bodyInfo.EndIndex < 0)
+            {
+                errors.Add(TranslationError.NthRoot_NoSecondEndBracket);
+                Helper.DevPrintTranslationError(nameof(TranslationError.NthRoot_NoSecondStartBracket));
+                bodyInfo.EndIndex = input.Length;
+            }
+            bodyInfo.Content = Slicer.GetSpanSafely(input, topInfo.EndIndex..);
+        }
+        root.Body = bodyInfo.Content;
+        root.TextAfter = input[bodyInfo.EndIndex..];
+
+        return root.ToString();
     }
 }

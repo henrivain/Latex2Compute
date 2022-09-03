@@ -10,4 +10,7 @@ public enum TranslationError
     Frac_NoFirstEndBracket = 12,
     Frac_NoEndFound = 15,
     Power_NoEndingBracketFound = 18,
+    NthRoot_NoSecondStartBracket = 23,
+    NthRoot_NoFirstClosingBracket = 16,
+    NthRoot_NoSecondEndBracket = 25,
 }

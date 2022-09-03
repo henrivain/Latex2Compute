@@ -14,12 +14,7 @@ public static class OperatorAlgorithms
         //runs operator change algorithms with instructions from settings
         List<TranslationError> errors = Enumerable.Empty<TranslationError>().ToList();
 
-
         item.Latex = FractionBuilder.BuildAll(item.Latex, ref errors);
-        //while (item.Latex.Contains("\\frac{") || item.Latex.Contains("\\dfrac{"))
-        //{
-        //    item = Fraction(item);
-        //}
         
         if (item.Latex.Contains("\\begin{cases}"))
         {
@@ -34,7 +29,7 @@ public static class OperatorAlgorithms
         }
         while (item.Latex.Contains("\\sqrt["))
         {
-            item = RootBuilder.Build(item);
+            item.Latex = RootBuilder.BuildAll(item.Latex, ref errors);
         }
 
         item.Latex = LimitBuilder.BuildAll(item.Latex, ref errors);
@@ -77,23 +72,4 @@ public static class OperatorAlgorithms
         item.Latex = inp[..start] + "#142#(" + inp[start..] + ")";
         return item;
     }
-
-  
-
-   
-
-    private static TranslationItem MethodTemplate(TranslationItem item)
-    {
-        // What does this do?
-        string inp = item.Latex;
-        string erCodes = item.ErrorCodes;
-
-        //code goes here
-
-        item.Latex = inp;
-        item.ErrorCodes = erCodes;
-        return item;
-    }
-
-
 }

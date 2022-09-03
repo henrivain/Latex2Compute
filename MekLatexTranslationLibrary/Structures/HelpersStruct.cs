@@ -42,8 +42,8 @@ internal struct ContentAndEnd
         Content = content;
     }
 
-    internal int EndIndex { get; private set; }
-    internal string Content { get; private set; }
+    internal int EndIndex { get; set; }
+    internal string Content { get; set; }
 }
 
 /// <summary>

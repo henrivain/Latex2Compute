@@ -16,40 +16,26 @@ public static class Translation
     /// </summary>
     /// <param name="input"></param>
     /// <returns>TranslationResult (Result, ErrorCodes) with latex translated</returns>
-    public static TranslationResult MakeNormalTranslation(TranslationItem input)
+    public static TranslationResult MakeNormalTranslation(TranslationItem item)
     {
-        TranslationItem result = ConnectToAlgorithms(input);
-
-        return new(result.Latex, result.ErrorCodes); ;
-    }
-
-
-
-    /// <summary>
-    /// Run translation algorihms in right order
-    /// </summary>
-    /// <param name="item"></param>
-    /// <returns>inp that is translated with given translation args</returns>
-    private static TranslationItem ConnectToAlgorithms(TranslationItem item)
-    {
+        string input = item.Latex;
         List<TranslationError> errors = Enumerable.Empty<TranslationError>().ToList();
 
         // start changes
-        item = StartEdit.Run(item);
+        input = StartEdit.Run(input);
 
         // translate all operators
-        item.Latex = TranslateAllOperators(item.Latex, ref errors);
+        input = TranslateAllOperators(input, ref errors);
 
         // connect to symbol translations
-        item = SymbolTranslations.Run(item);
+        input = SymbolTranslations.Run(input, item.Settings, ref errors);
 
         // make end changes
-        item = EndEdit.Run(item);
+        input = EndEdit.Run(input, item.Settings, ref errors);
 
         // finish and return value
-        return item;
+        return new(input, string.Join(", ", errors));
     }
-
 
     private static string TranslateAllOperators(string input, ref List<TranslationError> errors)
     {

@@ -5,63 +5,47 @@ namespace MekLatexTranslationLibrary;
 /// <summary>
 /// Translation algorithms for Matcha io symbols and constructors
 /// </summary>
-public static class Matcha
+internal static class Matcha
 {
-    public static TranslationItem ConnectToMathchaChanges(TranslationItem item)
-    {
-        // connect to matcha changes if enabled in settings
-        if (item.Settings.MatchaEnabled)
-        {
-            MakeMatchaChanges(item);
-        }
-        return item;
-    }
-
-    private static TranslationItem MakeMatchaChanges(TranslationItem item)
+    public static string MakeMatchaChanges(string input, ref List<TranslationError> errors)
     {
         // method removes unuseful latex groups that matcha.io adds to their latex documents
+        input = input.Replace("\\displaystyle", "");
+        input = input.Replace("$", "");
 
-        string inp = item.Latex;
-
-        inp = inp.Replace("\\displaystyle", "");
-        inp = inp.Replace("$", "");
-        item.Latex = inp;
-
-        while (item.Latex.Contains("\\end{") || item.Latex.Contains("\\begin{"))
+        while (input.Contains("\\end{") || input.Contains("\\begin{"))
         {
-            int start = item.Latex.IndexOf("\\end{");
-            if (start == -1)
+            int startIndex = input.IndexOf("\\end{");
+            if (startIndex == -1)
             {
                 // if contains begin instead of end
-                start = item.Latex.IndexOf("\\begin{");
-                item.Latex = item.Latex.Remove(start, 7);
+                startIndex = input.IndexOf("\\begin{");
+                input = input.Remove(startIndex, 7);
             }
             else
             {
                 // remove end
-                item.Latex = item.Latex.Remove(start, 5);
+                input = input.Remove(startIndex, 5);
             }
-            item = RemoveConstructorArgs(item, start);
+            input = RemoveConstructorArgs(input, startIndex, ref errors);
         }
-        return item;
+        return input;
     }
 
-    private static TranslationItem RemoveConstructorArgs(TranslationItem item, int start)
+    private static string RemoveConstructorArgs(string input, int startIndex, ref List<TranslationError> errors)
     {
         // remove arguments from macha io document constructors or math field definers
-        int end = BracketHandler.FindBrackets(item.Latex, "{}", start);
+        int end = BracketHandler.FindBrackets(input, "{}", startIndex);
 
         if (end == -1)
         {
             // no end to matcha page constructor => skip
-            item.ErrorCodes += "virhe4";
+            Helper.TranslationError(TranslationError.Matcha_PageConstructorEndBracketNotFound, ref errors);
         }
         else
         {
-            item.Latex = item.Latex.Remove(start, end - start + 1);
+            input = input.Remove(startIndex, end - startIndex + 1);
         }
-
-
-        return item;
+        return input;
     }
 }

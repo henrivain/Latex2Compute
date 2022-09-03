@@ -1,9 +1,4 @@
 ﻿using MekLatexTranslationLibrary.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MekLatexTranslationLibrary;
 
@@ -14,23 +9,22 @@ static internal class StartEdit
     /// </summary>
     /// <param name="item"></param>
     /// <returns>TranslationItem item with changes made</returns>
-    internal static TranslationItem Run(TranslationItem item)
+    internal static string Run(string input)
     {
-        string inp = item.Latex;
+  
 
         //Changes to LaTexInput
-        inp = inp.Replace("\\ ", "");
-        inp = inp.Replace(" ", "");
-        inp = inp.Replace("\n", "");
-        inp = inp.Replace("\r", "");
+        input = input.Replace("\\ ", "");
+        input = input.Replace(" ", "");
+        input = input.Replace("\n", "");
+        input = input.Replace("\r", "");
 
         // remove \text and \mathrm
-        inp = RemovePattern.BracketsAfterLatex(inp, "\\text");
-        inp = RemovePattern.BracketsAfterLatex(inp, "\\mathrm");
+        input = RemovePattern.BracketsAfterLatex(input, "\\text");
+        input = RemovePattern.BracketsAfterLatex(input, "\\mathrm");
 
-        inp = inp.Replace("m/s", "\\frac{m}{s}");
+        input = input.Replace("m/s", "\\frac{m}{s}");
 
-        item.Latex = inp;
-        return item;
+        return input;
     }
 }

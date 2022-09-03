@@ -8,76 +8,76 @@ static internal class EndEdit
     /// <summary>
     /// Translates all operator tags to ti-nspire form and deletes empty operators. Do Matcha changes
     /// <para/>most of the operator names are seen as units with physics mode => uses tags (example "s" = second => "system" [problem] => uses "#121#")
-    /// <para/>Removes empty divisions ["()/()" => ""], Adds derivative or solve if needed [solve(inp,x)]
+    /// <para/>Removes empty divisions ["()/()" => ""], Adds derivative or solve if needed [solve(input,x)]
     /// </summary>
-    /// <param name="item"></param>
-    /// <returns>inp with made end change</returns>
-    internal static TranslationItem Run(TranslationItem item)
+    /// <param name="input"></param>
+    /// <returns>input with made end change</returns>
+    internal static string Run(string input, TranslationArgs args, ref List<TranslationError> errors)
     {
 
         // remove matcha document constructors (do before curly bracket removal)
-        item = Matcha.ConnectToMathchaChanges(item);
-
-        string inp = item.Latex;
+        if (args.MatchaEnabled)
+        {
+            input = Matcha.MakeMatchaChanges(input, ref errors);
+        }
 
         // change special
-        if (item.Settings.SpecialSymbolTranslation)
+        if (args.SpecialSymbolTranslation)
         {
-            inp = SpecialSymbols(inp);
+            input = SpecialSymbols(input);
         }
 
         // remove unused curly brackets
-        if (item.Settings.CurlyBracket)
+        if (args.CurlyBracket)
         {
-            inp = inp.Replace("{", "");
-            inp = inp.Replace("}", "");
+            input = input.Replace("{", "");
+            input = input.Replace("}", "");
         }
         // remove not useful
-        inp = inp.Replace("\\", "");
+        input = input.Replace("\\", "");
 
-        if (item.Settings.AutoSeparateOperators)
+        if (args.AutoSeparateOperators)
         {
-            inp = SeparateOperatorsWithCdot(inp);
+            input = SeparateOperatorsWithCdot(input);
         }
 
-        inp = TranslationTag.ToNspireOperator(inp);
+        input = TranslationTag.ToNspireOperator(input);
 
         // changes from settings
 
-        switch (item.Settings.EndChanges)
+        switch (args.EndChanges)
         {
             case "all":
                 // remove all not wanted items
-                inp = RemoveEmptyFractions(inp);
-                inp = RemoveEndChangesSymbols(inp);
+                input = RemoveEmptyFractions(input);
+                input = RemoveEndChangesSymbols(input);
                 break;
 
             case "emptyFrac":
                 //remove empty fractions
-                inp = RemoveEmptyFractions(inp);
+                input = RemoveEmptyFractions(input);
                 break;
 
             default:
                 break;
         }
 
-        if (item.Settings.AutoSolve)
+        if (args.AutoSolve)
         {
             // if auto solve is on => call autosolve method and check if conditions are true
-            inp = RunAutoSolve(inp);
+            input = RunAutoSolve(input);
         }
 
-        inp = CheckDerivative(inp, item);
+        input = CheckDerivative(input, args);
 
-        item.Latex = inp;
-        return item;
+        return input;
     }
 
     /// <summary>
-    /// Removes all empty fractions from inp like ()/() or (^2)/() or ^2/^2
+    /// Removes all empty fractions from input like ()/() or (^2)/() or ^2/^2
     /// </summary>
     /// <param name="inp"></param>
-    /// <returns>inp with fractions removed</returns>
+    /// <returns>input with fractions removed</returns>
     private static string RemoveEmptyFractions(string inp)
     {
         string[] patterns =
@@ -116,33 +116,31 @@ static internal class EndEdit
 
 
     /// <summary>
-    /// Wrap inp inside ti-nspire derivative block and add variable [any char, check "xyz" first]
-    /// <para/> Runs if item.Settings.Autoderivative == true or inp starts with 'D'
+    /// Wrap input inside ti-nspire derivative block and add variable [any char, check "xyz" first]
+    /// <para/> Runs if input.Settings.Autoderivative == true or input starts with 'D'
     /// </summary>
     /// <param name="inp"></param>
     /// <param name="item"></param>
-    /// <returns>derivative(inp,x) wrapped inp</returns>
-    private static string CheckDerivative(string inp, TranslationItem item)
+    /// <returns>derivative(input,x) wrapped input</returns>
+    private static string CheckDerivative(string input, TranslationArgs args)
     {
         // check if needed to add "derivative()"
-        if (item.Settings.AutoDerivative)
+        if (args.AutoDerivative)
         {
-            return RunAutoDerivative(inp);
+            return RunAutoDerivative(input);
         }
-
-        if (inp.StartsWith('D'))
+        if (input.StartsWith('D'))
         {
-            return RunAutoDerivative(inp.Remove(0, 1));
+            return RunAutoDerivative(input.Remove(0, 1));
         }
-
-        return inp;
+        return input;
     }
 
     /// <summary>
     /// Removes unesessary symbols like "…"
     /// </summary>
     /// <param name="inp"></param>
-    /// <returns>inp with unnesessary symbols removed</returns>
+    /// <returns>input with unnesessary symbols removed</returns>
     private static string RemoveEndChangesSymbols(string inp)
     {
         // remove non needed symbols
@@ -150,11 +148,11 @@ static internal class EndEdit
     }
 
     /// <summary>
-    /// Wrap inp inside ti-nspire solve block and add variable x, y or z if found like "solve(inp,x)"
+    /// Wrap input inside ti-nspire solve block and add variable x, y or z if found like "solve(input,x)"
     /// <para/>Runs in any case
     /// </summary>
     /// <param name="inp"></param>
-    /// <returns>solve(inp,x) wrapped inp</returns>
+    /// <returns>solve(input,x) wrapped input</returns>
     private static string RunAutoSolve(string inp)
     {
         string[] symbols = { ">", "<", "=" };
@@ -179,7 +177,7 @@ static internal class EndEdit
     }
 
     /// <summary>
-    /// Put inp inside derivative() and add vars if found in inp
+    /// Put input inside derivative() and add vars if found in input
     /// </summary>
     /// <param name="inp"></param>
     /// <returns></returns>
@@ -194,10 +192,10 @@ static internal class EndEdit
     }
 
     /// <summary>
-    /// GetBottom first character that appears to be in inp (x, y and z are checked first)
+    /// GetBottom first character that appears to be in input (x, y and z are checked first)
     /// </summary>
     /// <param name="inp"></param>
-    /// <returns>char "variable" or null if no chars in inp</returns>
+    /// <returns>char "variable" or null if no chars in input</returns>
     private static char? FindVariable(string inp)
     {
         char[] variables = { 'x', 'y', 'z' };
@@ -227,7 +225,7 @@ static internal class EndEdit
     /// Translate i and e (neper and imaginary unit)
     /// </summary>
     /// <param name="inp"></param>
-    /// <returns>inp with translated i and e</returns>
+    /// <returns>input with translated i and e</returns>
     private static string SpecialSymbols(string inp)
     {
         // change special symbols
@@ -244,11 +242,11 @@ static internal class EndEdit
     }
 
     /// <summary>
-    /// if inp[index] is 'i', make checks and add @ if needed
+    /// if input[index] is 'i', make checks and add @ if needed
     /// </summary>
     /// <param name="inp"></param>
     /// <param name="index"></param>
-    /// <returns>inp with one more @i translated</returns>
+    /// <returns>input with one more @i translated</returns>
     private static string TranslateImaginaryUnit(string inp, ref int index)
     {
         if (inp[index] is not 'i') return inp;
@@ -256,7 +254,7 @@ static internal class EndEdit
         if (index == 0)
         {
             index++;
-            return $"@{inp}";       // add @-symbol in front of inp
+            return $"@{inp}";       // add @-symbol in front of input
         }
 
         char charBeforeIndex = inp[(index - 1)];

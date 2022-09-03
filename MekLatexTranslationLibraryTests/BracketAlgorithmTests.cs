@@ -48,6 +48,20 @@ public class BracketAlgorithmTests
         Assert.Equal(-1, squareResult);
     }
 
+    [Theory]
+    [InlineData("", -1)]
+    [InlineData(")", 1)]
+    [InlineData("ggg)", 4)]
+    public void FindBracket_ShouldReturn_IndexPlusOne_IfEndFound( 
+        string input, int expectedIndex)
+    {
+        // Arrange & Act
+        int result = BracketHandler.FindBrackets(input, BracketType.Round);
+
+
+        // Assert
+        Assert.Equal(expectedIndex, result);
+    }
 
 
     [Theory]

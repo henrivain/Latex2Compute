@@ -20,12 +20,10 @@ public struct TranslationItem
     public TranslationItem(string text, TranslationArgs settings)
     {
         Latex = text;
-        ErrorCodes = "";
         Settings = settings;
     }
 
     internal string Latex { get; set; }
-    public string ErrorCodes { get; internal set; }
     public TranslationArgs Settings { get; private set; }
 }
 

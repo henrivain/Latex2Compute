@@ -11,38 +11,41 @@ internal static class SymbolTranslations
     /// <summary>
     /// Translates all easy to translate symbols like "\cdot" and "\alpha" and all units if needed
     /// </summary>
-    /// <param name="item"></param>
+    /// <param name="input"></param>
     /// <returns></returns>
-    internal static TranslationItem Run(TranslationItem item)
+    internal static string Run(string input, TranslationArgs args, ref List<TranslationError> errors)
     {
         // translate symbols to ti-nspire form
 
         // geometry mode changes
-        if (item.Settings.GeometryMode)
+        if (args.GeometryMode)
         {
-            item = GeometryModeSymbols(item);
+            input = GeometryModeSymbols(input);
         }
 
         // make basic everytime translations
-        item = BasicSymbols(item);
+        input = BasicSymbols(input);
+
+        // vectors
+        input = CheckVectorBars(input, ref errors);
 
         // physics mode 1 changes
-        if (item.Settings.PhysicsMode1)
+        if (args.PhysicsMode1)
         {
             // Remove physics symbols like m^3, V, N
             // => do not use g,l,m,s,A,C,F,N,W,V as variables in your Latex text
-            item = RemoveGreekSymbols(item);
-            item = RemovePhysics1ModeSymbols(item);
+            input = RemoveGreekSymbols(input);
+            input = RemovePhysics1ModeSymbols(input);
         }
 
         // mathmode changes
-        if (item.Settings.MathMode)
+        if (args.MathMode)
         {
             // remove greek letters
-            item = RemoveGreekSymbols(item);
+            input = RemoveGreekSymbols(input);
         }
 
-        return item;
+        return input;
     }
 
     private static string[] GetPhysicsSymbols()
@@ -68,7 +71,7 @@ internal static class SymbolTranslations
     {
         // storage to math and physics greek symbols
         // return [string array {symbols}]
-        string[] symbolsToRemove = 
+        return new[] 
         {
             "k\\Omega", "\\Omega", "\\Gamma", "\\Delta",            
             "\\varepsilon", "\\zeta", "\\eta", "\\theta",           
@@ -78,132 +81,117 @@ internal static class SymbolTranslations
             "\\Upsilon", "\\phi", "\\Phi", "\\chi", "\\psi",        
             "\\Psi", "\\omega", "\\partial", "\\varphi"             
         };
-        return symbolsToRemove;
     }
 
-    private static TranslationItem BasicSymbols(TranslationItem item)
+    private static string BasicSymbols(string input)
     {
         // Translate symbols which will be translated same way every time
-        string inp = item.Latex;
 
         // basic symbols
-        inp = inp.Replace("{,}", ".");
-        inp = inp.Replace("\\cdot", "*");
-        inp = inp.Replace("\\infty", "infinity");
-        inp = inp.Replace("\\pi", "#161#");
+        input = input.Replace("{,}", ".")
+            .Replace("\\cdot", "*")
+            .Replace("\\infty", "infinity")
+            .Replace("\\pi", "#161#");
 
-        TranslateAllBrackets(ref inp);
+        input = TranslateAllBrackets(input);
 
         // remove angles
-        inp = inp.Replace("(rad)", "");
-        inp = inp.Replace("rad", "");
-        inp = inp.Replace("\\degree", "");
-        inp = inp.Replace("°", "");
+        input = input
+            .Replace("(rad)", string.Empty)    
+            .Replace("rad", string.Empty)
+            .Replace("\\degree", string.Empty)
+            .Replace("°", string.Empty)
 
-        // less than, greater than
-        inp = inp.Replace("\\le", "<=");
-        inp = inp.Replace("\\ge", ">=");
-        inp = inp.Replace("\\mp", "±");
-        inp = inp.Replace("\\pm", "±");
-        inp = inp.Replace("\\ne ", "≠");
+        // less than, greater han
+            .Replace("\\le", "<=")
+            .Replace("\\ge", ">=")
+            .Replace("\\mp", "±")
+            .Replace("\\pm", "±")
+            .Replace("\\ne ", "≠")
 
-        // remove if not geometry mode
-        inp = inp.Replace("\\alpha", "");
-        inp = inp.Replace("\\beta", "");
-        inp = inp.Replace("\\gamma", "");
-        inp = inp.Replace("\\delta", "");
+        // remove if not geometrymode
+            .Replace("\\alpha", string.Empty)
+            .Replace("\\beta", string.Empty)
+            .Replace("\\gamma", string.Empty)
+            .Replace("\\delta", string.Empty)
 
         // other symbols
-        inp = inp.Replace("\\ldots", "");
-        inp = inp.Replace("\\...", "");
+            .Replace("\\ldots", string.Empty)
+            .Replace("\\...", string.Empty);
 
-        item.Latex = inp;
-
-        // vectors
-        item = CheckVectorBars(item);
-        return item;
+        return input;
     }
 
-    private static void TranslateAllBrackets(ref string inp)
+    private static string TranslateAllBrackets(string input)
     {
         // different brackets and abs
-        inp = inp.Replace("\\left(", "(");
-        inp = inp.Replace("\\right)", ")");
-        inp = inp.Replace("\\left\\{", "(");
-        inp = inp.Replace("\\right\\}", ")");
-        inp = inp.Replace("\\left[", "(");
-        inp = inp.Replace("\\right]", ")");
-        inp = inp.Replace("\\left|", "abs(");
-        inp = inp.Replace("\\right|", ")");
+        return input
+            .Replace("\\left(", "(")
+            .Replace("\\right)", ")")
+            .Replace("\\left\\{", "(")
+            .Replace("\\right\\}", ")")
+            .Replace("\\left[", "(")
+            .Replace("\\right]", ")")
+            .Replace("\\left|", "abs(")
+            .Replace("\\right|", ")");
     }
 
-    private static TranslationItem CheckVectorBars(TranslationItem item)
+    private static string CheckVectorBars(string input, ref List<TranslationError> errors)
     {
-        // check if \overline{ elements in inp
-        string inp = item.Latex;
+        // remove vector "\overline{}" element
         string overline = "\\overline{";
-        while (inp.Contains(overline))
+        
+        while (true)
         {
-            RemoveVectorBar(ref item, ref inp, overline);
-        }
-        item.Latex = inp;
-        return item;
-    }
-
-    private static void RemoveVectorBar(ref TranslationItem item, ref string inp, string overline)
-    {
-        // remove vector "\overline" element
-        int start = inp.IndexOf(overline);
-        inp = inp.Remove(start, 10);
-        int end = BracketHandler.FindBrackets(inp, "{}", start);
-        if (end != -1)
-        {
-            inp = inp.Remove(end, 1);
-        }
-        else
-        {
-            // no end add error code => vector bar does not have end \overline{  } <=
-            item.ErrorCodes += "virhe 21";
+            int start = input.IndexOf(overline);
+            if (start < 0) return input;
+            
+            input = input.Remove(start, 10);
+            int end = BracketHandler.FindBrackets(input, BracketType.Curly, start);
+            end--;
+            if (end is not -1)
+            {
+                input = input.Remove(end, 1);
+            }
+            else
+            {
+                // no end add error code => vector bar does not have end \overline{  } <=
+                Helper.TranslationError(TranslationError.VecBar_NoEndBracketFound, ref errors);
+            }
         }
     }
 
-    private static TranslationItem GeometryModeSymbols(TranslationItem item)
+  
+
+    private static string GeometryModeSymbols(string input)
     {
         // Translate symbols which will be translated same way every time
-        string inp = item.Latex;
-
-        inp = inp.Replace("\\alpha", "α");
-        inp = inp.Replace("\\beta", "β");
-        inp = inp.Replace("\\gamma", "γ");
-        inp = inp.Replace("\\delta", "δ");
-
-        item.Latex = inp;
-        return item;
+        return input
+            .Replace("\\alpha", "α")
+            .Replace("\\beta", "β")
+            .Replace("\\gamma", "γ")
+            .Replace("\\delta", "δ");
     }
 
-    private static TranslationItem RemoveGreekSymbols(TranslationItem item)
+    private static string RemoveGreekSymbols(string input)
     {
         // Translate symbols which will be translated same way every time
-        string inp = item.Latex;
         string[] SymbolsArray = GetGreekSymbolsArray();
         foreach (string symbol in SymbolsArray)
         {
-            inp = inp.Replace(symbol, "");
+            input = input.Replace(symbol, string.Empty);
         }
-        item.Latex = inp;
-        return item;
+        return input;
     }
 
-    private static TranslationItem RemovePhysics1ModeSymbols(TranslationItem item)
+    private static string RemovePhysics1ModeSymbols(string input)
     {
         // Translate symbols which will be translated same way every time
-        string inp = item.Latex;
         string[] SymbolsArray = GetPhysicsSymbols();
         foreach (string symbol in SymbolsArray)
         {
-            inp = inp.Replace(symbol, "");
+            input = input.Replace(symbol, string.Empty);
         }
-        item.Latex = inp;
-        return item;
+        return input;
     }
 }

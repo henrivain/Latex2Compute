@@ -9,7 +9,7 @@ internal static class SumBuilder
     const string OperatorStart = "\\sum";
     const string Tag = "∑";
 
-    private static string Build(string input, int startIndex, ref List<TranslationError> errors)
+    internal static string Build(string input, int startIndex, ref List<TranslationError> errors)
     {
         ComplexSymbolReader reader = new(input, startIndex, "sum");
         SumInfo sumInfo = new SumInfo().SetReaderInfo(reader, ref errors);
@@ -17,7 +17,7 @@ internal static class SumBuilder
         return $"{sumInfo.TextBefore}{Tag}({sumInfo.Equation},{sumInfo.Bottom},{sumInfo.Top}){sumInfo.TextAfter}";
     }
 
-    internal static string BuildAll(string input, ref List<TranslationError> errors)
+    public static string BuildAll(string input, ref List<TranslationError> errors)
     {
         while (true)
         {

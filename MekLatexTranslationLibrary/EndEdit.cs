@@ -19,7 +19,6 @@ static internal class EndEdit
         item = Matcha.ConnectToMathchaChanges(item);
 
         string inp = item.Latex;
-        string erCodes = item.ErrorCodes;
 
         // change special
         if (item.Settings.SpecialSymbolTranslation)
@@ -71,7 +70,6 @@ static internal class EndEdit
         inp = CheckDerivative(inp, item);
 
         item.Latex = inp;
-        item.ErrorCodes = erCodes;
         return item;
     }
 

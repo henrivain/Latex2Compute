@@ -27,8 +27,7 @@ internal class RiseToPowerBuilder
             {
                 //if no ending bracket => closing = end
                 input += ")";
-                errors.Add(TranslationError.Power_NoEndingBracketFound);
-                Helper.DevPrintTranslationError(nameof(TranslationError.Power_NoEndingBracketFound));
+                Helper.TranslationError(TranslationError.Power_NoEndingBracketFound, ref errors);
             }
         }
     }

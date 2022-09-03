@@ -49,4 +49,9 @@ internal static class Helper
         if (bigger < minValue) return -1;
         return (smaller < minValue) ? bigger : smaller;
     }
+
+    internal static void TranslationError(object cases_EndBeforeStart)
+    {
+        throw new NotImplementedException();
+    }
 }

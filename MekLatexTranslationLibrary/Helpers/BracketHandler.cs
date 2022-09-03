@@ -20,14 +20,15 @@ internal static class BracketHandler
         BracketType.Curly => ("{", "}"),
         BracketType.CurlyLong => ("\\left{", "\\right}"),
         BracketType.CurrencySign_And => ("¤", "&"),
+        BracketType.CasesStartEnd => ("\\begin{cases}", "\\end{cases}"),
         _ => throw new NotImplementedException($"{nameof(BracketType)} {type} is not implemented")
     };
 
     /// <summary>
     /// Find index of matching end bracket
-    /// <para/>example: input='log(33)', bracketType.Round, startIndex=5 => returns 8
+    /// <para/>example: input='log(33)*42', bracketType.Round, startIndex=5 => returns 8
     /// <para/>return index if end index + 1, because it makes reading spans easier (it is start of next span and end of this one)
-    /// <para/>START BRACKET SHOULD NOT BE INCLUDED IN INPUT (or startIndex should be start bracket index + 1)
+    /// <para/>START BRACKET SHOULD NOT BE INCLUDED IN THE INPUT (or startIndex should be start bracket index + 1)
     /// </summary>
     /// <param name="input">The string which is looped throught</param>
     /// <param name="type"></param>

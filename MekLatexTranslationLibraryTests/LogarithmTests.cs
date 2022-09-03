@@ -73,7 +73,6 @@ public class LogarithmTests
     [Theory]
     [InlineData("\\ln \\left(3\\right)444\\cdot \\ln 33=\\ln 555", "ln(3)444*ln(33)=ln(555)")]
     [InlineData("\\frac{\\ln 9\\cdot \\ln 5}{\\ln 8}", "(ln(9)*ln(5))/(ln(8))")]
-    [InlineData("\\begin{cases}\\ln 7&\\\\\\ln 8&\\end{cases}", "system(ln(7),ln(8))")]
     public void NaturalLogarithm_ShouldReturn_ValidTranslation_Always(
         string input, string expectedResult)
     {

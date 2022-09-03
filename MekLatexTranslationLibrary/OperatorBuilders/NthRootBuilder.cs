@@ -1,9 +1,9 @@
-﻿/// Copyright 2021 Henri Vainio 
+﻿/// Copyright 2022 Henri Vainio 
 using MekLatexTranslationLibrary.Helpers;
 
 namespace MekLatexTranslationLibrary.OperatorBuilders;
 
-internal static class RootBuilder
+internal static class NthRootBuilder
 {
     struct Root
     {
@@ -18,7 +18,7 @@ internal static class RootBuilder
     const string OperatorStart = "\\sqrt[";
     const string Tag = "#141#";
 
-    internal static string BuildAll(string input, ref List<TranslationError> errors)
+    public static string BuildAll(string input, ref List<TranslationError> errors)
     {
         int startIndex;
         while (true)
@@ -53,12 +53,11 @@ internal static class RootBuilder
         if (bodyInfo.EndIndex < 0)
         {
             Helper.TranslationError(TranslationError.NthRoot_NoSecondStartBracket, ref errors);
-
+            
             bodyInfo.EndIndex = BracketHandler.FindBrackets(input, BracketType.Curly, topInfo.EndIndex);
             if (bodyInfo.EndIndex < 0)
             {
-                errors.Add(TranslationError.NthRoot_NoSecondEndBracket);
-                Helper.DevPrintTranslationError(nameof(TranslationError.NthRoot_NoSecondStartBracket));
+                Helper.TranslationError(TranslationError.NthRoot_NoSecondStartBracket, ref errors);
                 bodyInfo.EndIndex = input.Length;
             }
             bodyInfo.Content = Slicer.GetSpanSafely(input, topInfo.EndIndex..);

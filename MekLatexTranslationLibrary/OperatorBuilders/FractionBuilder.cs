@@ -8,8 +8,8 @@ namespace MekLatexTranslationLibrary.OperatorBuilders;
 
 internal class FractionBuilder
 {
-    private static string OperatorStart { get; } = "\\frac{";
-    private static string OperatorStartVariantD { get; } = "\\dfrac{";
+    const string OperatorStart = "\\frac{";
+    const string OperatorStartVariantD = "\\dfrac{";
 
 
 
@@ -59,7 +59,7 @@ internal class FractionBuilder
         }
     }
 
-    private static string Build(string input, int startIndex, ref List<TranslationError> errors)
+    internal static string Build(string input, int startIndex, ref List<TranslationError> errors)
     {
         Fraction f = new()
         {

@@ -9,8 +9,11 @@ public enum TranslationError
     Sum_NoVariableFound = 11,
     Frac_NoFirstEndBracket = 12,
     Frac_NoEndFound = 15,
+    NthRoot_NoFirstClosingBracket = 16,
     Power_NoEndingBracketFound = 18,
     NthRoot_NoSecondStartBracket = 23,
-    NthRoot_NoFirstClosingBracket = 16,
     NthRoot_NoSecondEndBracket = 25,
+    Sqrt_InputDoesNotStartWithBracket = 26,
+    Cases_EndBeforeStart = 27,
+    Cases_NoEndBracketFound = 28,
 }

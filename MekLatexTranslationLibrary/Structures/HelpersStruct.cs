@@ -39,9 +39,8 @@ internal struct ContentAndEnd
     internal ContentAndEnd(int endIndex, string content)
     {
         EndIndex = endIndex;
-        Content = content;
+        Content = content ?? string.Empty;
     }
-
     internal int EndIndex { get; set; }
     internal string Content { get; set; }
 }

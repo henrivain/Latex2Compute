@@ -1,4 +1,5 @@
 ﻿/// Copyright 2021 Henri Vainio 
+using MekLatexTranslationLibrary.OperatorBuilders;
 using System.Collections;
 
 /// <summary>
@@ -31,11 +32,13 @@ public static class Translation
     /// <returns>inp that is translated with given translation args</returns>
     private static TranslationItem ConnectToAlgorithms(TranslationItem item)
     {
+        List<TranslationError> errors = Enumerable.Empty<TranslationError>().ToList();
+
         // start changes
         item = StartEdit.Run(item);
 
         // translate all operators
-        item = OperatorAlgorithms.RunAll(item);
+        item.Latex = TranslateAllOperators(item.Latex, ref errors);
 
         // connect to symbol translations
         item = SymbolTranslations.Run(item);
@@ -45,5 +48,21 @@ public static class Translation
 
         // finish and return value
         return item;
+    }
+
+
+    private static string TranslateAllOperators(string input, ref List<TranslationError> errors)
+    {
+        input = FractionBuilder.BuildAll(input, ref errors);
+        input = CasesBuilder.BuildAll(input, ref errors);
+        input = LogarithmBuilder.BuildAll(input, ref errors);
+        input = SquareRootBuilder.BuildAll(input, ref errors);
+        input = NthRootBuilder.BuildAll(input, ref errors);
+        input = LimitBuilder.BuildAll(input, ref errors);
+        input = SumBuilder.BuildAll(input, ref errors);
+        input = IntegralBuilder.BuildAll(input);
+        input = TrigonBuilder.BuildAll(input);
+        input = RiseToPowerBuilder.BuildAll(input, ref errors);   //keep this last
+        return input;
     }
 }

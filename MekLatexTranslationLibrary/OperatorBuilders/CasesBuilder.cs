@@ -4,48 +4,59 @@ namespace MekLatexTranslationLibrary.OperatorBuilders;
 
 internal static class CasesBuilder
 {
-    internal static TranslationItem Build(TranslationItem item)
+    const string OperatorStart = "\\begin{cases}";
+    const string OperatorEnd = "\\end{cases}";
+    const string Tag = "#121#";
+
+    struct Cases
     {
-        // Find \cases and turn it into system()
-        string inp = item.Latex;
-        string erCodes = item.ErrorCodes;
+        public Cases() { }
 
-        string newCasesStart = "¤";
-        string newCasesEnd = "&";
+        public string TextBefore { get; set; } = string.Empty;
+        public string Body { get; set; } = string.Empty;
+        public string TextAfter { get; set; } = string.Empty;
 
-        inp = inp.Replace("\\\\", "#122#");
-        inp = inp.Replace("&", "");
-        inp = inp.Replace("¤", "");
-        inp = inp.Replace("\\begin{cases}", newCasesStart);
-        inp = inp.Replace("\\end{cases}", newCasesEnd);
+        public override string ToString() => $"{TextBefore}{Tag}({Body}){TextAfter}";
+    }
 
-        while (inp.Contains(newCasesStart) && inp.Contains(newCasesEnd))
+    public static string BuildAll(string input, ref List<TranslationError> errors)
+    {
+        int startIndex;
+        while (true)
         {
-            inp = Compile(inp, ref erCodes, newCasesStart);
+            startIndex = input.IndexOf(OperatorStart);
+            if (startIndex < 0) return input;
+            input = input.Remove(startIndex, OperatorStart.Length);
+            input = Build(input, startIndex, ref errors);
+        }
+    }
+
+    private static string Build(string input, int startIndex, ref List<TranslationError> errors)
+    {
+        input = input.Replace("\\\\", "#122#");
+        input = input.Replace("&", string.Empty);
+
+        Cases instance = new()
+        {
+            TextBefore = input[..startIndex]
+        };
+
+        int bodyEndIndex = BracketHandler.FindBrackets(input, BracketType.CasesStartEnd, startIndex);
+
+        if (bodyEndIndex < 0)
+        {
+            instance.Body = BuildAll(input[startIndex..], ref errors);
+            Helper.TranslationError(TranslationError.Cases_NoEndBracketFound, ref errors);
+        }
+        else
+        {
+            instance.Body = BuildAll(input[startIndex..(bodyEndIndex - OperatorEnd.Length)], ref errors);
+            instance.TextAfter = Slicer.GetSpanSafely(input, bodyEndIndex..);
         }
 
-        inp = inp.Replace("&", "");  //remove ends before start
-        item.Latex = inp;
-        item.ErrorCodes = erCodes;
-        return item;
+        return instance.ToString();
     }
 
 
-    private static string Compile(string inp, ref string erCodes, string newCasesStart)
-    {
-        // can't reach this point if doesn't have both: \begin and \end
-        int start = inp.IndexOf(newCasesStart);
-        int end = BracketHandler.FindBrackets(inp, "¤&", start + 1);
-        if (end != -1)
-        {
-            //compile normal
-            return $"{inp[..start]}#121#({inp.AsSpan(start + 1, end - start - 1)}){inp[(end + 1)..]}";
-        }
-        //if end is set before start (end = inp.end)
-        erCodes += "virhe26";
-        
-        Helper.DevPrintTranslationError("virhe26");
-        
-        return $"{inp[..start]}#121#({inp[(start + 1)..]})";
-    }
+   
 }

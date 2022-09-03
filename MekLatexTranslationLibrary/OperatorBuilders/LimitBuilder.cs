@@ -8,10 +8,10 @@ internal static class LimitBuilder
 {
     // call recursion after body.Content is initialized (like integral)
 
-    private static string Tag { get; } = "#151#";
-    private static string OperatorStart { get; } = "\\lim";
+    const string Tag = "#151#";
+    const string OperatorStart = "\\lim";
     
-    private static string Build(string input, int startIndex, ref List<TranslationError> errors)
+    internal static string Build(string input, int startIndex, ref List<TranslationError> errors)
     {
 
         var bottomInfo = HelperAlgorithms.CheckAndGetInconsistentStart(input, startIndex, "lim", "_{");
@@ -35,44 +35,7 @@ internal static class LimitBuilder
     }
     
 
-    internal static TranslationItem Build(TranslationItem item)
-    {
-        // Find limit and translate it "\\lim_(x\to y)(z)" => lim(z,x,y)
-        string inp = item.Latex;
-
-        int start = inp.IndexOf("\\lim");
-        inp = inp.Remove(start, 4);
-
-        ContentAndEnd bottomInfo = HelperAlgorithms.CheckAndGetInconsistentStart(inp, start, "lim", "_{");
-        string bottom = bottomInfo.Content;
-        int bottomEnd = bottomInfo.EndIndex;
-        if (bottomEnd is -1)
-        {
-            bottomEnd = start - 1;
-            item.ErrorCodes += "virhe6";
-            Helper.DevPrintTranslationError("virhe6");
-        }
-
-        bottom = ReplaceArrowWithComma(bottom);
-        bottom = AddMissingParts(bottom);
-
-        ContentAndEnd bracketContentInfo = HelperAlgorithms.GetExpressionAfterOperator(inp[(bottomEnd + 1)..]);
-
-        string content = bracketContentInfo.Content;
-        int end = bracketContentInfo.EndIndex;
-
-        if (end != -1)
-        {
-            // if all found [with content]
-            item.Latex = $"{inp[..start]}{Tag}({content},{bottom}){inp[(bottomEnd + end + 1)..]}";
-            return item;
-        }
-        // if no content brackets
-        item.Latex = $"{inp[..start]}{Tag}({inp[(bottomEnd + 1)..]},{bottom})";
-        return item;
-    }
-    
-    internal static string BuildAll(string input, ref List<TranslationError> errors)
+    public static string BuildAll(string input, ref List<TranslationError> errors)
     {
         int startIndex;
 

@@ -5,12 +5,12 @@ using MekLatexTranslationLibrary.Structures;
 namespace MekLatexTranslationLibrary.OperatorBuilders;
 
 /// <summary>
-/// Translate one integral with Build()
+/// Translate one integral with BuildAll()
 /// </summary>
 internal class IntegralBuilder
 {
-    private static string Tag { get; } = "#181#";
-    private static string OperatorStart { get; } = "\\int";
+    const string Tag = "#181#";
+    const string OperatorStart = "\\int";
 
     /// <summary>
     /// Translate all integrals inside input 
@@ -18,7 +18,7 @@ internal class IntegralBuilder
     /// </summary>
     /// <param name="input"></param>
     /// <returns>input with all integrals translated</returns>
-    internal static string BuildAllInside(string input)
+    public static string BuildAll(string input)
     {
         while (true)
         {
@@ -39,7 +39,7 @@ internal class IntegralBuilder
     /// <param name="inp"></param>
     /// <param name="startIndex"></param>
     /// <returns>inp with some Integral translated</returns>
-    private static string Build(string inp, int startIndex)
+    internal static string Build(string inp, int startIndex)
     {
         if (IsUndefinedIntegral(inp, startIndex))
         {
@@ -64,7 +64,7 @@ internal class IntegralBuilder
     }
     private static TwoStrings SeparateBodyAndArgument(string input, int dIndex)
     {
-        string integralBody = BuildAllInside(Slicer.GetSpanSafely(input, ..dIndex));
+        string integralBody = BuildAll(Slicer.GetSpanSafely(input, ..dIndex));
         string integralArgument = Slicer.GetSpanSafely(input, (dIndex + 1)..);
         if (string.IsNullOrWhiteSpace(integralBody)) integralBody = "y";
         if (string.IsNullOrWhiteSpace(integralArgument)) integralArgument = "x";

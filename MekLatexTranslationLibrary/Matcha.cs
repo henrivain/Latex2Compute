@@ -53,7 +53,7 @@ public static class Matcha
 
         if (end == -1)
         {
-            // no end to matcha constructor => skip
+            // no end to matcha page constructor => skip
             item.ErrorCodes += "virhe4";
         }
         else

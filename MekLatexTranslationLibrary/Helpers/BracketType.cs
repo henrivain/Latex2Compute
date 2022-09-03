@@ -7,5 +7,6 @@ public enum BracketType
     Curly, CurlyLong,
     Round, RoundLong,
     Square, SquareLong,
-    CurrencySign_And
+    CurrencySign_And,
+    CasesStartEnd
 }

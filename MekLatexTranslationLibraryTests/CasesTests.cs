@@ -1,5 +1,11 @@
-﻿namespace MekLatexTranslationLibraryTests;
-public class SquareRootTests
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MekLatexTranslationLibraryTests;
+public class CasesTests
 {
     readonly TranslationArgs _normalArgs = new()
     {
@@ -15,18 +21,12 @@ public class SquareRootTests
         PhysicsMode2 = false,
     };
 
-
     [Theory]
-    [InlineData("\\sqrt{3}", "sqrt(3)")]
-    [InlineData("\\sqrt{34", "sqrt(34)")]
-    [InlineData("\\sqrt{12}", "sqrt(12)")]
-    [InlineData("\\sqrt{123}", "sqrt(123)")]
-    [InlineData("\\sqrt{}", "sqrt()")]
-    [InlineData("13\\sqrt{}24", "13sqrt()24")]
-    [InlineData("1\\sqrt{34}2", "1sqrt(34)2")]
-    [InlineData("1\\sqrt{\\sqrt{34}}2", "1sqrt(sqrt(34))2")]
-    [InlineData("\\sqrt{12}\\sqrt{34}", "sqrt(12)sqrt(34)")]
-    public void ValidSquareRoot_ShouldReturn_ValidTranslation_Always(
+    [InlineData("\\begin{cases}7&\\\\8&\\end{cases}", "system(7,8)")]
+    [InlineData("\\begin{cases}77&\\\\88&\\end{cases}", "system(77,88)")]
+    [InlineData("\\begin{cases}77&\\\\88&ee", "system(77,88ee)")]
+    [InlineData("\\begin{cases}\r\n\\begin{cases}\r\n1&2\\\\\r\n3&4\r\n\\end{cases}\\\\\r\n56\r\n\\end{cases}", "system(system(12,34),56)")]
+    public void NaturalLogarithm_ShouldReturn_ValidTranslation_Always(
         string input, string expectedResult)
     {
         // Arrange

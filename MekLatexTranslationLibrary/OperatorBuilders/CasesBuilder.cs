@@ -2,22 +2,13 @@
 
 namespace MekLatexTranslationLibrary.OperatorBuilders;
 
-internal static class CasesBuilder
+internal static partial class CasesBuilder
 {
     const string OperatorStart = "\\begin{cases}";
     const string OperatorEnd = "\\end{cases}";
-    const string Tag = "#121#";
-
-    struct Cases
-    {
-        public Cases() { }
-
-        public string TextBefore { get; set; } = string.Empty;
-        public string Body { get; set; } = string.Empty;
-        public string TextAfter { get; set; } = string.Empty;
-
-        public override string ToString() => $"{TextBefore}{Tag}({Body}){TextAfter}";
-    }
+    const string NormalTag = "#121#";
+    const string RowChangeTag = "#122#";
+    const string PiecedTag = "#123#";
 
     public static string BuildAll(string input, ref List<TranslationError> errors)
     {
@@ -33,7 +24,7 @@ internal static class CasesBuilder
 
     private static string Build(string input, int startIndex, ref List<TranslationError> errors)
     {
-        input = input.Replace("\\\\", "#122#");
+        input = input.Replace("\\\\", RowChangeTag);
         input = input.Replace("&", string.Empty);
 
         Cases instance = new()
@@ -53,10 +44,6 @@ internal static class CasesBuilder
             instance.Body = BuildAll(input[startIndex..(bodyEndIndex - OperatorEnd.Length)], ref errors);
             instance.TextAfter = Slicer.GetSpanSafely(input, bodyEndIndex..);
         }
-
         return instance.ToString();
     }
-
-
-   
 }

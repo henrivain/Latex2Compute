@@ -1,7 +1,7 @@
 ﻿/// Copyright 2021 Henri Vainio 
 using MekLatexTranslationLibrary.Helpers;
 
-namespace MekLatexTranslationLibrary;
+namespace MekLatexTranslationLibrary.OtherBuilders;
 
 static internal class EndEdit
 {
@@ -62,13 +62,17 @@ static internal class EndEdit
                 break;
         }
 
-        if (args.AutoSolve)
+        if (args.AutoSolve && input.Contains("#192#") is false)
         {
             // if auto solve is on => call autosolve method and check if conditions are true
             input = RunAutoSolve(input);
         }
 
         input = CheckDerivative(input, args);
+
+        input = input
+            .Replace("#192#", "solve")
+            .Replace("#191#", "derivative");
 
         return input;
     }
@@ -171,7 +175,7 @@ static internal class EndEdit
             {
                 variables += ",z";
             }
-            inp = $"solve({inp}{variables})";
+            inp = $"#192#({inp}{variables})";
         }
         return inp;
     }
@@ -186,9 +190,9 @@ static internal class EndEdit
         char? variable = FindVariable(inp);
         if (variable is null)
         {
-            return $"derivative({inp},)";
+            return $"#191#({inp},)";
         }
-        return $"derivative({inp},{variable})";
+        return $"#191#({inp},{variable})";
     }
 
     /// <summary>
@@ -257,7 +261,7 @@ static internal class EndEdit
             return $"@{inp}";       // add @-symbol in front of input
         }
 
-        char charBeforeIndex = inp[(index - 1)];
+        char charBeforeIndex = inp[index - 1];
 
         if (charBeforeIndex is not 'p')
         {

@@ -28,8 +28,8 @@ public class DerivativeTests
         var physicsItem = new TranslationItem(input, _physicsArgs);
 
         // Act
-        var normalResult = Translation.MakeNormalTranslation(normalItem);
-        var physicsResult = Translation.MakeNormalTranslation(physicsItem);
+        var normalResult = LatexTranslation.Translate(normalItem);
+        var physicsResult = LatexTranslation.Translate(physicsItem);
 
         // Assert
         Assert.Equal(expectedResult, normalResult.Result);
@@ -48,8 +48,8 @@ public class DerivativeTests
         var physicsItem = new TranslationItem(input, _physicsArgs);
 
         // Act
-        var normalResult = Translation.MakeNormalTranslation(normalItem);
-        var physicsResult = Translation.MakeNormalTranslation(physicsItem);
+        var normalResult = LatexTranslation.Translate(normalItem);
+        var physicsResult = LatexTranslation.Translate(physicsItem);
 
         // Assert
         Assert.Equal(expectedResult, normalResult.Result);
@@ -73,8 +73,8 @@ public class DerivativeTests
         var physicsItem = new TranslationItem(input, physicsArgs);
 
         // Act
-        var normalResult = Translation.MakeNormalTranslation(normalItem);
-        var physicsResult = Translation.MakeNormalTranslation(physicsItem);
+        var normalResult = LatexTranslation.Translate(normalItem);
+        var physicsResult = LatexTranslation.Translate(physicsItem);
 
         // Assert
         Assert.Equal(expectedResult, normalResult.Result);
@@ -92,7 +92,7 @@ public class DerivativeTests
         var physicsItem = new TranslationItem(input, _physicsArgs);
 
         // Act
-        var physicsResult = Translation.MakeNormalTranslation(physicsItem);
+        var physicsResult = LatexTranslation.Translate(physicsItem);
 
         // Assert
         Assert.Equal(expectedResult, physicsResult.Result);
@@ -110,7 +110,7 @@ public class DerivativeTests
         var normalItem = new TranslationItem(input, _normalArgs);
 
         // Act
-        var normalResult = Translation.MakeNormalTranslation(normalItem);
+        var normalResult = LatexTranslation.Translate(normalItem);
 
         // Assert
         Assert.Equal(expectedResult, normalResult.Result);

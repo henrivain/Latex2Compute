@@ -25,6 +25,7 @@ internal static class TranslationTag
             //system
             .Replace("#121#", "system")
             .Replace("#122#", ",")
+            .Replace("#123#", "piecewise")
             //trigonometry
             .Replace("#131#", "arcsin")
             .Replace("#132#", "sin")
@@ -211,11 +212,11 @@ internal static class TranslationTag
     {
         if (tag.Length is not 5)
         {
-            throw new InvalidOperationException($"[HelperAlgorithms.DoesMatchFiveCharTag] Given tag is not length of five (5); given tag {tag}");
+            throw new InvalidOperationException($"[Translation] Given tag is not length of five (5); given tag {tag}");
         }
         if (input.Length < 5)
         {
-            Helper.DevPrintTranslationError($"[HelperAlgorithms.DoesMatchFiveCharTag] Given input is not at least length of five (5); given input {input}");
+            Helper.DevPrintTranslationError($"Given input is not at least length of five (5); given input {input}");
             return false;
         }
         return true;

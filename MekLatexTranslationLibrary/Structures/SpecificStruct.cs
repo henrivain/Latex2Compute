@@ -62,8 +62,6 @@ internal struct LogStartInfo
             "\\ln" => ("none", true),
             _ => (string.Empty, false)
         };
-
-
     }
 
     internal bool IsFound { get; private set; } = false;
@@ -95,9 +93,8 @@ internal struct SumInfo
         int equalDivider = reader.BottomContent.IndexOf('=');
         if (equalDivider is -1)
         {
-            Helper.DevPrintTranslationError(nameof(TranslationError.Sum_NoVariableFound));
+            Helper.TranslationError(TranslationError.Sum_NoVariableFound, ref errors);
             Bottom = $"n,{reader.BottomContent}";
-            errors.Add(TranslationError.Sum_NoVariableFound);
             return this;
         }
         Bottom = $"{reader.BottomContent[..equalDivider]},{reader.BottomContent[(equalDivider + 1)..]}";

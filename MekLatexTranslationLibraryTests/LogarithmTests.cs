@@ -36,8 +36,8 @@ public class LogarithmTests
         var physicsItem = new TranslationItem(input, _physicsArgs);
 
         // Act
-        var normalResult = Translation.MakeNormalTranslation(normalItem);
-        var physicsResult = Translation.MakeNormalTranslation(physicsItem);
+        var normalResult = LatexTranslation.Translate(normalItem);
+        var physicsResult = LatexTranslation.Translate(physicsItem);
 
         // Assert
         Assert.Equal(expectedResult, normalResult.Result);
@@ -60,8 +60,8 @@ public class LogarithmTests
         var physicsItem = new TranslationItem(input, _physicsArgs);
 
         // Act
-        var normalResult = Translation.MakeNormalTranslation(normalItem);
-        var physicsResult = Translation.MakeNormalTranslation(physicsItem);
+        var normalResult = LatexTranslation.Translate(normalItem);
+        var physicsResult = LatexTranslation.Translate(physicsItem);
 
         // Assert
         Assert.Equal(expectedResult, normalResult.Result);
@@ -81,8 +81,8 @@ public class LogarithmTests
         var physicsItem = new TranslationItem(input, _physicsArgs);
 
         // Act
-        var normalResult = Translation.MakeNormalTranslation(normalItem);
-        var physicsResult = Translation.MakeNormalTranslation(physicsItem);
+        var normalResult = LatexTranslation.Translate(normalItem);
+        var physicsResult = LatexTranslation.Translate(physicsItem);
 
         // Assert
         Assert.Equal(expectedResult, normalResult.Result);
@@ -100,8 +100,8 @@ public class LogarithmTests
         var physicsItem = new TranslationItem(input, _physicsArgs);
 
         // Act
-        var normalResult = Translation.MakeNormalTranslation(normalItem);
-        var physicsResult = Translation.MakeNormalTranslation(physicsItem);
+        var normalResult = LatexTranslation.Translate(normalItem);
+        var physicsResult = LatexTranslation.Translate(physicsItem);
 
         // Assert
         Assert.Equal(expectedResult, normalResult.Result);

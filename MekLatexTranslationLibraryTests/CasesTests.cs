@@ -34,8 +34,30 @@ public class CasesTests
         var physicsItem = new TranslationItem(input, _physicsArgs);
 
         // Act
-        var normalResult = Translation.MakeNormalTranslation(normalItem);
-        var physicsResult = Translation.MakeNormalTranslation(physicsItem);
+        var normalResult = LatexTranslation.Translate(normalItem);
+        var physicsResult = LatexTranslation.Translate(physicsItem);
+
+        // Assert
+        Assert.Equal(expectedResult, normalResult.Result);
+        Assert.Equal(expectedResult, physicsResult.Result);
+    }
+
+
+
+    [Theory]
+    [InlineData("\\begin{cases}3x&{,}x>0\\\\x&{,}x=0\\end{cases}", "piecewise(3x,x>0,x,x=0)")]  // Two rows
+    [InlineData("\\begin{cases}3x&{,}x<0\\\\x&{,}x=0\\\\4x^2&{,}x>0\\end{cases}", "piecewise(3x,x<0,x,x=0,4x^2,x>0)")]   //Three rows
+    [InlineData("\\begin{cases}3x&{,}x<0\\\\x&\\\\4x^2&{,}x>0\\end{cases}", "system(3x.x<0,x,4x^2.x>0)")]   // Is normal system, because middle row is not pieced
+    public void PiecedFunction_ShouldBeTranslated_ToPiecewiceFunction_IfEveryRowIsPieced(
+    string input, string expectedResult)
+    {
+        // Arrange
+        var normalItem = new TranslationItem(input, _normalArgs);
+        var physicsItem = new TranslationItem(input, _physicsArgs);
+
+        // Act
+        var normalResult = LatexTranslation.Translate(normalItem);
+        var physicsResult = LatexTranslation.Translate(physicsItem);
 
         // Assert
         Assert.Equal(expectedResult, normalResult.Result);

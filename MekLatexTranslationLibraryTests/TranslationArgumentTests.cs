@@ -37,6 +37,7 @@ public class TranslationArgumentTests
     [InlineData("3x<=0", "solve(3x<=0,x)")]
     [InlineData("55\\cdotx>0", "solve(55*x>0,x)")]
     [InlineData("55x>=0", "solve(55x>=0,x)")]
+    [InlineData("solve(3x,x)", "solve(3x,x)")]  // solve should not be added twice
     public void AutoSolve_ShouldAdd_Solve_AndVariable_IfHasEqualityOperator_AndVariable(string input, string expectedResult)
     {
         // Arrange
@@ -48,7 +49,7 @@ public class TranslationArgumentTests
         });
 
         // Act
-        var result = Translation.MakeNormalTranslation(normalItem);
+        var result = LatexTranslation.Translate(normalItem);
 
         // Assert
         Assert.Equal(expectedResult, result.Result);
@@ -60,6 +61,8 @@ public class TranslationArgumentTests
     [InlineData("D14b", "derivative(14b,b)")]
     [InlineData("D14abx", "derivative(14abx,x)")]   // xyz are chosen first
     [InlineData("14abx", "14abx")]   // no D
+    [InlineData("DD 3x", "derivative(D3x,x)")]   // should not run twice
+    [InlineData("D derivative(3x,x)", "derivative(derivative(3x,x),x)")]   // can derivative already derivated 
     public void AutoDerivative_ShouldAdd_Derivative_AndVariable_IfStartsWithD(string input, string expectedResult)
     {
         // Arrange
@@ -70,7 +73,7 @@ public class TranslationArgumentTests
         });
 
         // Act
-        var result = Translation.MakeNormalTranslation(normalItem);
+        var result = LatexTranslation.Translate(normalItem);
 
         // Assert
         Assert.Equal(expectedResult, result.Result);
@@ -81,6 +84,7 @@ public class TranslationArgumentTests
     [InlineData("14b", "derivative(14b,b)")]
     [InlineData("14abx", "derivative(14abx,x)")]   // xyz are chosen first
     [InlineData("14", "derivative(14,)")]   // no D
+    [InlineData("derivative(3x,x)", "derivative(derivative(3x,x),x)")]   // can derivative already derivated 
     public void AutoDerivativeSetting_DerivatesAlways(string input, string expectedResult)
     {
         // Arrange
@@ -92,7 +96,7 @@ public class TranslationArgumentTests
         });
 
         // Act
-        var result = Translation.MakeNormalTranslation(normalItem);
+        var result = LatexTranslation.Translate(normalItem);
 
         // Assert
         Assert.Equal(expectedResult, result.Result);
@@ -113,7 +117,7 @@ public class TranslationArgumentTests
         });
 
         // Act
-        var result = Translation.MakeNormalTranslation(normalItem);
+        var result = LatexTranslation.Translate(normalItem);
 
         // Assert
         Assert.Equal(expectedResult, result.Result);
@@ -134,7 +138,7 @@ public class TranslationArgumentTests
         });
 
         // Act
-        var result = Translation.MakeNormalTranslation(normalItem);
+        var result = LatexTranslation.Translate(normalItem);
 
         // Assert
         Assert.Equal(expectedResult, result.Result);

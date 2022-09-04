@@ -1,21 +1,27 @@
 ﻿/// Copyright 2021 Henri Vainio 
 using MekLatexTranslationLibrary.OperatorBuilders;
+using MekLatexTranslationLibrary.OtherBuilders;
 
-/// <summary>
-/// Call LaTeX translation and get results
-/// </summary>
 namespace MekLatexTranslationLibrary;
 
-public static class Translation
-{
-    internal static bool LatexInDevelopment = true;
 
-    /// <summary>
-    /// Makes normal translation => Translater LaTeX for user's cas calculator like Ti-Nspire
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns>TranslationResult (Result, ErrorCodes) with latex translated</returns>
-    public static TranslationResult MakeNormalTranslation(TranslationItem item)
+public static class LatexTranslation
+{
+    // Summary:
+    //          Translate latex string into form that your symbolic calculator understands
+    //          (mainly developed (and tested) for ti-nspire, but also works in many occasions with other calculators)
+    //          Translation process prints errors in the console if entry assembly is in debug mode
+    // 
+    //  Params: 
+    //          TranslationItem item which includes:
+    //              Latex (latex string to be translated)
+    //              TranslationArgs (Settings that algorithms will follow when doing the translation process)
+    //
+    //  Returns: 
+    //          Translation result which includes:
+    //              Result (string representation of all latex translated)
+    //              ErrorCodes (any error that appeared during the translation)
+    public static TranslationResult Translate(TranslationItem item)
     {
         string input = item.Latex;
         List<TranslationError> errors = Enumerable.Empty<TranslationError>().ToList();
@@ -36,7 +42,7 @@ public static class Translation
         return new(input, string.Join(", ", errors));
     }
 
-    private static string TranslateAllOperators(string input, ref List<TranslationError> errors)
+    internal static string TranslateAllOperators(string input, ref List<TranslationError> errors)
     {
         input = FractionBuilder.BuildAll(input, ref errors);
         input = CasesBuilder.BuildAll(input, ref errors);

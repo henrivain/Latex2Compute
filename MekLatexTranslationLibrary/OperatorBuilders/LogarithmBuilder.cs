@@ -82,8 +82,8 @@ internal static class LogarithmBuilder
             // move to next index from start
             return new ContentAndEnd(temp.EndIndex + 1, temp.Content);
         }
-        errors.Add(TranslationError.Log_BasisNotFound);
-        Helper.DevPrintTranslationError(nameof(TranslationError.Log_BasisNotFound));
+        Helper.TranslationError(TranslationError.Log_BasisNotFound, ref errors);
+
         return new(lsi.Index + 1, "10");    // set base to 10
 
     }

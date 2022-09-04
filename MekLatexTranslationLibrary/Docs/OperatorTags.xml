@@ -22,8 +22,9 @@ and is easier to present as number tags.
 		</Logarithm>
 		
 		<System>
-			<id>#121#</id>							<!-- means "system"		-->
+			<system>#121#</system>					<!-- means "system"		-->
 			<lineDivider>#122#</lineDivider>		<!-- means ","			-->
+			<pieced>#123#</pieced>					<!-- means "piecewise"	-->
 		</System>
 
 		<Trigonometry>
@@ -55,6 +56,11 @@ and is easier to present as number tags.
 		<Integral>
 			<integral>#181#</integral>				<!-- means "∫"			-->
 		</Integral>
-		
+
+		<FromLastTranslation>
+			<derivative>#191#</derivative>			<!-- means "derivative" -->
+			<solve>#192#</solve>					<!-- means "solve" -->
+		</FromLastTranslation>
+
 	</CommonOperatorCodes>
 </Documentation>

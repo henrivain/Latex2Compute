@@ -1,7 +1,7 @@
 ﻿/// Copyright 2021 Henri Vainio 
 using MekLatexTranslationLibrary.Helpers;
 
-namespace MekLatexTranslationLibrary;
+namespace MekLatexTranslationLibrary.OtherBuilders;
 
 /// <summary>
 /// Change or remove LaTeX symbols in LaTeX to acsii translation
@@ -54,15 +54,28 @@ internal static class SymbolTranslations
         // return [string array {symbols}]
         string[] PhysicsSymbols =
         {
-            "\\min", "\\max", "lx", "lm", "Wb", "sr", 
             "mm^3", "cm^3", "dm^3", "nm^3", "km^3", "m^3",
             "mm^2", "cm^2", "dm^2", "nm^2", "km^2", "m^2",
-            "mm", "cm", "dm", "nm", "pm", "km", "hm", "dak",
-            "eV", "kg", "mg", "MWh", "GWh", "TWh", "kWh", "kW", "bar", "kN",
-            "kJ", "mol", "°F", "°C", "kPa", "Pa", "MHz",
-            "kHz", "Hz", "cd", "ml", "kA", "mA", "kV", "mV", "C",
-            "ms", "ns", "cl", "dl",
-            "A", "g", "K", "m", "s", "W", "J", "N", "F", "l", "V", "h", "r", "T"
+            "keV", "MeV", "GeV", "TeV", "eV",
+            "MHz", "kHz", "Hz",
+            "MWh", "GWh", "TWh", "kWh", "kW",
+            "mol", 
+            "kpl",
+            "\\min", "\\max",
+            "kPa", "bar", "Pa",
+            "dak", "cm", "dm", "nm", "pm", "km", "hm", "mm",
+            "lx", "lm", "Wb", "sr",
+            "kN",
+            "kJ", 
+            "kg", "mg",
+            "°F", "°C",
+            "cd", 
+            "kA", "mA", 
+            "kV", "mV", 
+            "ms", "ns",
+            "ml", "cl", "dl",
+            "A","C", "F", "g", "G", "h", "J", "K", "l", 
+            "m", "N", "r", "s", "T", "V", "W",  
         };
         return PhysicsSymbols;
     }
@@ -71,15 +84,15 @@ internal static class SymbolTranslations
     {
         // storage to math and physics greek symbols
         // return [string array {symbols}]
-        return new[] 
+        return new[]
         {
-            "k\\Omega", "\\Omega", "\\Gamma", "\\Delta",            
-            "\\varepsilon", "\\zeta", "\\eta", "\\theta",           
-            "\\vartheta", "\\iota", "\\kappa", "\\lambda",          
-            "\\Lambda", "\\mu", "\\nu", "\\xi", "\\Xi", "\\Pi",     
-            "\\rho", "\\sigma", "\\Sigma", "\\tau", "\\upsilon",    
-            "\\Upsilon", "\\phi", "\\Phi", "\\chi", "\\psi",        
-            "\\Psi", "\\omega", "\\partial", "\\varphi"             
+            "k\\Omega", "\\Omega", "\\Gamma", "\\Delta",
+            "\\varepsilon", "\\zeta", "\\eta", "\\theta",
+            "\\vartheta", "\\iota", "\\kappa", "\\lambda",
+            "\\Lambda", "\\mu", "\\nu", "\\xi", "\\Xi", "\\Pi",
+            "\\rho", "\\sigma", "\\Sigma", "\\tau", "\\upsilon",
+            "\\Upsilon", "\\phi", "\\Phi", "\\chi", "\\psi",
+            "\\Psi", "\\omega", "\\partial", "\\varphi"
         };
     }
 
@@ -97,7 +110,7 @@ internal static class SymbolTranslations
 
         // remove angles
         input = input
-            .Replace("(rad)", string.Empty)    
+            .Replace("(rad)", string.Empty)
             .Replace("rad", string.Empty)
             .Replace("\\degree", string.Empty)
             .Replace("°", string.Empty)
@@ -132,7 +145,7 @@ internal static class SymbolTranslations
             .Replace("\\right\\}", ")")
             .Replace("\\left[", "(")
             .Replace("\\right]", ")")
-            .Replace("\\left|", "abs(")
+            .Replace("\\left|", "#171#(")
             .Replace("\\right|", ")");
     }
 
@@ -140,12 +153,12 @@ internal static class SymbolTranslations
     {
         // remove vector "\overline{}" element
         string overline = "\\overline{";
-        
+
         while (true)
         {
             int start = input.IndexOf(overline);
             if (start < 0) return input;
-            
+
             input = input.Remove(start, 10);
             int end = BracketHandler.FindBrackets(input, BracketType.Curly, start);
             end--;
@@ -161,7 +174,7 @@ internal static class SymbolTranslations
         }
     }
 
-  
+
 
     private static string GeometryModeSymbols(string input)
     {

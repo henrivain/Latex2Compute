@@ -57,7 +57,7 @@ internal static class NthRootBuilder
             bodyInfo.EndIndex = BracketHandler.FindBrackets(input, BracketType.Curly, topInfo.EndIndex);
             if (bodyInfo.EndIndex < 0)
             {
-                Helper.TranslationError(TranslationError.NthRoot_NoSecondStartBracket, ref errors);
+                Helper.TranslationError(TranslationError.NthRoot_NoEndFound, ref errors);
                 bodyInfo.EndIndex = input.Length;
             }
             bodyInfo.Content = Slicer.GetSpanSafely(input, topInfo.EndIndex..);

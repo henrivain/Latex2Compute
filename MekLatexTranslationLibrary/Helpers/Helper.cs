@@ -1,6 +1,4 @@
 ﻿/// Copyright 2021 Henri Vainio 
-using System.Text.RegularExpressions;
-
 namespace MekLatexTranslationLibrary.Helpers;
 
 internal static class Helper
@@ -11,24 +9,21 @@ internal static class Helper
     /// <param name="error"></param>
     internal static void DevPrintTranslationError(string error)
     {
-        if (Translation.LatexInDevelopment)
+        if (AssemblyInfoHelper.EntryAssembly.IsDebug is not false)
         {
             Console.WriteLine($"[TranslationError] {error}");
         }
     }
 
     /// <summary>
-    /// Add translationerror to list and print it to console if in debug mode
+    /// Add translation error to list and print it to console if in debug mode
     /// </summary>
     /// <param name="error">error to add to errors list</param>
     /// <param name="errors">errors list which includes all errors in translate process</param>
     internal static void TranslationError(TranslationError error, ref List<TranslationError> errors)
     {
         errors.Add(error);
-        if (Translation.LatexInDevelopment)
-        {
-            Console.WriteLine($"[TranslationError] {nameof(error)}");
-        }
+        DevPrintTranslationError(error.ToString());
     }
 
 

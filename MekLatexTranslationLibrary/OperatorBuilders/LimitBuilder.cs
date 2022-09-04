@@ -21,8 +21,7 @@ internal static class LimitBuilder
         if (bottomEnd is -1)
         {
             bottomEnd = startIndex - 1;
-            errors.Add(TranslationError.Lim_NoApproachValue);
-            Helper.DevPrintTranslationError(nameof(TranslationError.Lim_NoApproachValue));
+            Helper.TranslationError(TranslationError.Lim_NoApproachValue, ref errors);
         }
 
         bottom = ReplaceArrowWithComma(bottom);

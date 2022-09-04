@@ -38,6 +38,67 @@ internal static class HelperAlgorithms
     }
 
     /// <summary>
+    /// GetBottom expression that belongs to some Latex operator 
+    /// <para/> DO NOT INCLUDE START! (wrong: "\log_2(234)" right: "(234)" ) use inp[index..]
+    /// </summary>
+    /// <remarks>
+    /// example: 
+    /// <para/>"23" => "23" 
+    /// <para/>"(234)" => "234" 
+    /// <para/>"23=4" => "23"
+    /// </remarks>
+    /// <param name="croppedInput"></param>
+    /// <returns>(int endIndex, string content) if found, else substring of inp and length of inp (endIndex is always 0 or bigger)</returns>
+    internal static ContentAndEnd GetExpressionAfterOperator(string croppedInput)
+    {
+
+        ContentAndEnd info = BracketHandler.GetCharsBetweenBrackets(croppedInput, BracketType.RoundLong, 0);
+        if (info.EndIndex != -1) return info;
+        return SeparateByOperator(croppedInput);
+    }
+
+
+
+    /// <summary>
+    /// Try to get index of pattern. If ArgumentOutOfRange returns -1
+    /// </summary>
+    /// <param name="input"></param>
+    /// <param name="pattern"></param>
+    /// <param name="startIndex"></param>
+    /// <returns>startindex of pattern, -1 if not found, if ArgumentOutOfRange</returns>
+    internal static int TryGetIndexOf(string input, string pattern, int startIndex = 0)
+    {
+        try
+        {
+            return input.IndexOf(pattern, startIndex);
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+            Helper.DevPrintTranslationError($"Given startIndex was out of range; input: {input}, startIndex: {startIndex}");
+            return -1;
+        }
+    }
+
+    /// <summary>
+    /// GetBottom text until next =, &lt;, &gt;, +, -, * or ], ), } operator
+    /// </summary>
+    /// <param name="inp"></param>
+    /// <returns>(int EndIndex, string content) if found, else returns input length and input</returns>
+    private static ContentAndEnd SeparateByOperator(string inp)
+    {
+
+        List<int> values = IndexerAlgorithms.GetFirstOperatorIndexes(inp);
+
+        if (values.Count > 0)
+        {
+            int end = values.Min();
+            string content = inp[..end];
+            return new(end, content);
+        }
+        return new(inp.Length, inp);
+    }
+
+    /// <summary>
     /// GetBottom short version of inconsistent start (startsWith _ or ^ )
     /// </summary>
     /// <param name="input"></param>
@@ -46,12 +107,12 @@ internal static class HelperAlgorithms
     private static ContentAndEnd ShortInconsistentStart(string input, int startIndex, string symbol)
     {
         startIndex++;   // exclude _ or ^ from input
-        
+
         string content = Slicer.GetSpanSafely(input, startIndex, 1);
         if (string.IsNullOrEmpty(content))
         {
             // does not continue after _ or ^
-            return new(startIndex, GetPlaceHolderSymbol(symbol));   
+            return new(startIndex, GetPlaceHolderSymbol(symbol));
         }
         return new(startIndex, content);
     }
@@ -68,7 +129,7 @@ internal static class HelperAlgorithms
         startIndex += 2;    // exclude  ^{ or _{ from string 
         int endPoint = BracketHandler.FindBrackets(input, BracketType.Curly, startIndex);
         endPoint--;
-        
+
         if (endPoint < 0)
         {
             //decide if returns -1 or input Length
@@ -129,84 +190,5 @@ internal static class HelperAlgorithms
             "^{" => "^",
             _ => "_"
         };
-    }
-
-    /// <summary>
-    /// GetBottom expression that belongs to some Latex operator 
-    /// <para/> DO NOT INCLUDE START! (wrong: "\log_2(234)" right: "(234)" ) use inp[index..]
-    /// </summary>
-    /// <remarks>
-    /// example: 
-    /// <para/>"23" => "23" 
-    /// <para/>"(234)" => "234" 
-    /// <para/>"23=4" => "23"
-    /// </remarks>
-    /// <param name="croppedInput"></param>
-    /// <returns>(int endIndex, string content) if found, else substring of inp and length of inp (endIndex is always 0 or bigger)</returns>
-    internal static ContentAndEnd GetExpressionAfterOperator(string croppedInput)
-    {
-
-        ContentAndEnd info = BracketHandler.GetCharsBetweenBrackets(croppedInput, BracketType.RoundLong, 0);
-        if (info.EndIndex != -1) return info;
-        return SeparateByOperator(croppedInput);
-    }
-
-    /// <summary>
-    /// GetBottom Substring with given length and startindex
-    /// </summary>
-    /// <param name="input"></param>
-    /// <param name="startIndex"></param>
-    /// <param name="span"></param>
-    /// <returns>substring of input or null, if IndexOutOfRange</returns>
-    internal static string GetNextCharsSafely(string input, short span, int startIndex = 0)
-    {
-        try
-        {
-            return input.Substring(startIndex, span);
-        }
-        catch (ArgumentOutOfRangeException)
-        {
-            if (Translation.LatexInDevelopment) Console.WriteLine($"[Builders.CheckNextCharsSafely] Input span ArgumentOutOfRange; input: {input}, span: {span}, startIndex: {startIndex}");
-            return string.Empty;
-        }
-    }
-
-    /// <summary>
-    /// Try to get index of pattern. If ArgumentOutOfRange returns -1
-    /// </summary>
-    /// <param name="input"></param>
-    /// <param name="pattern"></param>
-    /// <param name="startIndex"></param>
-    /// <returns>startindex of pattern, -1 if not found, if ArgumentOutOfRange</returns>
-    internal static int TryGetIndexOf(string input, string pattern, int startIndex = 0)
-    {
-        try
-        {
-            return input.IndexOf(pattern, startIndex);
-        }
-        catch (ArgumentOutOfRangeException)
-        {
-            Helper.DevPrintTranslationError($"[HelperAlgorithms.TryGetIndexOf] Given startIndex was out of range; input: {input}, startIndex: {startIndex}");
-            return -1;
-        }
-    }
-
-    /// <summary>
-    /// GetBottom text until next =, &lt;, &gt;, +, -, * or ], ), } operator
-    /// </summary>
-    /// <param name="inp"></param>
-    /// <returns>(int EndIndex, string content) if found, else returns input length and input</returns>
-    private static ContentAndEnd SeparateByOperator(string inp)
-    {
-
-        List<int> values = IndexerAlgorithms.GetFirstOperatorIndexes(inp);
-
-        if (values.Count > 0)
-        {
-            int end = values.Min();
-            string content = inp[..end];
-            return new(end, content);
-        }
-        return new(inp.Length, inp);
     }
 }

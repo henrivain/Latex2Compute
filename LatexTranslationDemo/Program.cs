@@ -1,6 +1,7 @@
 ﻿using MekLatexTranslationLibrary;
 
 bool canContinue = true;
+
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 Console.WriteLine("Translation Lib version: " + 
     typeof(TranslationItem).Assembly.GetName().Version?.ToString() ?? "NULL");

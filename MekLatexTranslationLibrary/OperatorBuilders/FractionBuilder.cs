@@ -1,8 +1,5 @@
 ﻿/// Copyright 2021 Henri Vainio 
 using MekLatexTranslationLibrary.Helpers;
-using System.Diagnostics.Tracing;
-using System.Net.Http;
-using System.Runtime.InteropServices;
 
 namespace MekLatexTranslationLibrary.OperatorBuilders;
 
@@ -83,8 +80,7 @@ internal class FractionBuilder
         int endIndex = BracketHandler.FindBrackets(input, BracketType.Curly, startIndex);
         if (endIndex < 0)
         {
-            errors.Add(TranslationError.Frac_NoFirstEndBracket);
-            Helper.DevPrintTranslationError(nameof(TranslationError.Frac_NoFirstEndBracket));
+            Helper.TranslationError(TranslationError.Frac_NoFirstEndBracket, ref errors);
             return (input[startIndex..], -1);
         }
         return (input[startIndex..endIndex], endIndex);
@@ -100,15 +96,13 @@ internal class FractionBuilder
         }
         else
         {
-            errors.Add(TranslationError.Frac_NoSecondStartBracket);
-            Helper.DevPrintTranslationError(nameof(TranslationError.Frac_NoSecondStartBracket));
+            Helper.TranslationError(TranslationError.Frac_NoSecondStartBracket, ref errors);
         }
 
         int endIndex = BracketHandler.FindBrackets(input, BracketType.Curly, startIndex);
         if (endIndex < 0) 
         {
-            errors.Add(TranslationError.Frac_NoSecondEndBracket);
-            Helper.DevPrintTranslationError(nameof(TranslationError.Frac_NoSecondEndBracket));
+            Helper.TranslationError(TranslationError.Frac_NoSecondEndBracket, ref errors);
             endIndex = input.Length;
         }
         return (input[startIndex..endIndex], endIndex);

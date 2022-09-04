@@ -25,7 +25,7 @@ internal class SquareRootBuilder
         var body = BracketHandler.GetCharsBetweenBrackets(input, BracketType.Curly, startIndex);
         if (body.EndIndex < 0)
         {
-            Helper.TranslationError(TranslationError.Sqrt_InputDoesNotStartWithBracket, ref errors);
+            Helper.TranslationError(TranslationError.Sqrt_NoStartBracketFound, ref errors);
             body.EndIndex = input.Length;
             body.Content = input[startIndex..];
         }

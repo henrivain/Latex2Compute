@@ -23,7 +23,7 @@ static bool RunTranslationProcess()
 
     TranslationItem item = new(input, new());
 
-    TranslationResult result = Translation.MakeNormalTranslation(item);
+    TranslationResult result = LatexTranslation.Translate(item);
     Console.WriteLine();
     Console.WriteLine($"Translation result: {result.Result}");
     Console.WriteLine();

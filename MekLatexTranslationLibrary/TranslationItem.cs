@@ -22,6 +22,6 @@ public struct TranslationItem
         Settings = settings;
     }
 
-    internal string Latex { get; set; }
+    public string Latex { get; internal set; }
     public TranslationArgs Settings { get; private set; }
 }

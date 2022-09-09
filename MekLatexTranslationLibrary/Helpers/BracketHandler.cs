@@ -21,6 +21,7 @@ internal static class BracketHandler
         BracketType.CurlyLong => ("\\left{", "\\right}"),
         BracketType.CurrencySign_And => ("¤", "&"),
         BracketType.CasesStartEnd => ("\\begin{cases}", "\\end{cases}"),
+        BracketType.IntegralBody_D => ("\\int", "d"),
         _ => throw new NotImplementedException($"{nameof(BracketType)} {type} is not implemented")
     };
 

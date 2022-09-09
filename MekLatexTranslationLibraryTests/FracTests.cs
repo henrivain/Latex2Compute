@@ -21,6 +21,7 @@ public class FracTests
     [InlineData("\\frac{22}{33}", "(22)/(33)")]
     [InlineData("\\dfrac{4}{3}", "(4)/(3)")]
     [InlineData("\\dfrac{22}{33}", "(22)/(33)")]
+    [InlineData("a^{\\frac{1}{2}}", "a^((1)/(2))")]
     public void ValidFraction_ShouldReturn_CorrectFormFraction_Always(
         string input, string expectedResult)
     {

@@ -5,8 +5,8 @@ namespace MekLatexTranslationLibrary.OperatorBuilders;
 
 internal class FractionBuilder
 {
-    const string OperatorStart = "\\frac{";
-    const string OperatorStartVariantD = "\\dfrac{";
+    const string OperatorStart = "\\frac";
+    const string OperatorStartVariantD = "\\dfrac";
 
 
 
@@ -77,6 +77,9 @@ internal class FractionBuilder
     }
     private static (string content, int endIndex) GetTop(string input, int startIndex, ref List<TranslationError> errors)
     {
+        var top = BracketHandler.GetCharsBetweenBrackets(input, BracketType.Curly, startIndex);
+        if (top.EndIndex is not -1) return (top.Content, top.EndIndex);
+       
         int endIndex = BracketHandler.FindBrackets(input, BracketType.Curly, startIndex);
         if (endIndex < 0)
         {
@@ -89,6 +92,9 @@ internal class FractionBuilder
 
     private static (string content, int endIndex) GetBottom(string input, int startIndex, ref List<TranslationError> errors)
     {
+        var bottom = BracketHandler.GetCharsBetweenBrackets(input, BracketType.Curly, startIndex);
+        if (bottom.EndIndex is not -1) return (bottom.Content, bottom.EndIndex);
+
         bool useOffset = Slicer.GetSpanSafely(input, startIndex, 1) is "{";
         if (useOffset )
         {

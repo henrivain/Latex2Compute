@@ -8,5 +8,6 @@ public enum BracketType
     Round, RoundLong,
     Square, SquareLong,
     CurrencySign_And,
-    CasesStartEnd
+    CasesStartEnd,
+    IntegralBody_D
 }

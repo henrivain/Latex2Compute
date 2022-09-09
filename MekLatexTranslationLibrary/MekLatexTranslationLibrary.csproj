@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<Version>3.1.6.15</Version>
+	<Version>3.1.6.16</Version>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Title>MekTranslationLatexLibrary</Title>
+	<Title>MekTranslationLatexLibrary</Title>
     <Authors>Henri Vainio</Authors>
     <Company>Matikkaeditorinkääntäjä</Company>
     <Description>Translate LaTeX into calculator form</Description>

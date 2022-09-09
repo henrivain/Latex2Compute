@@ -121,6 +121,7 @@ internal static class SymbolTranslations
             .Replace("\\mp", "±")
             .Replace("\\pm", "±")
             .Replace("\\ne", "≠")
+            .Replace("\\%", "%")
 
         // remove if not geometrymode
             .Replace("\\alpha", string.Empty)

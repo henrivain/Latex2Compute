@@ -145,7 +145,7 @@ public class SymbolTests
     [InlineData("lx lm cd")]
     [InlineData("r rad sr")]
     [InlineData("eV keV MeV GeV TeV")]
-    [InlineData("J kJ")]
+    [InlineData("J kJ MJ GJ kcal cal")]
     [InlineData("°C °F K")]
     [InlineData("MHz kHz Hz")]
     [InlineData("bar kPa Pa")]

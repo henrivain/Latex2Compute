@@ -60,7 +60,7 @@ internal static class SymbolTranslations
             "MHz", "kHz", "Hz",
             "kcal", "cal",
             "MWh", "GWh", "TWh", "kWh", "kW",
-            "mol", 
+            "mmol", "mol", 
             "kpl",
             "\\min", "\\max",
             "kPa", "bar", "Pa",

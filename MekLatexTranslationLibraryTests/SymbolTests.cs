@@ -141,7 +141,7 @@ public class SymbolTests
     [InlineData("kN N")]
     [InlineData("kg mg g")]
     [InlineData("ms ns s h")]
-    [InlineData("mol")]
+    [InlineData("mol mmol")]
     [InlineData("lx lm cd")]
     [InlineData("r rad sr")]
     [InlineData("eV keV MeV GeV TeV")]

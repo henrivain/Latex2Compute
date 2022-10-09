@@ -11,19 +11,32 @@ internal static class BracketHandler
     const string LeftBracket = "\\left(";
     const string RightBracket = "\\right)";
 
-    private static (string Opening, string Closing) GetBracketsFromType(BracketType type) => type switch
+    private static Dictionary<BracketType, (string Opening, string Closing)> BracketAsString { get; set; } = new()
     {
-        BracketType.Round => ("(", ")"),
-        BracketType.RoundLong => (LeftBracket, RightBracket),
-        BracketType.Square => ("[", "]"),
-        BracketType.SquareLong => ("\\left[", "\\right]"),
-        BracketType.Curly => ("{", "}"),
-        BracketType.CurlyLong => ("\\left{", "\\right}"),
-        BracketType.CurrencySign_And => ("¤", "&"),
-        BracketType.CasesStartEnd => ("\\begin{cases}", "\\end{cases}"),
-        BracketType.IntegralBody_D => ("\\int", "d"),
-        _ => throw new NotImplementedException($"{nameof(BracketType)} {type} is not implemented")
+        [BracketType.Round] = ("(", ")"),
+        [BracketType.RoundLong] = (LeftBracket, RightBracket),
+        [BracketType.Square] = ("[", "]"),
+        [BracketType.SquareLong] = ("\\left[", "\\right]"),
+        [BracketType.Curly] = ("{", "}"),
+        [BracketType.CurlyLong] = ("\\left{", "\\right}"),
+        [BracketType.CurrencySign_And] = ("¤", "&"),
+        [BracketType.CasesStartEnd] = ("\\begin{cases}", "\\end{cases}"),
+        [BracketType.IntegralBody_D] = ("\\int", "d")
     };
+    
+    /// <summary>
+    /// Add new string representation for brackettype, if it doesn't already exist
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="opening"></param>
+    /// <param name="closing"></param>
+    /// <returns>true if value is added, otherwise false</returns>
+    internal static bool TryAddBracketAsString(BracketType type, string opening, string closing)
+    {
+        if (BracketAsString.ContainsKey(type)) return false;
+        BracketAsString[type] = (opening, closing);
+        return true;
+    }
 
     /// <summary>
     /// Find index of matching end bracket
@@ -33,23 +46,28 @@ internal static class BracketHandler
     /// </summary>
     /// <param name="input">The string which is looped throught</param>
     /// <param name="type"></param>
-    /// <param name="startPoint"></param>
+    /// <param name="startIndex"></param>
+    /// <param name="matchValidatorFunc">Function to be used to validate if opening and closing match index</param>
     /// <returns>index of ending bracket+1, returns -1 if not found</returns>
-    public static int FindBrackets(string input, BracketType type = BracketType.Curly, int startIndex = 0)
+    public static int FindBrackets(string input, BracketType type = BracketType.Curly, int startIndex = 0, Func<string, string, int, bool>? matchValidatorFunc = null)
     {
-        (string opening, string closing) = GetBracketsFromType(type);
-        
+        var (opening, closing) = BracketAsString[type];
+
+        // use this validation method if no other is given
+        matchValidatorFunc ??= (string input, string reference, int index) =>
+        {
+            return Slicer.GetSpanSafely(input, index, reference.Length) == reference;
+        };
+
         int x = 1;
         for (int i = startIndex; i < input.Length; i++)
         {
-            string next = Slicer.GetSpanSafely(input, i, opening.Length);
-            string next2 = Slicer.GetSpanSafely(input, i, closing.Length);
-            if (next == opening)
+            if (matchValidatorFunc(input, opening, i))
             {
                 i += opening.Length - 1;
                 x++;
             }
-            else if (next2 == closing)
+            else if (matchValidatorFunc(input, closing, i))
             {
                 x--;
                 i += closing.Length - 1;
@@ -58,9 +76,6 @@ internal static class BracketHandler
         }
         return -1;
     }
-
-
-
 
     /// <summary>
     /// Find closing bracket of element, if start not given starts from index 0
@@ -111,7 +126,7 @@ internal static class BracketHandler
     /// <para/>if no start bracket: (-1, string.Empty)</returns>
     public static ContentAndEnd GetCharsBetweenBrackets(string input, BracketType type = BracketType.RoundLong, int startIndex = 0)
     {
-        (string opening, string closing) = GetBracketsFromType(type);
+        var (opening, closing) = BracketAsString[type];
 
         // leave opening bracket in input
         if (Slicer.GetSpanSafely(input, startIndex, opening.Length) == opening)

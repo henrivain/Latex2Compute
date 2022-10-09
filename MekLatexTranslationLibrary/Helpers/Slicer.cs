@@ -22,7 +22,7 @@ internal static class Slicer
         return GetSpanSafely(input, startIndex..(startIndex + length));
     }
 
-    internal static char? GetCharSpan(string input, int startIndex)
+    internal static char? GetCharSafely(string input, int startIndex)
     {
         try
         {
@@ -33,5 +33,11 @@ internal static class Slicer
             Console.WriteLine($"[Translation] Index out of range, Can't read char with index '{startIndex}' from input: '{input}', returns null");
             return null;
         }
+    }
+
+    internal static char? GetLastCharSafely(string input)
+    {
+        if (string.IsNullOrEmpty(input)) return null;
+        return input[^1];
     }
 }

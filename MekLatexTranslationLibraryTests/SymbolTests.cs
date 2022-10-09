@@ -162,6 +162,19 @@ public class SymbolTests
         Assert.Empty(result.Result);
     }
 
+    [Theory]
+    [InlineData("2{,}897\\ 771\\ 955\\cdot 10^{−3}\\ \\text{m}\\cdot \\text{K}", "2.897771955*10^(−3)")]
+    [InlineData("5{,}670\\ 374\\ 419\\cdot 10^{−8}\\ \\frac{\\text{W}}{\\text{m}^2\\cdot \\text{K}^4}", "5.670374419*10^(−8)")]
+    [InlineData("\\frac{m+W}{s}", "")]
+    public void PhysicsMode_ShouldRemove_Unnecessary_MultiplicationAndPlus_Signs(string input, string expectedReturn)
+    {
+        // Arrange
+        var physicsItem = new TranslationItem(input, _physicsArgs);
+        
+        // Act
+        var result = LatexTranslation.Translate(physicsItem);
 
-
+        // Assert
+        Assert.Equal(expectedReturn, result.Result);
+    }
 }

@@ -1,5 +1,6 @@
 ﻿/// Copyright 2021 Henri Vainio 
 using MekLatexTranslationLibrary.Helpers;
+using System.Text.RegularExpressions;
 
 namespace MekLatexTranslationLibrary.OtherBuilders;
 
@@ -57,9 +58,6 @@ static internal class EndEdit
                 //remove empty fractions
                 input = RemoveEmptyFractions(input);
                 break;
-
-            default:
-                break;
         }
 
         if (args.AutoSolve && input.Contains("#192#") is false)
@@ -84,25 +82,50 @@ static internal class EndEdit
     /// <returns>input with fractions removed</returns>
     private static string RemoveEmptyFractions(string inp)
     {
-        string[] patterns =
+        inp = RemoveUnnecessaryOperatorSigns(inp);
+
+        /*lang=regex*/string[] patterns =
         {
-            @"\(\)/\(\)",                   // ()/() 
-            @"\*\^\([0-9]\)",
-            @"\(\)\^[0-9]",                 // ()^2
-            @"\(\^[0-9]\)/\(\)",            // (^2)/()      2 can be any number
-            @"\(\^[0-9]\)/\(\^[0-9]\)",     // (^2)/(^2)      
-            @"\(\)/\(\^[0-9]\)",            // ()/(^2)
-            @"\(\)/\([0-9]\)",              // ()/(2)
-            @"\([0-9]\)/\(\)",              // (2)/()
-            @"\^[0-9]/\^[0-9]",             // ^2/^2
-            @"\^[0-9]/",                    // ^2/
-            @"/\^[0-9]",                    // /^2
-            @"\(\*\)/\(\*\)",                 // (*)/(*) 
-            @"\(\*\)/\(\)",                  // (*)/() 
-            @"\(\)/\(\*\)",                  // ()/(*) 
-            @"\(\)/\(\)",                   // ()/() 
+            // [,+,-,*,^2] means, that can be '+', '-', '*', '^2' or empty ''
+            // 2 can be any number 
+            @"\((\*|\+|\-|\^[0-9]|\^\([0-9]?\))?\)/\((\*|\+|\-|\^[0-9]|\^\([0-9]?\))?\)",       // ([,+,-,*,^2,(^2)])/([,+,-,*,^2,^(2),^()])
+            @"(\*|\+|\-|\(\))\^([0-9]|\([0-9]\))",      // [+,-,*,()]^(2)  or  [+,-,*,()]^2
+            @"\(\)/\([0-9]\)",                          // ()/(2)
+            @"\([0-9]\)/\(\)",                          // (2)/()
+            @"(\^[0-9])?/\^[0-9]",                      // ^2/^2 or /^2
+            @"\^[0-9]/",                                // ^2/
+            @"\(\)/\(\)",                               // ()/() 
         };
         return RemovePattern.RegexPatterns(inp, patterns);
+    }
+
+
+    private record struct ReplacableRegexPattern(string Pattern, string Replacement);
+
+    private static string RemoveUnnecessaryOperatorSigns(string inp)
+    {
+        inp ??= string.Empty;
+
+        // if inp ends with any operator, remove it
+        char[] operators = { '+', '-', '/', '*' };
+        if (operators.Contains(Slicer.GetLastCharSafely(inp) ?? '\0'))
+        {
+            inp = inp[..^1];
+        }
+
+        // replace patterns
+        ReplacableRegexPattern[] patterns =
+        {
+            new($@"\((\*|\+|\-|/)\^", "(^"),        // '(*^', '(+^', '(-^' or '(/^'      
+        };
+        foreach (var pattern in patterns)
+        {
+            while (Regex.IsMatch(inp, pattern.Pattern))
+            {
+                inp = Regex.Replace(inp, pattern.Pattern, pattern.Replacement);
+            }
+        }
+        return inp;
     }
 
     private static string SeparateOperatorsWithCdot(string inp)
@@ -121,10 +144,10 @@ static internal class EndEdit
 
     /// <summary>
     /// Wrap input inside ti-nspire derivative block and add variable [any char, check "xyz" first]
-    /// <para/> Runs if input.Settings.Autoderivative == true or input starts with 'D'
+    /// <para/> Runs if input.Settings.Autoderivative is true or input starts with 'D'
     /// </summary>
-    /// <param name="inp"></param>
-    /// <param name="item"></param>
+    /// <param name="input"></param>
+    /// <param name="args"></param>
     /// <returns>derivative(input,x) wrapped input</returns>
     private static string CheckDerivative(string input, TranslationArgs args)
     {

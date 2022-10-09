@@ -47,7 +47,7 @@ namespace MekLatexTranslationLibrary.Helpers
                 // loop to remove every instance
                 while (inp.Contains(pattern))
                 {
-                    inp = inp.Replace(pattern, "");
+                    inp = inp.Replace(pattern, string.Empty);
                 }
             }
             return inp;
@@ -65,7 +65,7 @@ namespace MekLatexTranslationLibrary.Helpers
             {
                 while (Regex.IsMatch(inp, pattern))
                 {
-                    inp = Regex.Replace(inp, pattern, "");
+                    inp = Regex.Replace(inp, pattern, string.Empty);
                 }
             }
             return inp;

@@ -1,43 +1,43 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-	<Version>3.1.7.0</Version>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-	<Title>MekTranslationLatexLibrary</Title>
-    <Authors>Henri Vainio</Authors>
-    <Company>Matikkaeditorinkääntäjä</Company>
-    <Description>Translate LaTeX into calculator form</Description>
-    <PackageProjectUrl>https://github.com/matikkaeditorinkaantaja/MekLatexTranslationLibrary</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/matikkaeditorinkaantaja/MekTranslationLibraryProject</RepositoryUrl>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageIcon>logo v2.1 128x128.png</PackageIcon>
-    <PackageOutputPath>C:\Nugets</PackageOutputPath>
-  </PropertyGroup>
+	<PropertyGroup>
+		<Version>3.1.7.1</Version>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Title>MekTranslationLatexLibrary</Title>
+		<Authors>Henri Vainio</Authors>
+		<Company>Matikkaeditorinkääntäjä</Company>
+		<Description>Translate LaTeX into calculator form</Description>
+		<PackageProjectUrl>https://github.com/matikkaeditorinkaantaja/MekLatexTranslationLibrary</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/matikkaeditorinkaantaja/MekTranslationLibraryProject</RepositoryUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageIcon>logo v2.1 128x128.png</PackageIcon>
+		<PackageOutputPath>C:\Nugets</PackageOutputPath>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Resources\logo v2.1 128x128.png" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="Resources\logo v2.1 128x128.png" />
+	</ItemGroup>
 
- 
 
-  <ItemGroup>
-    <None Include="..\README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
 
- 
+	<ItemGroup>
+		<None Include="..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="Resources\logo v2.1 128x128.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </Resource>
-  </ItemGroup>
 
-  
+
+	<ItemGroup>
+		<Resource Include="Resources\logo v2.1 128x128.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</Resource>
+	</ItemGroup>
+
+
 </Project>

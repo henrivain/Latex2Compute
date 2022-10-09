@@ -59,7 +59,17 @@ internal class IntegralBuilder
     private static (string Body, string Argument, string TextAfter) ReadIntegralBody(string inp, int startIndex)
     {
         string integralBody = inp[startIndex..];
-        int dIndex = BracketHandler.FindBrackets(integralBody, BracketType.IntegralBody_D);
+
+        // pass validator func to fix 'd' match problem with \cdot
+        var matchValidatorFunc = (string input, string reference, int index) =>
+        {
+            string span = Slicer.GetSpanSafely(input, index, reference.Length);
+            if (span != reference) return false;
+            if (reference is "d" && index - 2 >= 0 && Slicer.GetSpanSafely(input, (index - 2)..(index + 3)) is "\\cdot") return false;
+            return true;
+        };
+        int dIndex = BracketHandler.FindBrackets(integralBody, BracketType.IntegralBody_D, 0, matchValidatorFunc);
+
         if (dIndex > 0) dIndex--;
         if (dIndex is -1) dIndex = integralBody.Length;
         return SeparateBodyAndArgument(integralBody, dIndex);
@@ -69,7 +79,6 @@ internal class IntegralBuilder
         string integralBody = BuildAll(Slicer.GetSpanSafely(input, ..dIndex));
 
         int argEndIndex = CharComparer.GetIndexOfFirstNonChar(input.AsSpan(), dIndex + 1);
-        
         string integralArgument = Slicer.GetSpanSafely(input, (dIndex + 1)..argEndIndex);          // !!! this line takes all until end
         if (string.IsNullOrWhiteSpace(integralBody)) integralBody = "y";
         if (string.IsNullOrWhiteSpace(integralArgument)) integralArgument = "x";

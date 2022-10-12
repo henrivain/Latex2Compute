@@ -10,7 +10,21 @@ internal static class LimitBuilder
 
     const string Tag = "#151#";
     const string OperatorStart = "\\lim";
-    
+
+    public static string BuildAll(string input, ref List<TranslationError> errors)
+    {
+        int startIndex;
+
+        while (true)
+        {
+            startIndex = input.IndexOf(OperatorStart);
+            if (startIndex < 0) return input;
+
+            input = input.Remove(startIndex, OperatorStart.Length);
+            input = Build(input, startIndex, ref errors);
+        }
+    }
+
     internal static string Build(string input, int startIndex, ref List<TranslationError> errors)
     {
 
@@ -33,23 +47,6 @@ internal static class LimitBuilder
         return $"{input[..startIndex]}{Tag}({BuildAll(body.Content, ref errors)},{bottom}){afterBody}";
     }
     
-
-    public static string BuildAll(string input, ref List<TranslationError> errors)
-    {
-        int startIndex;
-
-        while (true)
-        {
-            startIndex = input.IndexOf(OperatorStart);
-            if (startIndex < 0) return input;
-
-            input = input.Remove(startIndex, OperatorStart.Length);
-            input = Build(input, startIndex, ref errors);
-        }
-    }
-
-  
-
     private static string ReplaceArrowWithComma(string bottom)
     {
         string[] arrows = new string[]

@@ -21,7 +21,8 @@ internal static class BracketHandler
         [BracketType.CurlyLong] = ("\\left{", "\\right}"),
         [BracketType.CurrencySign_And] = ("¤", "&"),
         [BracketType.CasesStartEnd] = ("\\begin{cases}", "\\end{cases}"),
-        [BracketType.IntegralBody_D] = ("\\int", "d")
+        [BracketType.IntegralBody_D] = ("\\int", "d"),
+        [BracketType.RoundLong_RoundLongUnderScore] = (LeftBracket, $"{RightBracket}_")
     };
     
     /// <summary>

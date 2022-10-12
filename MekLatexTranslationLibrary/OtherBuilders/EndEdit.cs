@@ -42,6 +42,14 @@ static internal class EndEdit
             input = SeparateOperatorsWithCdot(input);
         }
 
+        if (args.AutoSolve && input.Contains("#192#") is false)
+        {
+            // if auto solve is on => call autosolve method and check if conditions are true
+            input = RunAutoSolve(input);
+        }
+        input = CheckDerivative(input, args);
+
+
         input = TranslationTag.ToNspireOperator(input);
 
         // changes from settings
@@ -60,17 +68,7 @@ static internal class EndEdit
                 break;
         }
 
-        if (args.AutoSolve && input.Contains("#192#") is false)
-        {
-            // if auto solve is on => call autosolve method and check if conditions are true
-            input = RunAutoSolve(input);
-        }
-
-        input = CheckDerivative(input, args);
-
-        input = input
-            .Replace("#192#", "solve")
-            .Replace("#191#", "derivative");
+        
 
         return input;
     }

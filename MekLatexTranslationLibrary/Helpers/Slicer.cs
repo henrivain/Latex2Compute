@@ -28,7 +28,7 @@ internal static class Slicer
         {
             return input[startIndex];
         }
-        catch (ArgumentOutOfRangeException)
+        catch (IndexOutOfRangeException)
         {
             Console.WriteLine($"[Translation] Index out of range, Can't read char with index '{startIndex}' from input: '{input}', returns null");
             return null;

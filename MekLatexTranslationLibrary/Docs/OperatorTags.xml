@@ -62,5 +62,10 @@ and is easier to present as number tags.
 			<solve>#192#</solve>					<!-- means "solve" -->
 		</FromLastTranslation>
 
+		<Propability>
+			<npr>#201#</npr>						<!-- means "nPr" -->
+			<ncr>#202#</ncr>						<!-- means "nCr" -->
+		</Propability>
+
 	</CommonOperatorCodes>
 </Documentation>

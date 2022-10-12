@@ -9,5 +9,6 @@ public enum BracketType
     Square, SquareLong,
     CurrencySign_And,
     CasesStartEnd,
-    IntegralBody_D
+    IntegralBody_D,
+    RoundLong_RoundLongUnderScore
 }

@@ -16,4 +16,6 @@ public enum TranslationError
     NthRoot_NoFirstClosingBracket = 12,
     Power_NoEndingBracketFound = 13,
     Cases_NoEndBracketFound = 14,
+    Binom_NoFirstStart = 15,
+    BinomNoSecondStart = 16,
 }

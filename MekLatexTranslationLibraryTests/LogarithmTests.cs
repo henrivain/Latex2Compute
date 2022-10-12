@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MekLatexTranslationLibraryTests;
+﻿namespace MekLatexTranslationLibraryTests;
 public class LogarithmTests
 {
     readonly TranslationArgs _normalArgs = new()

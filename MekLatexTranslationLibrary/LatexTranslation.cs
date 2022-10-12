@@ -45,6 +45,7 @@ public static class LatexTranslation
     internal static string TranslateAllOperators(string input, ref List<TranslationError> errors)
     {
         input = FractionBuilder.BuildAll(input, ref errors);
+        input = PropabilityOperators.BuildAll(input, ref errors);
         input = CasesBuilder.BuildAll(input, ref errors);
         input = LogarithmBuilder.BuildAll(input, ref errors);
         input = SquareRootBuilder.BuildAll(input, ref errors);

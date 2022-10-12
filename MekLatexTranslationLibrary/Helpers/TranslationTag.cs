@@ -39,12 +39,23 @@ internal static class TranslationTag
             //lim
             .Replace("#151#", "lim")
             // pi
-            .Replace("#161#", "pi")       
+            .Replace("#161#", "pi")
             // abs
-            .Replace("#171#", "abs")      
+            .Replace("#171#", "abs")
             // integral
-            .Replace("#181#", "∫");
-        
+            .Replace("#181#", "∫")
+
+            // auto solve and derivative
+            .Replace("#192#", "solve")
+            .Replace("#191#", "derivative")
+            
+            // propability operators
+            .Replace("#201#", "nPr")
+            .Replace("#202#", "nCr")
+
+            ;
+
+
         return inp;
     }
 
@@ -68,7 +79,7 @@ internal static class TranslationTag
 
 
     /// <summary>
-    /// Separates Operator with "*" if it does not have any of operator symbol before it
+    /// Separates Binom with "*" if it does not have any of operator symbol before it
     /// <para/>operator symbols: * + - / = > < or ) ] }
     /// </summary>
     /// <param name="inp"></param>

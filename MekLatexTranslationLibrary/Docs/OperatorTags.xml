@@ -25,6 +25,7 @@ and is easier to present as number tags.
 			<system>#121#</system>					<!-- means "system"		-->
 			<lineDivider>#122#</lineDivider>		<!-- means ","			-->
 			<pieced>#123#</pieced>					<!-- means "piecewise"	-->
+			<or_tai>#124#</or_tai>					<!-- means " or "		-->
 		</System>
 
 		<Trigonometry>

@@ -25,7 +25,6 @@ internal static partial class CasesBuilder
     private static string Build(string input, int startIndex, ref List<TranslationError> errors)
     {
         input = input.Replace("\\\\", RowChangeTag);
-        input = input.Replace("&", string.Empty);
 
         Cases instance = new()
         {

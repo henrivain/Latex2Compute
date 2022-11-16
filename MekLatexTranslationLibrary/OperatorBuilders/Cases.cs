@@ -8,7 +8,6 @@ internal static partial class CasesBuilder
     {
         string _body = string.Empty;
 
-        static readonly string[] _pieceRangeDefiners = new string[] { "{,}x", "{,}y", "{,}z" };
         
 
         public string TextBefore { get; set; } = string.Empty;
@@ -29,45 +28,45 @@ internal static partial class CasesBuilder
         {
             if (IsPieced is null)
             {
-                bool isPieced = TryConvertIntoPiecedFunction();
+                bool isPieced = CheckIfPieced();
                 if (isPieced) ConvertBodyIntoPieced();
                 IsPieced = isPieced;    // IsPieced must be defined after Body, because setting Body will set IsPieced null
             }
             string tag = (IsPieced ?? false) ? PiecedTag : NormalTag;
-            return $"{TextBefore}{tag}({Body}){TextAfter}";
+            
+            return $"{TextBefore}{tag}({Body}){TextAfter}"
+                .Replace("&", string.Empty);
         }
+
+        const string _rangeDivider = "&{,}";
 
         private void ConvertBodyIntoPieced()
         {
             string[] piecedBody = Body.Split(RowChangeTag);
             for (int i = 0; i < piecedBody.Length; i++)
             {
-                int index = -1;
-                foreach (var definer in _pieceRangeDefiners)
-                {
-                    index = Helper.GetSmallestValue(index, piecedBody[i].IndexOf(definer), 0);
-                }
+                string line = piecedBody[i];
+                int index = line.IndexOf(_rangeDivider);
                 if (index < 0)
                 {
-                    piecedBody[i] = $"{piecedBody[i]},";
+                    throw new InvalidOperationException($"{nameof(line)} must have range divider '{_rangeDivider}'. Input was {line}");
                 }
-                else
-                {
-                    piecedBody[i] = piecedBody[i]
-                        .Remove(index, 3)
-                        .Insert(index, ",");
-                }
+                piecedBody[i] = line
+                    .Remove(index, 4)
+                    .Insert(index, ",")
+                    .Replace("or", "#124#")
+                    .Replace("tai", "#124#");
             }
             Body = string.Join(RowChangeTag, piecedBody);
         }
 
-        private bool TryConvertIntoPiecedFunction()
+        private bool CheckIfPieced()
         {
             string[] piecedBody = Body.Split(RowChangeTag);
             for (int i = 0; i < piecedBody.Length; i++)
             {
-                bool isPiecePieced = _pieceRangeDefiners.Any(x => piecedBody[i].Contains(x));
-                if (isPiecePieced is false) return false;
+                // return false if one line does not contain range divider
+                if (piecedBody[i].Contains(_rangeDivider) is false) return false;
             }
             return true;
         }

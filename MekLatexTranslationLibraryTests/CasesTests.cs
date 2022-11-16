@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace MekLatexTranslationLibraryTests;
 public class CasesTests
@@ -42,14 +38,88 @@ public class CasesTests
         Assert.Equal(expectedResult, physicsResult.Result);
     }
 
+    [Theory]
+    [InlineData("""
+        \begin{cases}
+        3x&{,}x<0\\
+        x&\\
+        4x^2&{,}x>0
+        \end{cases}
+        """, "system(3x.x<0,x,4x^2.x>0)")]
+    public void PiecedFunction_ShouldBeTranslated_AsSystem_IfRowLacksRange(string input, string expectedResult)
+    {
+        // Arrange
+        var normalItem = new TranslationItem(input, _normalArgs);
+        var physicsItem = new TranslationItem(input, _physicsArgs);
 
+        // Act
+        var normalResult = LatexTranslation.Translate(normalItem);
+        var physicsResult = LatexTranslation.Translate(physicsItem);
+
+        // Assert
+        Assert.Equal(expectedResult, normalResult.Result);
+        Assert.Equal(expectedResult, physicsResult.Result);
+    }
 
     [Theory]
     [InlineData("\\begin{cases}3x&{,}x>0\\\\x&{,}x=0\\end{cases}", "piecewise(3x,x>0,x,x=0)")]  // Two rows
     [InlineData("\\begin{cases}3x&{,}x<0\\\\x&{,}x=0\\\\4x^2&{,}x>0\\end{cases}", "piecewise(3x,x<0,x,x=0,4x^2,x>0)")]   //Three rows
-    [InlineData("\\begin{cases}3x&{,}x<0\\\\x&\\\\4x^2&{,}x>0\\end{cases}", "system(3x.x<0,x,4x^2.x>0)")]   // Is normal system, because middle row is not pieced
     public void PiecedFunction_ShouldBeTranslated_ToPiecewiceFunction_IfEveryRowIsPieced(
-    string input, string expectedResult)
+        string input, string expectedResult)
+    {
+        // Arrange
+        var normalItem = new TranslationItem(input, _normalArgs);
+        var physicsItem = new TranslationItem(input, _physicsArgs);
+
+        // Act
+        var normalResult = LatexTranslation.Translate(normalItem);
+        var physicsResult = LatexTranslation.Translate(physicsItem);
+
+        // Assert
+        Assert.Equal(expectedResult, normalResult.Result);
+        Assert.Equal(expectedResult, physicsResult.Result);
+    }
+
+    [Theory]
+    [InlineData(""" 
+        \begin{cases}
+        0&{,}x<0\\
+        \frac{1}{20}&{,}0\le x\le 20\\
+        0&{,}x>20
+        \end{cases}
+        """, "piecewise(0,x<0,(1)/(20),0<=x<=20,0,x>20)")]   // x is between "0<=x<=20"
+    public void PiecedFunction_ShouldAccept_VarBetweenNumbers_InRange(
+        string input, string expectedResult)
+    {
+        // Arrange
+        var normalItem = new TranslationItem(input, _normalArgs);
+        var physicsItem = new TranslationItem(input, _physicsArgs);
+
+        // Act
+        var normalResult = LatexTranslation.Translate(normalItem);
+        var physicsResult = LatexTranslation.Translate(physicsItem);
+
+        // Assert
+        Assert.Equal(expectedResult, normalResult.Result);
+        Assert.Equal(expectedResult, physicsResult.Result);
+    }
+
+
+    [Theory]
+    [InlineData(""" 
+        \begin{cases}
+        0&{,}x<0\ tai\ x>20\\
+        \frac{1}{20}&{,}0\le x\le 20
+        \end{cases}
+        """, "piecewise(0,x<0 or x>20,(1)/(20),0<=x<=20)")]   // includes "tai" => or operator
+    [InlineData(""" 
+        \begin{cases}
+        0&{,}x<0\or\ x>20\\
+        \frac{1}{20}&{,}0\le x\le 20
+        \end{cases}
+        """, "piecewise(0,x<0 or x>20,(1)/(20),0<=x<=20)")]   // includes or operator
+    public void PiecedFunction_OR_ShouldBeTranslated(
+        string input, string expectedResult)
     {
         // Arrange
         var normalItem = new TranslationItem(input, _normalArgs);

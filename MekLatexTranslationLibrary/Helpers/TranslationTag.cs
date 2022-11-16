@@ -16,9 +16,7 @@ internal static class TranslationTag
     /// <returns>inp with tags translated into nspire form</returns>
     internal static string ToNspireOperator(string inp)
     {
-
-        inp = inp
-
+        return inp
             //log
             .Replace("#111#", "log")
             .Replace("#112#", "ln")
@@ -26,6 +24,7 @@ internal static class TranslationTag
             .Replace("#121#", "system")
             .Replace("#122#", ",")
             .Replace("#123#", "piecewise")
+            .Replace("#124#", " or ")   // include spaces!
             //trigonometry
             .Replace("#131#", "arcsin")
             .Replace("#132#", "sin")
@@ -52,11 +51,7 @@ internal static class TranslationTag
             // propability operators
             .Replace("#201#", "nPr")
             .Replace("#202#", "nCr")
-
             ;
-
-
-        return inp;
     }
 
     /// <summary>

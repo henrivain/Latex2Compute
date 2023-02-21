@@ -132,7 +132,7 @@ public class SymbolTests
     [Theory]
     [InlineData("mm^3 cm^3 dm^3 nm^3 km^3 m^3")]
     [InlineData("mm^2 cm^2 dm^2 nm^2 km^2 m^2")]
-    [InlineData("nm mm cm dm m dak hm km")]
+    [InlineData("nm mm cm dm m dam hm km")]
     [InlineData("kWh MWh GWh TWh")]
     [InlineData("kA A mA")]
     [InlineData("kV V mV")]

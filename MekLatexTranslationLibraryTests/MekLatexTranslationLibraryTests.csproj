@@ -24,4 +24,8 @@
 		<ProjectReference Include="..\MekLatexTranslationLibrary\MekLatexTranslationLibrary.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="PhysicsUnits\" />
+	</ItemGroup>
+
 </Project>

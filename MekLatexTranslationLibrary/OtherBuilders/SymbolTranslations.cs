@@ -1,5 +1,6 @@
 ﻿/// Copyright 2021 Henri Vainio 
 using MekLatexTranslationLibrary.Helpers;
+using MekLatexTranslationLibrary.PhysicsMode;
 
 namespace MekLatexTranslationLibrary.OtherBuilders;
 
@@ -37,6 +38,15 @@ internal static class SymbolTranslations
             input = RemoveGreekSymbols(input);
             input = RemovePhysics1ModeSymbols(input);
         }
+        if (args.PhysicsMode2)
+        {
+            var parser = new PhysicsModeTwoParser(input);
+            input = parser.Translate();
+            if (parser.Errors is not null)
+            {
+                errors.AddRange(parser.Errors);
+            }
+        }
 
         // mathmode changes
         if (args.MathMode)
@@ -59,12 +69,12 @@ internal static class SymbolTranslations
             "keV", "MeV", "GeV", "TeV", "eV",
             "MHz", "kHz", "Hz",
             "kcal", "cal",
-            "MWh", "GWh", "TWh", "kWh", "kW",
+            "MWh", "GWh", "TWh", "kWh", "PWh", "kW",
             "mmol", "mol", 
             "kpl",
             "\\min", "\\max",
             "kPa", "bar", "Pa",
-            "dak", "cm", "dm", "nm", "pm", "km", "hm", "mm",
+            "dam", "cm", "dm", "nm", "pm", "km", "hm", "mm",
             "lx", "lm", "Wb", "sr",
             "kN",
             "kJ", "MJ", "GJ", 

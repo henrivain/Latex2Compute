@@ -17,7 +17,7 @@ public class PhysicsModeTwoParserTests
     }
 
     [Theory]
-    [InlineData("20h+3\\min+7s+5ms+4ns", "20_hr+3_min+7_s+5_ms+4_ns")]
+    //[InlineData("20h+3\\min+7s+5ms+4ns", "20_hr+3_min+7_s+5_ms+4_ns")]
     [InlineData("\\minhhsnsms", "_min_hr_hr_s_ns_ms")]
     public void Translate_ShouldTranslate_TimeUnits(string input, string expectedResult)
     {

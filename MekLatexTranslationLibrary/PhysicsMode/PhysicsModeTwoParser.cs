@@ -19,19 +19,27 @@ internal class PhysicsModeTwoParser : IPhysicsModeParser
     {
         var input = Latex;
         var replacements = GetReplacementIndices(ref input).ToArray();
+        return Build(input, replacements);
+    }
 
-
+    private static string Build(string input, SymbolInfo[] replacements)
+    {
         for (int i = replacements.Length - 1; i >= 0; i--)
         {
-            var value = replacements[i];
-            for (int j = 0; j < i; j++)
+            for (int j = i + 1; j < replacements.Length; j++)
             {
-                if (replacements[j].Index > value.Index)
+                if (replacements[j].Index >= replacements[i].Index)
                 {
-                    replacements[j].Index += value.LengthDiff;
+                    replacements[j].Index += replacements[i].Value.Length;
+                    continue;
+                }
+                if (replacements[j].Index < replacements[i].Index)
+                {
+                    replacements[i].Index += replacements[j].LengthDiff;
+                    continue;
                 }
             }
-            input = $"{input[..value.Index]}{value.Value}{input[value.Index..]}";
+            input = $"{input[..replacements[i].Index]}{replacements[i].Value}{input[replacements[i].Index..]}";
         }
         return input;
     }
@@ -51,7 +59,7 @@ internal class PhysicsModeTwoParser : IPhysicsModeParser
                 }
                 input = input.Remove(index, symbol.Key.Length);
                 bool addSeparator = CheckSeparatorNeed(input, symbol.Value, index);
-                
+
                 int lengthDiff = symbol.Value.Length - symbol.Key.Length;
                 replacements.Add(new(addSeparator ? $"*{symbol.Value}" : symbol.Value, index, lengthDiff));
             }

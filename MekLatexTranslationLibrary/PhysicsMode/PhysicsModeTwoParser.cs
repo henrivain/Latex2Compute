@@ -35,10 +35,6 @@ internal class PhysicsModeTwoParser : IPhysicsModeParser
                     replacements[j].Index += replacements[i].LengthDiff;
                 }
             }
-            //for (int j = 0; j < i; j++)
-            //{
-                
-            //}
             input = AddAtIndex(input, replacements[i].Value, replacements[i].Index);
         }
         return input;
@@ -66,13 +62,13 @@ internal class PhysicsModeTwoParser : IPhysicsModeParser
 
     private static SymbolInfo ParseSymbolInfo(in string input, int index, KeyValuePair<string, string> symbol)
     {
-        bool addSeparator = CheckSeparatorNeed(input, symbol.Value, index);
+        bool addSeparator = IsSeparatorNeeded(input, symbol.Value, index);
         string replacement = addSeparator ? $"*{symbol.Value}" : symbol.Value;
         int lengthDiff = replacement.Length - symbol.Key.Length;
         return new(replacement, index, lengthDiff);
     }
 
-    private static bool CheckSeparatorNeed(in string input, in string replacement, int index)
+    private static bool IsSeparatorNeeded(in string input, in string replacement, int index)
     {
         if (replacement.Length < 1)
         {
@@ -97,7 +93,7 @@ internal class PhysicsModeTwoParser : IPhysicsModeParser
 
     public string? Result { get; private set; } = null;
 
-    static readonly char[] _operators = { '/', '*', '-', '+' };
+    static readonly char[] _operators = { '/', '*', '-', '+', '(', ')', '[', ']', '{', '}' };
 
     static ImmutableArray<KeyValuePair<string, string>> Symbols { get; }
         = ImmutableArray.Create(new Dictionary<string, string>()

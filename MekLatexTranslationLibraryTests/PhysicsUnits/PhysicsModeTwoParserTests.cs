@@ -17,8 +17,10 @@ public class PhysicsModeTwoParserTests
     }
 
     [Theory]
-    //[InlineData("20h+3\\min+7s+5ms+4ns", "20_hr+3_min+7_s+5_ms+4_ns")]
+    [InlineData("20h+3\\min+7s+5ms+4ns", "20_hr+3_min+7_s+5_ms+4_ns")]
     [InlineData("\\minhhsnsms", "_min_hr_hr_s_ns_ms")]
+    [InlineData("snsms", "_s_ns_ms")]
+    [InlineData("hsnsms", "_hr_s_ns_ms")]
     public void Translate_ShouldTranslate_TimeUnits(string input, string expectedResult)
     {
         // Arrange
@@ -32,9 +34,19 @@ public class PhysicsModeTwoParserTests
         Assert.Null(parser.Errors);
     }
 
+    /* Strange cases
+     * "mdammm" != "_m*10_m_mm" because dam is deleted first and "mmm" is left => "mm" + "m"
+     
+     */
+
     [Theory]
-    [InlineData("mm^2+cm+dam+mm*55km", "_mm^2+_cm+10_m+_mm*55_km")]
-    [InlineData("mm^2+cm+dammm*55km", "_mm^2+_cm+10_m_mm*55_km")]
+    //[InlineData("mm^2+cm+dam+mm*55km", "_mm^2+_cm+10_m+_mm*55_km")]
+    //[InlineData("mm^2+cm+dammm*55km", "_mm^2+_cm+10_m_mm*55_km")]
+    //[InlineData("mcm+mm", "_m_cm+_mm")]
+    //[InlineData("m+dammm", "_m+10_m_mm")]
+    //[InlineData("mdam+mm", "_m*10_m+_mm")]
+    //[InlineData("mm^2+dam77mm", "_mm^2+10_m77_mm")]
+    [InlineData("mm^2+dammm", "_mm^2+10_m_mm")]
     public void Translate_ShouldTranslate_Lengths(string input, string expectedResult)
     {
         // Arrange

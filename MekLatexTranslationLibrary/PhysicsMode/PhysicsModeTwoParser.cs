@@ -1,5 +1,6 @@
 ﻿using MekLatexTranslationLibrary.Helpers;
 using System.Collections.Immutable;
+using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("MekLatexTranslationLibraryTests")]
@@ -22,24 +23,23 @@ internal class PhysicsModeTwoParser : IPhysicsModeParser
         return Build(input, replacements);
     }
 
+
     private static string Build(string input, SymbolInfo[] replacements)
     {
         for (int i = replacements.Length - 1; i >= 0; i--)
         {
-            for (int j = i + 1; j < replacements.Length; j++)
+            for (int j = i - 1; j >= 0; j--)
             {
-                if (replacements[j].Index >= replacements[i].Index)
+                if (replacements[j].Index > replacements[i].Index)
                 {
-                    replacements[j].Index += replacements[i].Value.Length;
-                    continue;
-                }
-                if (replacements[j].Index < replacements[i].Index)
-                {
-                    replacements[i].Index += replacements[j].LengthDiff;
-                    continue;
+                    replacements[j].Index += replacements[i].LengthDiff;
                 }
             }
-            input = $"{input[..replacements[i].Index]}{replacements[i].Value}{input[replacements[i].Index..]}";
+            //for (int j = 0; j < i; j++)
+            //{
+                
+            //}
+            input = AddAtIndex(input, replacements[i].Value, replacements[i].Index);
         }
         return input;
     }
@@ -58,13 +58,18 @@ internal class PhysicsModeTwoParser : IPhysicsModeParser
                     break;
                 }
                 input = input.Remove(index, symbol.Key.Length);
-                bool addSeparator = CheckSeparatorNeed(input, symbol.Value, index);
-
-                int lengthDiff = symbol.Value.Length - symbol.Key.Length;
-                replacements.Add(new(addSeparator ? $"*{symbol.Value}" : symbol.Value, index, lengthDiff));
+                replacements.Add(ParseSymbolInfo(in input, index, symbol));
             }
         }
         return replacements;
+    }
+
+    private static SymbolInfo ParseSymbolInfo(in string input, int index, KeyValuePair<string, string> symbol)
+    {
+        bool addSeparator = CheckSeparatorNeed(input, symbol.Value, index);
+        string replacement = addSeparator ? $"*{symbol.Value}" : symbol.Value;
+        int lengthDiff = replacement.Length - symbol.Key.Length;
+        return new(replacement, index, lengthDiff);
     }
 
     private static bool CheckSeparatorNeed(in string input, in string replacement, int index)
@@ -80,6 +85,11 @@ internal class PhysicsModeTwoParser : IPhysicsModeParser
         }
         return char.IsDigit(replacement[0]) && _operators.Contains(charBefore.Value) is false;
     }
+    private static string AddAtIndex(string str, string span, int index)
+    {
+        return $"{str[..index]}{span}{str[index..]}";
+    }
+
 
     internal string Latex { get; }
 

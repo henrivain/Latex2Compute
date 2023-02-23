@@ -1,4 +1,5 @@
-﻿using MekLatexTranslationLibrary.OperatorBuilders;
+﻿using MekLatexTranslationLibrary.Helpers;
+using MekLatexTranslationLibrary.OperatorBuilders;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -6,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -32,11 +34,11 @@ internal class PhysicsTwoParser : IPhysicsModeParser
         string symbolKey = string.Empty;
         for (int index = 0; index < latex.Length; index++)
         {
-            string current = latex[index].ToString();
-
+            string currentKey;
             if (lastValidIndex is -1)
             {
-                bool isValidChar = CharacterCombinations.Contains(current);
+                currentKey = latex[index].ToString();
+                bool isValidChar = CharacterCombinations.Contains(currentKey);
                 if (isValidChar)
                 {
                     lastValidIndex = index;
@@ -48,24 +50,27 @@ internal class PhysicsTwoParser : IPhysicsModeParser
             }
             else
             {
-
+                currentKey = latex[lastValidIndex..(index + 1)];
+                bool isValidSpan = CharacterCombinations.Contains(currentKey);
+                if (isValidSpan is false)
+                {
+                    bool isSeparatorAdded = Build(ref latex, symbolKey, lastValidIndex);
+                    Reset(ref symbolKey, ref lastValidIndex, ref index);
+                    if (isSeparatorAdded)
+                    {
+                        index++;
+                    }
+                    continue;
+                }
             }
-
-            var currentKey = latex[lastValidIndex..(index+1)];
             bool isSymbol = Symbols.ContainsKey(currentKey);
             if (isSymbol)
             {
                 symbolKey = currentKey;
-                continue;
             }
-            bool isValidSpan = CharacterCombinations.Contains(currentKey);
-            if (index >= latex.Length - 1 || isValidSpan is false)
-            {
-                latex = Build(latex, symbolKey, lastValidIndex);
-                Reset(ref symbolKey, ref lastValidIndex, ref index);
-                continue;
-            }
+            
         }
+        Build(ref latex, symbolKey, lastValidIndex);
         return latex;
     }
 
@@ -73,19 +78,30 @@ internal class PhysicsTwoParser : IPhysicsModeParser
     {
         if (string.IsNullOrEmpty(symbolKey) is false)
         {
-            index = lastValidIndex + Symbols[symbolKey].Length;
+            index = lastValidIndex + Symbols[symbolKey].Length - 1;
         }
         symbolKey = string.Empty;
         lastValidIndex = -1;
     }
 
-    private static string Build(string latex, string symbolKey, int startIndex)
+    private static bool Build(ref string latex, string symbolKey, int startIndex)
     {
         if (string.IsNullOrEmpty(symbolKey))
         {
-            return latex;
+            return false;
         }
-        return $"{latex[..startIndex]}{Symbols[symbolKey]}{latex[(startIndex + symbolKey.Length)..]}";
+        string replacement = Symbols[symbolKey];
+        char? charBefore = Slicer.GetCharSafely(in latex, startIndex - 1);
+        char? firstOfReplacement = Slicer.GetCharSafely(in replacement, 0);
+        if (charBefore is not null &&
+            firstOfReplacement is not null &&
+            char.IsDigit(firstOfReplacement.Value) &&
+            _operators.Contains(charBefore.Value) is false)
+        {
+            replacement = $"*{replacement}";
+        }
+        latex = $"{latex[..startIndex]}{replacement}{latex[(startIndex + symbolKey.Length)..]}";
+        return replacement.StartsWith('*');
     }
 
 
@@ -187,6 +203,7 @@ internal class PhysicsTwoParser : IPhysicsModeParser
     });
 
     static HashSet<string> CharacterCombinations { get; } = SymbolKeysToHashSet();
+    static readonly char[] _operators = { '/', '*', '-', '+', '(', ')', '[', ']', '{', '}' };
 
     private static HashSet<string> SymbolKeysToHashSet()
     {

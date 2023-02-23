@@ -33,4 +33,40 @@ public class PhysicsTwoParserTests
         Assert.Equal(expectedResult, result);
         Assert.Null(parser.Errors);
     }
+
+    [Theory]
+    [InlineData("mcm+mm", "_m_cm+_mm")]
+    [InlineData("m+dammm", "_m+10_m_mm")]
+    [InlineData("mdam+mm", "_m*10_m+_mm")]
+    [InlineData("mm^2+dam77mm", "_mm^2+10_m77_mm")]
+    [InlineData("mm^2+dam+mm", "_mm^2+10_m+_mm")]
+    [InlineData("mm^2+dammm", "_mm^2+10_m_mm")]
+    public void Translate_ShouldTranslate_Lengths(string input, string expectedResult)
+    {
+        // Arrange
+        var parser = new PhysicsTwoParser(input);
+
+        // Act
+        var result = parser.Translate();
+
+        // Assert
+        Assert.Equal(expectedResult, result);
+        Assert.Null(parser.Errors);
+    }
+
+    [Theory]
+    [InlineData("dam+hm+Wh", "10_m+10^(2)_m+10^(-3)_kWh")]
+    [InlineData("kWhMWhGWhTWhPWh", "_kWh*10^(3)_kWh*10^(6)_kWh*10^(9)_kWh*10^(12)_kWh")]
+    public void Translate_ShouldAdd_TenPowers_IfNeeded(string input, string expectedResult)
+    {
+        // Arrange
+        var parser = new PhysicsTwoParser(input);
+
+        // Act
+        var result = parser.Translate();
+
+        // Assert
+        Assert.Equal(expectedResult, result);
+        Assert.Null(parser.Errors);
+    }
 }

@@ -52,8 +52,6 @@ static internal class EndEdit
 
         input = TranslationTag.ToNspireOperator(input);
 
-        // changes from settings
-
         switch (args.EndChanges)
         {
             case "all":

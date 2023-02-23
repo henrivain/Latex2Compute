@@ -40,7 +40,7 @@ internal static class SymbolTranslations
         }
         if (args.PhysicsMode2)
         {
-            var parser = new PhysicsModeTwoParser(input);
+            var parser = new PhysicsTwoParser(input);
             input = parser.Translate();
             if (parser.Errors is not null)
             {

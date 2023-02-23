@@ -56,8 +56,38 @@ public class PhysicsTwoParserTests
 
     [Theory]
     [InlineData("dam+hm+Wh", "10_m+10^(2)_m+10^(-3)_kWh")]
-    [InlineData("kWhMWhGWhTWhPWh", "_kWh*10^(3)_kWh*10^(6)_kWh*10^(9)_kWh*10^(12)_kWh")]
     public void Translate_ShouldAdd_TenPowers_IfNeeded(string input, string expectedResult)
+    {
+        // Arrange
+        var parser = new PhysicsTwoParser(input);
+
+        // Act
+        var result = parser.Translate();
+
+        // Assert
+        Assert.Equal(expectedResult, result);
+        Assert.Null(parser.Errors);
+    }
+
+    [Theory]
+    [InlineData("2dam+5hm", "2*10_m+5*10^(2)_m")]
+    [InlineData("kWhMWhGWhTWhPWh", "_kWh*10^(3)_kWh*10^(6)_kWh*10^(9)_kWh*10^(12)_kWh")]
+    public void Translate_ShouldAdd_MultiplicationSign_IfNeeded(string input, string expectedResult)
+    {
+        // Arrange
+        var parser = new PhysicsTwoParser(input);
+
+        // Act
+        var result = parser.Translate();
+
+        // Assert
+        Assert.Equal(expectedResult, result);
+        Assert.Null(parser.Errors);
+    }
+
+    [Theory]
+    [InlineData("kJkgK", "10^(3)_J_kg_°k")]
+    public void Translate_ShouldNotAdd_PowersIfNotNeeded(string input, string expectedResult)
     {
         // Arrange
         var parser = new PhysicsTwoParser(input);

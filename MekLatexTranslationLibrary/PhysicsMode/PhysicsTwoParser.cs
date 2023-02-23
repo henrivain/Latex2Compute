@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using System.Xml;
 
 namespace MekLatexTranslationLibrary.PhysicsMode;
-internal class PhysicsTwoParser : IPhysicsModeParser
+internal sealed class PhysicsTwoParser : IPhysicsModeParser
 {
     public PhysicsTwoParser(string latex)
     {
@@ -23,7 +23,7 @@ internal class PhysicsTwoParser : IPhysicsModeParser
 
     public TranslationError[]? Errors => null;
 
-    public string? Result => null;
+    public string? Result { get; private set; }
 
 
 
@@ -68,15 +68,21 @@ internal class PhysicsTwoParser : IPhysicsModeParser
             {
                 symbolKey = currentKey;
             }
-            
+
         }
         Build(ref latex, symbolKey, lastValidIndex);
+        Result = latex;
         return latex;
     }
 
     private static void Reset(ref string symbolKey, ref int lastValidIndex, ref int index)
     {
-        if (string.IsNullOrEmpty(symbolKey) is false)
+
+        if (string.IsNullOrEmpty(symbolKey))
+        {
+            index = lastValidIndex;
+        }
+        else
         {
             index = lastValidIndex + Symbols[symbolKey].Length - 1;
         }
@@ -106,105 +112,112 @@ internal class PhysicsTwoParser : IPhysicsModeParser
 
 
 
-    static ReadOnlyDictionary<string, string> Symbols { get; } = new(new Dictionary<string, string>()
-    {
-        // Rise to power does not matter, because it will be translated automatically
-        ["nm"] = "_nm",
-        ["mm"] = "_mm",
-        ["cm"] = "_cm",
-        ["dm"] = "_dm",
-        ["m"] = "_m",
-        ["dam"] = "10_m",
-        ["hm"] = "10^(2)_m",
-        ["km"] = "_km",
+    static ReadOnlyDictionary<string, string> Symbols { get; } =
+        new(new Dictionary<string, string>()
+        {
+            // Rise to power does not matter, because it is translated automatically
+            ["nm"] = "_nm",
+            ["mm"] = "_mm",
+            ["cm"] = "_cm",
+            ["dm"] = "_dm",
+            ["m"] = "_m",
+            ["dam"] = "10_m",
+            ["hm"] = "10^(2)_m",
+            ["km"] = "_km",
 
-        ["ml"] = "_mm",
-        ["cl"] = "10^(2)_l",
-        ["dl"] = "10_l",
-        ["l"] = "_km",
+            ["ml"] = "_mm",
+            ["cl"] = "10^(2)_l",
+            ["dl"] = "10_l",
+            ["l"] = "_km",
 
-        ["W"] = "_W",
-        ["kW"] = "_kW",
-        ["Wh"] = "10^(-3)_kWh",
-        ["kWh"] = "_kWh",
-        ["MWh"] = "10^(3)_kWh",
-        ["GWh"] = "10^(6)_kWh",
-        ["TWh"] = "10^(9)_kWh",
-        ["PWh"] = "10^(12)_kWh",
+            ["W"] = "_W",
+            ["kW"] = "_kW",
+            ["Wh"] = "10^(-3)_kWh",
+            ["kWh"] = "_kWh",
+            ["MWh"] = "10^(3)_kWh",
+            ["GWh"] = "10^(6)_kWh",
+            ["TWh"] = "10^(9)_kWh",
+            ["PWh"] = "10^(12)_kWh",
 
-        ["kA"] = "_kA",
-        ["A"] = "_A",
-        ["mA"] = "_mA",
+            ["kA"] = "_kA",
+            ["A"] = "_A",
+            ["mA"] = "_mA",
 
-        ["kV"] = "_kV",
-        ["V"] = "_V",
-        ["mV"] = "_mV",
+            ["kV"] = "_kV",
+            ["V"] = "_V",
+            ["mV"] = "_mV",
 
-        ["mT"] = "10^(-3)_T",
-        ["T"] = "_T",
+            ["mT"] = "10^(-3)_T",
+            ["T"] = "_T",
 
-        ["C"] = "_coul",
-        ["G"] = "_Gs",
+            ["C"] = "_coul",
+            ["G"] = "_Gs",
 
-        ["F"] = "_F",
-        ["nF"] = "_nF",
-        ["pF"] = "_pF",
-        ["Wb"] = "_Wb",
+            ["F"] = "_F",
+            ["nF"] = "_nF",
+            ["pF"] = "_pF",
+            ["Wb"] = "_Wb",
 
-        ["N"] = "_N",
-        ["kN"] = "10^(3)_N",
-        ["MN"] = "10^(6)_N",
-        ["GN"] = "10^(9)_N",
+            ["N"] = "_N",
+            ["kN"] = "10^(3)_N",
+            ["MN"] = "10^(6)_N",
+            ["GN"] = "10^(9)_N",
 
-        ["mg"] = "_mg",
-        ["g"] = "_gm",
-        ["kg"] = "_kg",
+            ["mg"] = "_mg",
+            ["g"] = "_gm",
+            ["kg"] = "_kg",
 
-        ["ns"] = "_ns",
-        ["ms"] = "_ms",
-        ["s"] = "_s",
-        ["\\min"] = "_min",
-        ["h"] = "_hr",
+            ["ns"] = "_ns",
+            ["ms"] = "_ms",
+            ["s"] = "_s",
+            ["\\min"] = "_min",
+            ["h"] = "_hr",
 
-        ["mol"] = "_mol",
-        ["mmol"] = "10^(-3)_mol",
+            ["mol"] = "_mol",
+            ["mmol"] = "10^(-3)_mol",
 
-        ["cd"] = "_cd",
+            ["cd"] = "_cd",
 
-        ["r"] = "",
-        ["rad"] = "",
-        ["(rad)"] = "",
+            ["r"] = "",
+            ["rad"] = "",
+            ["(rad)"] = "",
 
-        ["eV"] = "_eV",
-        ["keV"] = "10^(3)_eV",
-        ["MeV"] = "10^(6)_eV",
-        ["GeV"] = "10^(9)_eV",
-        ["TeV"] = "10^(12)_eV",
+            ["eV"] = "_eV",
+            ["keV"] = "10^(3)_eV",
+            ["MeV"] = "10^(6)_eV",
+            ["GeV"] = "10^(9)_eV",
+            ["TeV"] = "10^(12)_eV",
 
-        ["J"] = "_J",
-        ["kJ"] = "10^(3)_J",
-        ["MJ"] = "10^(6)_J",
-        ["GJ"] = "10^(9)_J",
-        ["TJ"] = "10^(12)_J",
+            ["J"] = "_J",
+            ["kJ"] = "10^(3)_J",
+            ["MJ"] = "10^(6)_J",
+            ["GJ"] = "10^(9)_J",
+            ["TJ"] = "10^(12)_J",
 
 
-        ["K"] = "_°k",
-        ["°C"] = "_°C",
-        ["°F"] = "_°F",
+            ["K"] = "_°k",
+            ["°C"] = "_°C",
+            ["°F"] = "_°F",
 
-        ["cal"] = "_cal",
-        ["kcal"] = "_kcal",
+            ["cal"] = "_cal",
+            ["kcal"] = "_kcal",
 
-        ["Hz"] = "_Hz",
-        ["kHz"] = "_kHz",
-        ["MHz"] = "_MHz",
-        ["GHz"] = "_GHz",
+            ["Hz"] = "_Hz",
+            ["kHz"] = "_kHz",
+            ["MHz"] = "_MHz",
+            ["GHz"] = "_GHz",
 
-    });
+        });
 
     static HashSet<string> CharacterCombinations { get; } = SymbolKeysToHashSet();
+    
     static readonly char[] _operators = { '/', '*', '-', '+', '(', ')', '[', ']', '{', '}' };
 
+    /// <summary>
+    /// Get hash set containing all possible combinations of characters 
+    /// that can lead to complete Symbols dictionary symbol key.
+    /// </summary>
+    /// <returns>Hashset of substrings from Symbols dictionary</returns>
     private static HashSet<string> SymbolKeysToHashSet()
     {
         // Hashset containing all possible combinations that can lead to complete symbol key

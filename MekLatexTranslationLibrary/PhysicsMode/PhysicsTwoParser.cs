@@ -26,7 +26,6 @@ internal sealed class PhysicsTwoParser : IPhysicsModeParser
     public string? Result { get; private set; }
 
 
-
     public string Translate()
     {
         var latex = Latex;
@@ -38,23 +37,18 @@ internal sealed class PhysicsTwoParser : IPhysicsModeParser
             if (lastValidIndex is -1)
             {
                 currentKey = latex[index].ToString();
-                bool isValidChar = CharacterCombinations.Contains(currentKey);
-                if (isValidChar)
-                {
-                    lastValidIndex = index;
-                }
-                else
+                if (CharacterCombinations.Contains(currentKey) is false)
                 {
                     continue;
                 }
+                lastValidIndex = index;
             }
             else
             {
                 currentKey = latex[lastValidIndex..(index + 1)];
-                bool isValidSpan = CharacterCombinations.Contains(currentKey);
-                if (isValidSpan is false)
+                if (CharacterCombinations.Contains(currentKey) is false)
                 {
-                    bool isSeparatorAdded = Build(ref latex, symbolKey, lastValidIndex);
+                    latex = Build(latex, symbolKey, lastValidIndex, out bool isSeparatorAdded);
                     Reset(ref symbolKey, ref lastValidIndex, ref index);
                     if (isSeparatorAdded)
                     {
@@ -68,16 +62,14 @@ internal sealed class PhysicsTwoParser : IPhysicsModeParser
             {
                 symbolKey = currentKey;
             }
-
         }
-        Build(ref latex, symbolKey, lastValidIndex);
+        latex = Build(latex, symbolKey, lastValidIndex, out _);
         Result = latex;
         return latex;
     }
 
     private static void Reset(ref string symbolKey, ref int lastValidIndex, ref int index)
     {
-
         if (string.IsNullOrEmpty(symbolKey))
         {
             index = lastValidIndex;
@@ -89,27 +81,22 @@ internal sealed class PhysicsTwoParser : IPhysicsModeParser
         symbolKey = string.Empty;
         lastValidIndex = -1;
     }
-
-    private static bool Build(ref string latex, string symbolKey, int startIndex)
+    private static string Build(string latex, string symbolKey, int startIndex, out bool addedSeparator)
     {
-        if (string.IsNullOrEmpty(symbolKey))
+        addedSeparator = false;
+        if (string.IsNullOrEmpty(symbolKey) || 
+            Symbols.ContainsKey(symbolKey) is false)
         {
-            return false;
+            return latex;
         }
         string replacement = Symbols[symbolKey];
-        char? charBefore = Slicer.GetCharSafely(in latex, startIndex - 1);
-        char? firstOfReplacement = Slicer.GetCharSafely(in replacement, 0);
-        if (charBefore is not null &&
-            firstOfReplacement is not null &&
-            char.IsDigit(firstOfReplacement.Value) &&
-            _operators.Contains(charBefore.Value) is false)
+        if (IsSeparatorNeeded(latex, startIndex, replacement))
         {
             replacement = $"*{replacement}";
+            addedSeparator = true;
         }
-        latex = $"{latex[..startIndex]}{replacement}{latex[(startIndex + symbolKey.Length)..]}";
-        return replacement.StartsWith('*');
+        return $"{latex[..startIndex]}{replacement}{latex[(startIndex + symbolKey.Length)..]}";
     }
-
 
 
     static ReadOnlyDictionary<string, string> Symbols { get; } =
@@ -212,6 +199,32 @@ internal sealed class PhysicsTwoParser : IPhysicsModeParser
     static HashSet<string> CharacterCombinations { get; } = SymbolKeysToHashSet();
     
     static readonly char[] _operators = { '/', '*', '-', '+', '(', ')', '[', ']', '{', '}' };
+
+    /// <summary>
+    /// Check if separator '*' is needed. Check if replacement[0] is digit and 
+    /// char before replacement in latex is not operator.
+    /// </summary>
+    /// <param name="latex"></param>
+    /// <param name="replacementIndex"></param>
+    /// <param name="replacement"></param>
+    /// <returns>True if separator '*' is needed, othewise false.</returns>
+    private static bool IsSeparatorNeeded(in string latex, int replacementIndex, in string replacement)
+    {
+        char? charBefore = Slicer.GetCharSafely(in latex, replacementIndex - 1);
+        char? firstOfReplacement = Slicer.GetCharSafely(in replacement, 0);
+        if (charBefore is null)
+        {
+            return false;
+        }
+        if (firstOfReplacement is null)
+        {
+            return false;
+        }
+
+        bool hasTenPower = char.IsDigit(firstOfReplacement.Value);
+        bool isOperator = _operators.Contains(charBefore.Value);
+        return hasTenPower && isOperator is false;
+    }
 
     /// <summary>
     /// Get hash set containing all possible combinations of characters 

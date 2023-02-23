@@ -87,7 +87,7 @@ internal class PhysicsModeTwoParser : IPhysicsModeParser
     }
 
 
-    internal string Latex { get; }
+    private string Latex { get; }
 
     public TranslationError[]? Errors { get; private set; } = null;
 

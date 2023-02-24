@@ -22,7 +22,7 @@ public class PhysicsMode2Tests
     [InlineData(@"\frac{\pi }{100}m^2+16{,}00\cdot 10^{-6}\frac{1}{K}\cdot \frac{\pi }{100}m^2\cdot \left(13K-308{,}15K\right)",
         "(pi)/(100)_m^2+16.00*10^(-6)(1)/(_°k)*(pi)/(100)_m^2*(13_°k-308.15_°k)")]
     [InlineData(@"\frac{290W}{1\frac{kg}{l}\cdot 490\cdot 10^{-3}l\cdot 0{,}1427\frac{K}{s}}",
-        "(290_W)/(1(_kg)/(_km)*490*10^(-3)_km*0.1427(_°k)/(_s))")]
+        "(290_W)/(1(_kg)/(_l)*490*10^(-3)_l*0.1427(_°k)/(_s))")]
     public void PhysicsModeTranslate_ShouldTranslate_ComplexUnits(string input, string expectedResult)
     {
         // Arrange
@@ -51,6 +51,7 @@ public class PhysicsMode2Tests
 
     [Theory]
     [InlineData(@"\text{kg/m}^3", "_kg/_m^3")]
+    [InlineData(@"l", "_l")]
     public void PhysicsModeTranslate_ShouldTranslate_SimpleUnits(string input, string expectedResult)
     {
         // Arrange

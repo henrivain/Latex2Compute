@@ -115,7 +115,7 @@ internal sealed class PhysicsTwoParser : IPhysicsModeParser
             ["ml"] = "_mm",
             ["cl"] = "10^(2)_l",
             ["dl"] = "10_l",
-            ["l"] = "_km",
+            ["l"] = "_l",
 
             ["W"] = "_W",
             ["kW"] = "_kW",

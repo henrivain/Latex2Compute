@@ -25,7 +25,7 @@ internal static class SymbolTranslations
         }
 
         // make basic everytime translations
-        input = BasicSymbols(input);
+        input = BasicSymbols(input, in args);
 
         // vectors
         input = CheckVectorBars(input, ref errors);
@@ -70,23 +70,23 @@ internal static class SymbolTranslations
             "MHz", "kHz", "Hz",
             "kcal", "cal",
             "MWh", "GWh", "TWh", "kWh", "PWh", "kW",
-            "mmol", "mol", 
+            "mmol", "mol",
             "kpl",
             "\\min", "\\max",
             "kPa", "bar", "Pa",
             "dam", "cm", "dm", "nm", "pm", "km", "hm", "mm",
             "lx", "lm", "Wb", "sr",
             "kN",
-            "kJ", "MJ", "GJ", 
+            "kJ", "MJ", "GJ",
             "kg", "mg",
             "°F", "°C",
-            "cd", 
-            "kA", "mA", 
-            "kV", "mV", 
+            "cd",
+            "kA", "mA",
+            "kV", "mV",
             "ms", "ns",
             "ml", "cl", "dl",
-            "A","C", "F", "g", "G", "h", "J", "K", "l", 
-            "m", "N", "r", "s", "T", "V", "W",  
+            "A","C", "F", "g", "G", "h", "J", "K", "l",
+            "m", "N", "r", "s", "T", "V", "W",
         };
         return PhysicsSymbols;
     }
@@ -107,7 +107,7 @@ internal static class SymbolTranslations
         };
     }
 
-    private static string BasicSymbols(string input)
+    private static string BasicSymbols(string input, in TranslationArgs args)
     {
         // Translate symbols which will be translated same way every time
 
@@ -120,13 +120,17 @@ internal static class SymbolTranslations
         input = TranslateAllBrackets(input);
 
         // remove angles
-        input = input
-            .Replace("(rad)", string.Empty)
-            .Replace("rad", string.Empty)
-            .Replace("\\degree", string.Empty)
-            .Replace("°", string.Empty)
+        if (args.PhysicsMode2 is false)
+        {
+            input = input
+                .Replace("°", string.Empty)
+                .Replace("(rad)", string.Empty)
+                .Replace("rad", string.Empty)
+                .Replace("\\degree", string.Empty);
+        }
 
-        // less than, greater han
+        input = input
+            // less than, greater han
             .Replace("\\le", "<=")
             .Replace("\\ge", ">=")
             .Replace("\\mp", "±")

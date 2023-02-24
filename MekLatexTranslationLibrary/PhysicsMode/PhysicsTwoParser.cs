@@ -168,6 +168,8 @@ internal sealed class PhysicsTwoParser : IPhysicsModeParser
             ["r"] = "",
             ["rad"] = "",
             ["(rad)"] = "",
+            ["\\degree"] = "",
+            ["°"] = "",
 
             ["eV"] = "_eV",
             ["keV"] = "10^(3)_eV",
@@ -182,7 +184,7 @@ internal sealed class PhysicsTwoParser : IPhysicsModeParser
             ["TJ"] = "10^(12)_J",
 
 
-            ["K"] = "_°k",
+            ["K"] = "_°K",
             ["°C"] = "_°C",
             ["°F"] = "_°F",
 

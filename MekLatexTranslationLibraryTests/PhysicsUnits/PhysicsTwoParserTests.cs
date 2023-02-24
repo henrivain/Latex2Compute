@@ -86,7 +86,10 @@ public class PhysicsTwoParserTests
     }
 
     [Theory]
-    [InlineData("kJkgK", "10^(3)_J_kg_°k")]
+    [InlineData("kJkgK", "10^(3)_J_kg_°K")]
+    [InlineData("0°C", "0_°C")]
+    [InlineData("0K", "0_°K")]
+    [InlineData("0°F", "0_°F")]
     public void Translate_ShouldNotAdd_PowersIfNotNeeded(string input, string expectedResult)
     {
         // Arrange

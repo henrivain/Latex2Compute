@@ -111,12 +111,16 @@ internal sealed class PhysicsTwoParser : IPhysicsModeParser
             ["dam"] = "10_m",
             ["hm"] = "10^(2)_m",
             ["km"] = "_km",
+            ["pc"] = "_pc",
+            ["kpc"] = "10^(3)_pc",
+            ["ly"] = "_ltyr",
 
             ["ml"] = "_ml",
             ["cl"] = "10^(2)_l",
             ["dl"] = "10_l",
             ["l"] = "_l",
 
+            ["mW"] = "10^(-3)_W",
             ["W"] = "_W",
             ["kW"] = "_kW",
             ["Wh"] = "10^(-3)_kWh",
@@ -195,6 +199,15 @@ internal sealed class PhysicsTwoParser : IPhysicsModeParser
             ["kHz"] = "_kHz",
             ["MHz"] = "_MHz",
             ["GHz"] = "_GHz",
+
+
+            ["mbar"] = "_mbar",
+            ["bar"] = "_bar",
+            ["kbar"] = "10^(3)_bar",
+            ["Pa"] = "_Pa",
+            ["kPa"] = "_kPa",
+            ["MPa"] = "10^(6)_Pa",
+            ["GPa"] = "10^(9)_Pa",
 
         });
 

@@ -56,6 +56,14 @@ public class PhysicsMode2Tests
     [InlineData("0°K", "0_°K")]
     [InlineData("0°F", "0_°F")]
     [InlineData("C", "_coul")]
+    [InlineData("mbar+barkbar", "_mbar+_bar*10^(3)_bar")]
+    [InlineData("PakPa", "_Pa_kPa")]
+    [InlineData("MPa", "10^(6)_Pa")]
+    [InlineData("GPa", "10^(9)_Pa")]
+    [InlineData("mW", "10^(-3)_W")]
+    [InlineData("lykpcpc", "_ltyr*10^(3)_pc_pc")]
+    [InlineData("molmmol", "_mol*10^(-3)_mol")]
+    [InlineData("kWhGWh", "_kWh*10^(6)_kWh")]
     public void PhysicsModeTranslate_ShouldTranslate_SimpleUnits(string input, string expectedResult)
     {
         // Arrange

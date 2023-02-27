@@ -209,6 +209,11 @@ internal sealed class PhysicsTwoParser : IPhysicsModeParser
             ["MPa"] = "10^(6)_Pa",
             ["GPa"] = "10^(9)_Pa",
 
+            [@"m\Omega"] = "10^(-3)_Ω",
+            [@"\Omega"] = "_ohm",
+            [@"k\Omega"] = "_kΩ",
+            [@"M\Omega"] = "_MΩ",
+
         });
 
     static HashSet<string> CharacterCombinations { get; } = SymbolKeysToHashSet();

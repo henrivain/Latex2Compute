@@ -94,4 +94,17 @@ public class PhysicsMode2Tests
         Assert.Empty(result.Result);
     }
 
+    [Theory]
+    [InlineData(@"2\Omega +3k\Omega -4m\Omega -4M\Omega ", "2_ohm+3_kΩ-4*10^(-3)_Ω-4_MΩ")]
+    public void PhysicsModeTranslate_LatexUnits(string input, string expectedResult)
+    {
+        TranslationItem item = new(input, _args);
+
+        // Act
+        var result = LatexTranslation.Translate(item);
+
+        // Assert
+        Assert.Equal(expectedResult, result.Result);
+    }
+
 }

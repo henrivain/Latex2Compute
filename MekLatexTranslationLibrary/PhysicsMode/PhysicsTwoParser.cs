@@ -142,6 +142,7 @@ internal sealed class PhysicsTwoParser : IPhysicsModeParser
             ["T"] = "_T",
 
             ["C"] = "_coul",
+            ["mC"] = "10^(-3)_coul",
             ["G"] = "_Gs",
 
             ["F"] = "_F",

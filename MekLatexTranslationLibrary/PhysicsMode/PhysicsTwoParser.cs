@@ -103,6 +103,7 @@ internal sealed class PhysicsTwoParser : IPhysicsModeParser
         new(new Dictionary<string, string>()
         {
             // Rise to power does not matter, because it is translated automatically
+            ["pm"] = "10^(-12)_m",
             ["nm"] = "_nm",
             ["mm"] = "_mm",
             ["cm"] = "_cm",

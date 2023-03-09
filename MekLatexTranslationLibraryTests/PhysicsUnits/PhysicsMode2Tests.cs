@@ -68,6 +68,9 @@ public class PhysicsMode2Tests
     [InlineData("3pm", "3*10^(-12)_m")]
     [InlineData("3a", "3_yr")]
     [InlineData("3Bq+4kBq", "3(1/_s)+4*10^(3)*(1/_s)")]
+    [InlineData("3c", "3_c")]
+    [InlineData("3u", "3_u")]
+    [InlineData("3MW+4GW+5TW", "3*10^(6)_W+4*10^(9)_W+5*10^(12)_W")]
     public void PhysicsModeTranslate_ShouldTranslate_SimpleUnits(string input, string expectedResult)
     {
         // Arrange

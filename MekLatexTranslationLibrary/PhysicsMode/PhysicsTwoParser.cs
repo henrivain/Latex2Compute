@@ -103,6 +103,15 @@ internal sealed class PhysicsTwoParser : IPhysicsModeParser
         new(new Dictionary<string, string>()
         {
             // Rise to power does not matter, because it is translated automatically
+            
+            // constants
+            ["c"] = "_c",   // light speed
+            ["u"] = "_u",   // atom mass unit
+
+            // TODO: Add "prefer constants over units"- setting
+            // ["h"] = "_h",   // planck constant   (already hour)
+            // ["g"] = "_g",   // gravitational acceleration    (already gram)
+            
             ["pm"] = "10^(-12)_m",
             ["nm"] = "_nm",
             ["mm"] = "_mm",
@@ -124,6 +133,9 @@ internal sealed class PhysicsTwoParser : IPhysicsModeParser
             ["mW"] = "10^(-3)_W",
             ["W"] = "_W",
             ["kW"] = "_kW",
+            ["MW"] = "10^(6)_W",
+            ["GW"] = "10^(9)_W",
+            ["TW"] = "10^(12)_W",
             ["Wh"] = "10^(-3)_kWh",
             ["kWh"] = "_kWh",
             ["MWh"] = "10^(3)_kWh",

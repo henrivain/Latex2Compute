@@ -66,6 +66,8 @@ public class PhysicsMode2Tests
     [InlineData("kWhGWh", "_kWh*10^(6)_kWh")]
     [InlineData("CmC", "_coul*10^(-3)_coul")]
     [InlineData("3pm", "3*10^(-12)_m")]
+    [InlineData("3a", "3_yr")]
+    [InlineData("3Bq+4kBq", "3(1/_s)+4*10^(3)*(1/_s)")]
     public void PhysicsModeTranslate_ShouldTranslate_SimpleUnits(string input, string expectedResult)
     {
         // Arrange

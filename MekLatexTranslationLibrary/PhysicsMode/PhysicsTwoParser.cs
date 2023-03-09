@@ -165,6 +165,7 @@ internal sealed class PhysicsTwoParser : IPhysicsModeParser
             ["s"] = "_s",
             ["\\min"] = "_min",
             ["h"] = "_hr",
+            ["a"] = "_yr",
 
             ["mol"] = "_mol",
             ["mmol"] = "10^(-3)_mol",
@@ -216,6 +217,10 @@ internal sealed class PhysicsTwoParser : IPhysicsModeParser
             [@"k\Omega"] = "_kΩ",
             [@"M\Omega"] = "_MΩ",
 
+            ["Bq"] = "(1/_s)",
+            ["kBq"] = "10^(3)*(1/_s)",
+            ["MBq"] = "10^(6)*(1/_s)",
+            ["GBq"] = "10^(9)*(1/_s)",
         });
 
     static HashSet<string> CharacterCombinations { get; } = SymbolKeysToHashSet();

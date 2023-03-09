@@ -42,12 +42,22 @@ static internal class EndEdit
             input = SeparateOperatorsWithCdot(input);
         }
 
+        // auto solve
         if (args.AutoSolve && input.Contains("#192#") is false)
         {
             // if auto solve is on => call autosolve method and check if conditions are true
             input = RunAutoSolve(input);
         }
-        input = CheckDerivative(input, args);
+
+        // auto derivative
+        if (args.AutoDerivative)
+        {
+            input = RunAutoDerivative(input);
+        }
+        if (input.StartsWith('D'))
+        {
+            input = RunAutoDerivative(input.Remove(0, 1));
+        }
 
 
         input = TranslationTag.ToNspireOperator(input);
@@ -57,7 +67,7 @@ static internal class EndEdit
             case "all":
                 // remove all not wanted items
                 input = RemoveEmptyFractions(input);
-                input = RemoveEndChangesSymbols(input);
+                input = input.Replace("…", "");
                 break;
 
             case "emptyFrac":
@@ -65,9 +75,6 @@ static internal class EndEdit
                 input = RemoveEmptyFractions(input);
                 break;
         }
-
-        
-
         return input;
     }
 
@@ -80,8 +87,9 @@ static internal class EndEdit
     {
         inp = RemoveUnnecessaryOperatorSigns(inp);
 
-        /*lang=regex*/string[] patterns =
-        {
+        /*lang=regex*/
+        string[] patterns =
+{
             // [,+,-,*,^2] means, that can be '+', '-', '*', '^2' or empty ''
             // 2 can be any number 
             @"\((\*|\+|\-|\^[0-9]|\^\([0-9]?\))?\)/\((\*|\+|\-|\^[0-9]|\^\([0-9]?\))?\)",       // ([,+,-,*,^2,(^2)])/([,+,-,*,^2,^(2),^()])
@@ -94,8 +102,6 @@ static internal class EndEdit
         };
         return RemovePattern.RegexPatterns(inp, patterns);
     }
-
-
     private record struct ReplacableRegexPattern(string Pattern, string Replacement);
 
     private static string RemoveUnnecessaryOperatorSigns(string inp)
@@ -134,42 +140,6 @@ static internal class EndEdit
         return inp;
     }
 
-
-
-
-
-    /// <summary>
-    /// Wrap input inside ti-nspire derivative block and add variable [any char, check "xyz" first]
-    /// <para/> Runs if input.Settings.Autoderivative is true or input starts with 'D'
-    /// </summary>
-    /// <param name="input"></param>
-    /// <param name="args"></param>
-    /// <returns>derivative(input,x) wrapped input</returns>
-    private static string CheckDerivative(string input, TranslationArgs args)
-    {
-        // check if needed to add "derivative()"
-        if (args.AutoDerivative)
-        {
-            return RunAutoDerivative(input);
-        }
-        if (input.StartsWith('D'))
-        {
-            return RunAutoDerivative(input.Remove(0, 1));
-        }
-        return input;
-    }
-
-    /// <summary>
-    /// Removes unesessary symbols like "…"
-    /// </summary>
-    /// <param name="inp"></param>
-    /// <returns>input with unnesessary symbols removed</returns>
-    private static string RemoveEndChangesSymbols(string inp)
-    {
-        // remove non needed symbols
-        return inp.Replace("…", "");
-    }
-
     /// <summary>
     /// Wrap input inside ti-nspire solve block and add variable x, y or z if found like "solve(input,x)"
     /// <para/>Runs in any case
@@ -179,23 +149,17 @@ static internal class EndEdit
     private static string RunAutoSolve(string inp)
     {
         string[] symbols = { ">", "<", "=" };
-        if (symbols.Any(inp.Contains))
+        if (symbols.Any(inp.Contains) is false)
         {
-            string variables = "";
-            if (inp.Contains('x'))
-            {
-                variables += ",x";
-            }
-            if (inp.Contains('y'))
-            {
-                variables += ",y";
-            }
-            if (inp.Contains('z'))
-            {
-                variables += ",z";
-            }
-            inp = $"#192#({inp}{variables})";
+            return inp;
         }
+
+        string? variables = string
+            .Concat(GetVariablesInInput(inp)
+            .Select(x => $",{x}")
+            );
+
+        inp = $"#192#({inp}{variables})";
         return inp;
     }
 
@@ -206,7 +170,7 @@ static internal class EndEdit
     /// <returns></returns>
     private static string RunAutoDerivative(string inp)
     {
-        char? variable = FindVariable(inp);
+        char? variable = GetFirstVariableCharInInput(inp.AsSpan());
         if (variable is null)
         {
             return $"#191#({inp},)";
@@ -214,19 +178,18 @@ static internal class EndEdit
         return $"#191#({inp},{variable})";
     }
 
+
+
     /// <summary>
-    /// GetBottom first character that appears to be in input (x, y and z are checked first)
+    /// Get first letter that appears to be in input (x, y and z are checked first)
     /// </summary>
     /// <param name="inp"></param>
     /// <returns>char "variable" or null if no chars in input</returns>
-    private static char? FindVariable(string inp)
+    private static char? GetFirstVariableCharInInput(ReadOnlySpan<char> input)
     {
-        char[] variables = { 'x', 'y', 'z' };
-        variables = variables.Concat(GetLowerCaseChars()).ToArray();
-
-        foreach (char c in variables)
+        foreach (char c in WeightedVariableLetters)
         {
-            if (inp.Contains(c))
+            if (input.Contains(c))
             {
                 return c;
             }
@@ -235,14 +198,25 @@ static internal class EndEdit
     }
 
     /// <summary>
-    /// GetBottom array of all lower case chars
+    /// Get all lowercase letters that appear in input
     /// </summary>
-    /// <returns></returns>
-    private static char[] GetLowerCaseChars()
+    /// <param name="input"></param>
+    /// <returns>array of lowercase letters that are found in input or empty array if none found</returns>
+    private static char[] GetVariablesInInput(ReadOnlySpan<char> input)
     {
-        // get all lowercase chars
-        return Enumerable.Range('a', 26).Select(x => (char)x).ToArray();
+        List<char> variables = new();
+        foreach (char c in LowerCaseLetters)
+        {
+            if (input.Contains(c))
+            {
+                variables.Add(c);
+            }
+        }
+        return variables.ToArray();
     }
+
+
+
 
     /// <summary>
     /// Translate i and e (neper and imaginary unit)
@@ -290,4 +264,10 @@ static internal class EndEdit
         }
         return inp;
     }
+
+
+
+    static char[] WeightedVariableLetters { get; } = new char[] { 'x', 'y', 'z' }.Concat(GetLowerCaseChars()).ToArray();
+    static char[] LowerCaseLetters { get; } = GetLowerCaseChars();
+    static char[] GetLowerCaseChars() => Enumerable.Range('a', 26).Select(x => (char)x).ToArray();
 }

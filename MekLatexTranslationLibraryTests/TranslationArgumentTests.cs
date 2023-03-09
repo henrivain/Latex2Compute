@@ -30,14 +30,16 @@ public class TranslationArgumentTests
 
     [Theory]
     [InlineData("x=0", "solve(x=0,x)")]
-    [InlineData("b=0", "solve(b=0)")]   // only xyz are recognized as variable => b is not set as var at the end
+    [InlineData("x+b=0", "solve(x+b=0,b,x)")]
+    [InlineData("xyz=0", "solve(xyz=0,x,y,z)")]
+    [InlineData("b=0", "solve(b=0,b)")]
     [InlineData("=y", "solve(=y,y)")]
     [InlineData("xyz", "xyz")]
     [InlineData("3\\cdotx<0", "solve(3*x<0,x)")]
     [InlineData("3x<=0", "solve(3x<=0,x)")]
     [InlineData("55\\cdotx>0", "solve(55*x>0,x)")]
     [InlineData("55x>=0", "solve(55x>=0,x)")]
-    [InlineData("solve(3x,x)", "solve(3x,x)")]  // solve should not be added twice
+    [InlineData("solve(3x,x)", "solve(3x,x)")]
     public void AutoSolve_ShouldAdd_Solve_AndVariable_IfHasEqualityOperator_AndVariable(string input, string expectedResult)
     {
         // Arrange

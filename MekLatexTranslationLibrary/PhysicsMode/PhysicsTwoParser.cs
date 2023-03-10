@@ -177,6 +177,7 @@ internal sealed class PhysicsTwoParser : IPhysicsModeParser
             ["s"] = "_s",
             ["\\min"] = "_min",
             ["h"] = "_hr",
+            ["d"] = "_day",
             ["a"] = "_yr",
 
             ["mol"] = "_mol",

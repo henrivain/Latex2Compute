@@ -154,8 +154,10 @@ internal sealed class PhysicsTwoParser : IPhysicsModeParser
             ["mT"] = "10^(-3)_T",
             ["T"] = "_T",
 
-            ["C"] = "_coul",
+            ["nC"] = "10^(-9)_coul",
+            ["\\muC"] = "10^(-6)_coul",
             ["mC"] = "10^(-3)_coul",
+            ["C"] = "_coul",
             ["G"] = "_Gs",
 
             ["F"] = "_F",
@@ -163,6 +165,7 @@ internal sealed class PhysicsTwoParser : IPhysicsModeParser
             ["pF"] = "_pF",
             ["Wb"] = "_Wb",
 
+            ["mN"] = "10^(-3)_N",
             ["N"] = "_N",
             ["kN"] = "10^(3)_N",
             ["MN"] = "10^(6)_N",

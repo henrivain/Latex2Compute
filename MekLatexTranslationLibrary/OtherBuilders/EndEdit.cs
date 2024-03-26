@@ -1,5 +1,6 @@
 ﻿/// Copyright 2021 Henri Vainio 
 using MekLatexTranslationLibrary.Helpers;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 namespace MekLatexTranslationLibrary.OtherBuilders;
@@ -75,7 +76,27 @@ static internal class EndEdit
                 input = RemoveEmptyFractions(input);
                 break;
         }
+
+        input = RemoveStartEqualSigns(input).ToString();
+
         return input;
+    }
+
+    private static ReadOnlySpan<char> RemoveStartEqualSigns(ReadOnlySpan<char> input)
+    {
+        int index = 0;
+        foreach (char c in input) 
+        { 
+            if (c is '=' or '+')
+            {
+                index++;
+            }
+            else
+            {
+                return input[index..];
+            }
+        }
+        return ReadOnlySpan<char>.Empty;
     }
 
     /// <summary>

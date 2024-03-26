@@ -89,7 +89,12 @@ public class SymbolTests
 
 
     [Theory]
+    [InlineData("===5", "5")]
+    [InlineData("=++=5", "5")]
+    [InlineData("=5", "5")]
+    [InlineData("=", "")]
     [InlineData("+5", "5")]
+    [InlineData("++5", "5")]
     [InlineData("5", "5")]
     [InlineData("-a", "-a")]
     public void PlusSign_InTheStartOfInput_ShouldBeRemoved_Always(

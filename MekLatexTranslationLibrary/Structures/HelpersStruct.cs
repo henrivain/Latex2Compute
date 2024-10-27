@@ -12,17 +12,17 @@ namespace MekLatexTranslationLibrary.Structures;
 /// Defines different bracket types
 /// </summary>
 /// <returns>"{}", "[]", "()" or all of them as list</returns>
-internal struct Bracket 
+internal record struct Brackets(char Opening, char Closing)
 {
-    internal const string Curly = "{}";
-    internal const string Square = "[]";
-    internal const string Round = "()";
+    internal static readonly Brackets _curly = new('{', '}');
+    internal static readonly Brackets _square = new('[', ']');
+    internal static readonly Brackets _round = new('(', ')');
     
     /// <summary>
     /// GetBottom all Latex bracket types
     /// </summary>
     /// <returns>{ Curly, Square, Round }</returns>
-    internal static readonly string[] All = { "{}", "[]", "()" };
+    internal static Brackets[] All { get; } = { _curly, _square, _round };
 }
 
 /// <summary>
@@ -51,23 +51,6 @@ internal struct ContentAndEnd
 /// <returns>
 /// string First, string Second
 /// </returns>
-internal struct TwoStrings
-{
-    /// <summary>
-    /// First and Second part of string that is cut to two pieces (can be used instead of tuple)
-    /// </summary>
-    /// <returns>
-    /// string First, string Second
-    /// </returns>
-    /// <param name="first"></param>
-    /// <param name="last"></param>
-    internal TwoStrings(string first, string last)
-    {
-        First = first;
-        Second = last;
-    }
-    internal string First { get; init; } = string.Empty;
-    internal string Second { get; init; } = string.Empty;
-}
+internal record TwoStrings(string First = "", string Second = "");
 
 

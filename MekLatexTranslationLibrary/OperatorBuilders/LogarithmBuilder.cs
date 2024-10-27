@@ -8,7 +8,7 @@ internal static class LogarithmBuilder
     const string NormalTag = "#111#";
     const string NaturalTag = "#112#";
 
-    public static string BuildAll(string input, ref List<TranslationError> errors)
+    public static string BuildAll(string input, ref List<TranslationErrors> errors)
     {
         LogStartInfo lsi;
         while (true)
@@ -21,7 +21,7 @@ internal static class LogarithmBuilder
         }
     }
 
-    internal static string Build(string input, LogStartInfo lsi, ref List<TranslationError> errors)
+    internal static string Build(string input, LogStartInfo lsi, ref List<TranslationErrors> errors)
     {
         if (lsi.StartType == "\\ln")
         {
@@ -64,7 +64,7 @@ internal static class LogarithmBuilder
     /// <param name="lsi"></param>
     /// <param name="item"></param>
     /// <returns>(Content, EndIndex)</returns>
-    private static ContentAndEnd GetBase(string inp, LogStartInfo lsi, ref List<TranslationError> errors)
+    private static ContentAndEnd GetBase(string inp, LogStartInfo lsi, ref List<TranslationErrors> errors)
     {
         // gets logarithm base from input string
         if (!lsi.HasBase)
@@ -74,7 +74,7 @@ internal static class LogarithmBuilder
         }
         return new(lsi.Index, lsi.Base);
     }
-    private static ContentAndEnd ValidateBase(ContentAndEnd temp, LogStartInfo lsi, ref List<TranslationError> errors)
+    private static ContentAndEnd ValidateBase(ContentAndEnd temp, LogStartInfo lsi, ref List<TranslationErrors> errors)
     {
         // validates or edits base if needed
         if (temp.EndIndex != -1)
@@ -82,7 +82,7 @@ internal static class LogarithmBuilder
             // move to next index from start
             return new ContentAndEnd(temp.EndIndex + 1, temp.Content);
         }
-        Helper.TranslationError(TranslationError.Log_BasisNotFound, ref errors);
+        Helper.TranslationError(TranslationErrors.Log_BasisNotFound, ref errors);
 
         return new(lsi.Index + 1, "10");    // set base to 10
 

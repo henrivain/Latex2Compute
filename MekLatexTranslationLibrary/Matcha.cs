@@ -7,7 +7,7 @@ namespace MekLatexTranslationLibrary;
 /// </summary>
 internal static class Matcha
 {
-    public static string MakeMatchaChanges(string input, ref List<TranslationError> errors)
+    public static string MakeMatchaChanges(string input, ref List<TranslationErrors> errors)
     {
         // method removes unuseful latex groups that matcha.io adds to their latex documents
         input = input.Replace("\\displaystyle", "");
@@ -32,15 +32,15 @@ internal static class Matcha
         return input;
     }
 
-    private static string RemoveConstructorArgs(string input, int startIndex, ref List<TranslationError> errors)
+    private static string RemoveConstructorArgs(string input, int startIndex, ref List<TranslationErrors> errors)
     {
         // remove arguments from macha io document constructors or math field definers
-        int end = BracketHandler.FindBrackets(input, "{}", startIndex);
+        int end = BracketHandler.FindBrackets(input, '{', '}', startIndex);
 
         if (end == -1)
         {
             // no end to matcha page constructor => skip
-            Helper.TranslationError(TranslationError.Matcha_PageConstructorEndBracketNotFound, ref errors);
+            Helper.TranslationError(TranslationErrors.Matcha_PageConstructorEndBracketNotFound, ref errors);
         }
         else
         {

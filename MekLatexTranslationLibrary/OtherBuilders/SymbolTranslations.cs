@@ -14,7 +14,7 @@ internal static class SymbolTranslations
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    internal static string Run(string input, TranslationArgs args, ref List<TranslationError> errors)
+    internal static string Run(string input, TranslationArgs args, ref List<TranslationErrors> errors)
     {
         // translate symbols to ti-nspire form
 
@@ -165,7 +165,7 @@ internal static class SymbolTranslations
             .Replace("\\right|", ")");
     }
 
-    private static string CheckVectorBars(string input, ref List<TranslationError> errors)
+    private static string CheckVectorBars(string input, ref List<TranslationErrors> errors)
     {
         // remove vector "\overline{}" element
         string overline = "\\overline{";
@@ -185,7 +185,7 @@ internal static class SymbolTranslations
             else
             {
                 // no end add error code => vector bar does not have end \overline{  } <=
-                Helper.TranslationError(TranslationError.VecBar_NoEndBracketFound, ref errors);
+                Helper.TranslationError(TranslationErrors.VecBar_NoEndBracketFound, ref errors);
             }
         }
     }

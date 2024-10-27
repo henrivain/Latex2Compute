@@ -2,7 +2,7 @@
 
 internal interface IPhysicsModeParser
 {
-    TranslationError[]? Errors { get; }
+    TranslationErrors[]? Errors { get; }
     string? Result { get; }
     string Translate();
 }

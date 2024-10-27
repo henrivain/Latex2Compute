@@ -1,6 +1,4 @@
-﻿using MekLatexTranslationLibrary.Helpers;
-
-namespace MekLatexTranslationLibrary.OperatorBuilders;
+﻿namespace MekLatexTranslationLibrary.OperatorBuilders;
 
 internal static partial class CasesBuilder
 {
@@ -29,7 +27,11 @@ internal static partial class CasesBuilder
             if (IsPieced is null)
             {
                 bool isPieced = CheckIfPieced();
-                if (isPieced) ConvertBodyIntoPieced();
+                if (isPieced)
+                {
+                    ConvertBodyIntoPieced();
+                }
+
                 IsPieced = isPieced;    // IsPieced must be defined after Body, because setting Body will set IsPieced null
             }
             string tag = (IsPieced ?? false) ? PiecedTag : NormalTag;
@@ -38,7 +40,7 @@ internal static partial class CasesBuilder
                 .Replace("&", string.Empty);
         }
 
-        const string _rangeDivider = "&{,}";
+        const string RangeDivider = "&{,}";
 
         private void ConvertBodyIntoPieced()
         {
@@ -46,10 +48,10 @@ internal static partial class CasesBuilder
             for (int i = 0; i < piecedBody.Length; i++)
             {
                 string line = piecedBody[i];
-                int index = line.IndexOf(_rangeDivider);
+                int index = line.IndexOf(RangeDivider);
                 if (index < 0)
                 {
-                    throw new InvalidOperationException($"{nameof(line)} must have range divider '{_rangeDivider}'. Input was {line}");
+                    throw new InvalidOperationException($"{nameof(line)} must have range divider '{RangeDivider}'. Input was {line}");
                 }
                 piecedBody[i] = line
                     .Remove(index, 4)
@@ -66,7 +68,10 @@ internal static partial class CasesBuilder
             for (int i = 0; i < piecedBody.Length; i++)
             {
                 // return false if one line does not contain range divider
-                if (piecedBody[i].Contains(_rangeDivider) is false) return false;
+                if (piecedBody[i].Contains(RangeDivider) is false)
+                {
+                    return false;
+                }
             }
             return true;
         }

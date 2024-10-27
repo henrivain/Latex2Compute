@@ -12,7 +12,7 @@ internal static class PropabilityOperators
     const string NPRTag = "#201#";
 
 
-    public static string BuildAll(string input, ref List<TranslationError> errors)
+    public static string BuildAll(string input, ref List<TranslationErrors> errors)
     {
         input = BuildAllNCRs(input, ref errors);
         input = BuildAllNPRs(input, ref errors);
@@ -28,7 +28,7 @@ internal static class PropabilityOperators
         public string TextAfter { get; set; } = string.Empty;
         public override string ToString() => $"{TextBefore}{BinomTag}({Equation},{Parameter}){TextAfter}";
     }
-    public static string BuildAllNCRs(string input, ref List<TranslationError> errors)
+    public static string BuildAllNCRs(string input, ref List<TranslationErrors> errors)
     {
         int startIndex;
 
@@ -41,14 +41,14 @@ internal static class PropabilityOperators
             input = BuildNCR(input, startIndex, ref errors);
         }
     }
-    internal static string BuildNCR(string input, int startIndex, ref List<TranslationError> errors)
+    internal static string BuildNCR(string input, int startIndex, ref List<TranslationErrors> errors)
     {
         Binom binom;
         var firstPart = BracketHandler.GetCharsBetweenBrackets(input, BracketType.Curly, startIndex);
 
         if (firstPart.EndIndex < 0)
         {
-            Helper.TranslationError(TranslationError.Binom_NoFirstStart, ref errors);
+            Helper.TranslationError(TranslationErrors.Binom_NoFirstStart, ref errors);
             binom = new()
             {
                 TextBefore = input[..startIndex],
@@ -60,7 +60,7 @@ internal static class PropabilityOperators
         string? param = null;
         if (secondPart.EndIndex < 0)
         {
-            Helper.TranslationError(TranslationError.BinomNoSecondStart, ref errors);
+            Helper.TranslationError(TranslationErrors.BinomNoSecondStart, ref errors);
             param = Slicer.GetSpanSafely(input, firstPart.EndIndex..);
         }
         binom = new()
@@ -77,7 +77,7 @@ internal static class PropabilityOperators
 
 
 
-    public static string BuildAllNPRs(string input, ref List<TranslationError> errors)
+    public static string BuildAllNPRs(string input, ref List<TranslationErrors> errors)
     {
         int indexerIndex = 0;
         int startIndex;
@@ -104,7 +104,7 @@ internal static class PropabilityOperators
             input = BuildNPR(input, startIndex, endIndex, ref errors);
         }
     }
-    internal static string BuildNPR(string input, int startIndex, int firstEndIndex, ref List<TranslationError> errors)
+    internal static string BuildNPR(string input, int startIndex, int firstEndIndex, ref List<TranslationErrors> errors)
     {
         string textBefore = input[..startIndex];
         string content = BuildAllNPRs(input[startIndex..(firstEndIndex - NPREnd.Length)], ref errors);

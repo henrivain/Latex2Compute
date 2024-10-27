@@ -14,7 +14,7 @@ static internal class EndEdit
     /// </summary>
     /// <param name="input"></param>
     /// <returns>input with made end change</returns>
-    internal static string Run(string input, TranslationArgs args, ref List<TranslationError> errors)
+    internal static string Run(string input, TranslationArgs args, ref List<TranslationErrors> errors)
     {
 
         // remove matcha document constructors (do before curly bracket removal)

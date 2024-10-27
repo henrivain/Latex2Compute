@@ -7,24 +7,17 @@ namespace MekLatexTranslationLibrary;
 
 public static class LatexTranslation
 {
-    // Summary:
-    //          Translate latex string into form that your symbolic calculator understands
-    //          (mainly developed (and tested) for ti-nspire, but also works in many occasions with other calculators)
-    //          Translation process prints errors in the console if entry assembly is in debug mode
-    // 
-    //  Params: 
-    //          TranslationItem item which includes:
-    //              Latex (latex string to be translated)
-    //              TranslationArgs (Settings that algorithms will follow when doing the translation process)
-    //
-    //  Returns: 
-    //          Translation result which includes:
-    //              Result (string representation of all latex translated)
-    //              ErrorCodes (any error that appeared during the translation)
+    /// <summary>
+    /// Translate latex string into form that your symbolic calculator understands.
+    /// (mainly developed (and tested) for ti-nspire, but also works in many occasions with other calculators)
+    /// Translation process prints errors in the console if entry assembly is in debug mode
+    /// </summary>
+    /// <param name="item"><see cref="TranslationItem"/> containing translation arguments and latex string.</param>
+    /// <returns><see cref="TranslationResult"/> containing any errors in translation process.</returns>
     public static TranslationResult Translate(TranslationItem item)
     {
         string input = item.Latex;
-        List<TranslationError> errors = Enumerable.Empty<TranslationError>().ToList();
+        List<TranslationErrors> errors = Enumerable.Empty<TranslationErrors>().ToList();
 
         // start changes
         input = StartEdit.Run(input);
@@ -42,8 +35,9 @@ public static class LatexTranslation
         return new(input, string.Join(", ", errors));
     }
 
-    internal static string TranslateAllOperators(string input, ref List<TranslationError> errors)
+    internal static string TranslateAllOperators(string input, ref List<TranslationErrors> errors)
     {
+        input = Matrix.Parse(input).Build();
         input = FractionBuilder.BuildAll(input, ref errors);
         input = PropabilityOperators.BuildAll(input, ref errors);
         input = CasesBuilder.BuildAll(input, ref errors);

@@ -21,8 +21,8 @@ static internal class StartEdit
             .Replace("solve", "#192#");
 
         // remove \text and \mathrm
-        input = RemovePattern.BracketsAfterLatex(input, "\\text");
-        input = RemovePattern.BracketsAfterLatex(input, "\\mathrm");
+        input = RemovePattern.RemovePatternAndBrackets(input, "\\text");
+        input = RemovePattern.RemovePatternAndBrackets(input, "\\mathrm");
 
         input = input
             .Replace("m/s", "\\frac{m}{s}")

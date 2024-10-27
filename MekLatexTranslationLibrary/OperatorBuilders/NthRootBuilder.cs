@@ -18,7 +18,7 @@ internal static class NthRootBuilder
     const string OperatorStart = "\\sqrt[";
     const string Tag = "#141#";
 
-    public static string BuildAll(string input, ref List<TranslationError> errors)
+    public static string BuildAll(string input, ref List<TranslationErrors> errors)
     {
         int startIndex;
         while (true)
@@ -30,7 +30,7 @@ internal static class NthRootBuilder
         }
     }
 
-    internal static string Build(string input, int startIndex, ref List<TranslationError> errors)
+    internal static string Build(string input, int startIndex, ref List<TranslationErrors> errors)
     {
         // Find and change "\\sqrt[x]{y}" => "root(y,x)"
         Root root = new()
@@ -41,7 +41,7 @@ internal static class NthRootBuilder
         var topInfo = BracketHandler.GetCharsBetweenBrackets(input, BracketType.Square, startIndex);
         if (topInfo.EndIndex < 0)
         {
-            Helper.TranslationError(TranslationError.NthRoot_NoFirstClosingBracket, ref errors);
+            Helper.TranslationError(TranslationErrors.NthRoot_NoFirstClosingBracket, ref errors);
          
             topInfo.Content = input[(startIndex + 1)..];
             topInfo.EndIndex = input.Length;
@@ -52,12 +52,12 @@ internal static class NthRootBuilder
         var bodyInfo = BracketHandler.GetCharsBetweenBrackets(input, BracketType.Curly, topInfo.EndIndex);
         if (bodyInfo.EndIndex < 0)
         {
-            Helper.TranslationError(TranslationError.NthRoot_NoSecondStartBracket, ref errors);
+            Helper.TranslationError(TranslationErrors.NthRoot_NoSecondStartBracket, ref errors);
             
             bodyInfo.EndIndex = BracketHandler.FindBrackets(input, BracketType.Curly, topInfo.EndIndex);
             if (bodyInfo.EndIndex < 0)
             {
-                Helper.TranslationError(TranslationError.NthRoot_NoEndFound, ref errors);
+                Helper.TranslationError(TranslationErrors.NthRoot_NoEndFound, ref errors);
                 bodyInfo.EndIndex = input.Length;
             }
             bodyInfo.Content = Slicer.GetSpanSafely(input, topInfo.EndIndex..);

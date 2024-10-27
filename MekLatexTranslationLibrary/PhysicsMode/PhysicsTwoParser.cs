@@ -11,7 +11,7 @@ internal sealed class PhysicsTwoParser : IPhysicsModeParser
     }
     private string Latex { get; }
 
-    public TranslationError[]? Errors => null;
+    public TranslationErrors[]? Errors => null;
 
     public string? Result { get; private set; }
 

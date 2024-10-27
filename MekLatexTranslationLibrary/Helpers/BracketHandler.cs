@@ -34,7 +34,10 @@ internal static class BracketHandler
     /// <returns>true if value is added, otherwise false</returns>
     internal static bool TryAddBracketAsString(BracketType type, string opening, string closing)
     {
-        if (BracketAsString.ContainsKey(type)) return false;
+        if (BracketAsString.ContainsKey(type))
+        {
+            return false;
+        }
         BracketAsString[type] = (opening, closing);
         return true;
     }
@@ -72,48 +75,51 @@ internal static class BracketHandler
             {
                 x--;
                 i += closing.Length - 1;
-                if (x is 0) return i + 1;   // offset by one for easier span handling
+                if (x is 0)
+                {
+                    return i + 1;   // offset by one for easier span handling
+                }
             }
         }
         return -1;
     }
 
+
+    public static int FindBrackets(ReadOnlySpan<char> input, Brackets brackets, int startIndex = 0) 
+        => FindBrackets(input, brackets.Opening, brackets.Closing, startIndex);
+
     /// <summary>
-    /// Find closing bracket of element, if start not given starts from index 0
+    /// Find pair closing bracket of element, if start not given starts from index 0.
+    /// <para/>Example: input='(3*(-3))*42', bracketType.Round, startPoint=0 => returns 7
     /// </summary>
     /// <param name="input"></param>
     /// <param name="bracketType"></param>
     /// <param name="startPoint"></param>
     /// <returns>index of end bracket, if not found returns -1</returns>
-    public static int FindBrackets(string input, string bracketType, int startPoint = 0)
+    public static int FindBrackets(ReadOnlySpan<char> input, char opening, char closing, int startPoint = 0)
     {
-        //finds and returns index of start bracket's pair
-        //(bracket type doesn't have to be brackets, can also be "¤&")
-        //if None => -1
-        //Example: 236{7}33}33 => 8
-        char opening = bracketType[0];
-        char closing = bracketType[1];
+        // finds and returns index of start bracket's pair
+        // (bracket type doesn't have to be brackets, can also be "¤&")
+        // if None => -1
+        // Example: 236{7}33}33 => 8
         
-        int x = 1;
-        int endBracket = -1;
-
+        int bracketDepth = 1;
         for (int i = startPoint; i < input.Length; i++)
         {
             if (input[i] == opening)
             {
-                x++;
+                bracketDepth++;
             }
             else if (input[i] == closing)
             {
-                x--;
-                if (x == 0)
+                bracketDepth--;
+                if (bracketDepth == 0)
                 {
-                    endBracket = i++;
-                    break;
+                    return i++;
                 }
             }
         };
-        return endBracket;
+        return -1;
     }
 
     /// <summary>
@@ -133,7 +139,10 @@ internal static class BracketHandler
         if (Slicer.GetSpanSafely(input, startIndex, opening.Length) == opening)
         {
             int endIndex = FindBrackets(input, type, startIndex + opening.Length);
-            if (endIndex < 0) return new(input.Length, input[(startIndex + 1)..]);
+            if (endIndex < 0)
+            {
+                return new(input.Length, input[(startIndex + 1)..]);
+            }
 
             string output = input[(startIndex + opening.Length)..(endIndex - closing.Length)];
             return new(endIndex, output);

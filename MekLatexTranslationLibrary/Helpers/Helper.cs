@@ -20,7 +20,7 @@ internal static class Helper
     /// </summary>
     /// <param name="error">error to add to errors list</param>
     /// <param name="errors">errors list which includes all errors in translate process</param>
-    internal static void TranslationError(TranslationError error, ref List<TranslationError> errors)
+    internal static void TranslationError(TranslationErrors error, ref List<TranslationErrors> errors)
     {
         errors.Add(error);
         DevPrintTranslationError(error.ToString());

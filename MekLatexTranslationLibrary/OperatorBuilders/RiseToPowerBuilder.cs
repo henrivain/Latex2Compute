@@ -3,7 +3,7 @@
 namespace MekLatexTranslationLibrary.OperatorBuilders;
 internal class RiseToPowerBuilder
 {
-    public static string BuildAll(string input, ref List<TranslationError> errors)
+    public static string BuildAll(string input, ref List<TranslationErrors> errors)
     {
         //find and translate longer rise to power    ^{x} => ^(x) 
 
@@ -27,7 +27,7 @@ internal class RiseToPowerBuilder
             {
                 //if no ending bracket => closing = end
                 input += ")";
-                Helper.TranslationError(TranslationError.Power_NoEndingBracketFound, ref errors);
+                Helper.TranslationError(TranslationErrors.Power_NoEndingBracketFound, ref errors);
             }
         }
     }

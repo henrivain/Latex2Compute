@@ -15,6 +15,19 @@ internal static class Slicer
         }
     }
 
+    /// <returns>Defined span of input, if fails returns <see cref="ReadOnlySpan{T}.Empty"/></returns>
+    internal static ReadOnlySpan<char> GetSpanSafely(this ReadOnlySpan<char> input, Range range)
+    {
+        try
+        {
+            return input[range];
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+            return ReadOnlySpan<char>.Empty;
+        }
+    }
+
 
     /// <returns>substring of input, if fails returns ""</returns>
     internal static string GetSpanSafely(string input, int startIndex, int length)

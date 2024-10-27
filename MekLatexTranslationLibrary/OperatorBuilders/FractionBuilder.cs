@@ -11,7 +11,7 @@ internal class FractionBuilder
 
 
 
-    public static string BuildAll(string input, ref List<TranslationError> errors)
+    public static string BuildAll(string input, ref List<TranslationErrors> errors)
     {
         // Finds \frac{x}{y} and turns it to (x)/(y)
         //possible errors [1, 2, 3]
@@ -56,7 +56,7 @@ internal class FractionBuilder
         }
     }
 
-    internal static string Build(string input, int startIndex, ref List<TranslationError> errors)
+    internal static string Build(string input, int startIndex, ref List<TranslationErrors> errors)
     {
         Fraction f = new()
         {
@@ -75,7 +75,7 @@ internal class FractionBuilder
         }
         return f.ToString();
     }
-    private static (string content, int endIndex) GetTop(string input, int startIndex, ref List<TranslationError> errors)
+    private static (string content, int endIndex) GetTop(string input, int startIndex, ref List<TranslationErrors> errors)
     {
         var top = BracketHandler.GetCharsBetweenBrackets(input, BracketType.Curly, startIndex);
         if (top.EndIndex is not -1) return (top.Content, top.EndIndex);
@@ -83,14 +83,14 @@ internal class FractionBuilder
         int endIndex = BracketHandler.FindBrackets(input, BracketType.Curly, startIndex);
         if (endIndex < 0)
         {
-            Helper.TranslationError(TranslationError.Frac_NoFirstEndBracket, ref errors);
+            Helper.TranslationError(TranslationErrors.Frac_NoFirstEndBracket, ref errors);
             return (input[startIndex..], -1);
         }
         return (input[startIndex..endIndex], endIndex);
     }
 
 
-    private static (string content, int endIndex) GetBottom(string input, int startIndex, ref List<TranslationError> errors)
+    private static (string content, int endIndex) GetBottom(string input, int startIndex, ref List<TranslationErrors> errors)
     {
         var bottom = BracketHandler.GetCharsBetweenBrackets(input, BracketType.Curly, startIndex);
         if (bottom.EndIndex is not -1) return (bottom.Content, bottom.EndIndex);
@@ -102,13 +102,13 @@ internal class FractionBuilder
         }
         else
         {
-            Helper.TranslationError(TranslationError.Frac_NoSecondStartBracket, ref errors);
+            Helper.TranslationError(TranslationErrors.Frac_NoSecondStartBracket, ref errors);
         }
 
         int endIndex = BracketHandler.FindBrackets(input, BracketType.Curly, startIndex);
         if (endIndex < 0) 
         {
-            Helper.TranslationError(TranslationError.Frac_NoSecondEndBracket, ref errors);
+            Helper.TranslationError(TranslationErrors.Frac_NoSecondEndBracket, ref errors);
             endIndex = input.Length;
         }
         return (input[startIndex..endIndex], endIndex);

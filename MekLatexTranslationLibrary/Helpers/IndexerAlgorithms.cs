@@ -88,9 +88,9 @@ namespace MekLatexTranslationLibrary.Helpers
         private static IEnumerable<int> GetFirstBracketIndexes(string inp)
         {
             List <int> indexes = new();
-            foreach (var op in Bracket.All)
+            foreach (var brackets in Brackets.All)
             {
-                int index = BracketHandler.FindBrackets(inp, op);
+                int index = BracketHandler.FindBrackets(inp, brackets.Opening, brackets.Closing);
                 CheckUndef(index, ref indexes);
             }
             return indexes;

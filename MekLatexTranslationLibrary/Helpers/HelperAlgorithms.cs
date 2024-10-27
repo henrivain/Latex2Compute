@@ -74,7 +74,7 @@ internal static class HelperAlgorithms
         }
         catch (ArgumentOutOfRangeException)
         {
-            Helper.DevPrintTranslationError($"Given startIndex was out of range; input: {input}, startIndex: {startIndex}");
+            Helper.PrintError($"Given startIndex was out of range; input: {input}, startIndex: {startIndex}");
             return -1;
         }
     }

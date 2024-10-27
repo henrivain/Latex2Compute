@@ -12,13 +12,13 @@ internal static class NthRootBuilder
         public string TopText { get; set; } = string.Empty;
         public string Body { get; set; } = string.Empty;
         public string TextAfter { get; set; } = string.Empty;
-        public override string ToString() => $"{TextBefore}{Tag}({Body},{TopText}){TextAfter}";
+        public override readonly string ToString() => $"{TextBefore}{Tag}({Body},{TopText}){TextAfter}";
     }
 
     const string OperatorStart = "\\sqrt[";
     const string Tag = "#141#";
 
-    public static string BuildAll(string input, ref List<TranslationErrors> errors)
+    public static string BuildAll(string input, ref TranslationErrors errors)
     {
         int startIndex;
         while (true)
@@ -30,7 +30,7 @@ internal static class NthRootBuilder
         }
     }
 
-    internal static string Build(string input, int startIndex, ref List<TranslationErrors> errors)
+    internal static string Build(string input, int startIndex, ref TranslationErrors errors)
     {
         // Find and change "\\sqrt[x]{y}" => "root(y,x)"
         Root root = new()
@@ -41,23 +41,26 @@ internal static class NthRootBuilder
         var topInfo = BracketHandler.GetCharsBetweenBrackets(input, BracketType.Square, startIndex);
         if (topInfo.EndIndex < 0)
         {
-            Helper.TranslationError(TranslationErrors.NthRoot_NoFirstClosingBracket, ref errors);
-         
+            errors |= TranslationErrors.NthRoot_NoFirstClosingBracket;
+            Helper.PrintError(TranslationErrors.NthRoot_NoFirstClosingBracket);
+
             topInfo.Content = input[(startIndex + 1)..];
             topInfo.EndIndex = input.Length;
         }
 
         root.TopText = topInfo.Content;
-        
+
         var bodyInfo = BracketHandler.GetCharsBetweenBrackets(input, BracketType.Curly, topInfo.EndIndex);
         if (bodyInfo.EndIndex < 0)
         {
-            Helper.TranslationError(TranslationErrors.NthRoot_NoSecondStartBracket, ref errors);
-            
+            errors |= TranslationErrors.NthRoot_NoSecondStartBracket;
+            Helper.PrintError(TranslationErrors.NthRoot_NoSecondStartBracket);
+
             bodyInfo.EndIndex = BracketHandler.FindBrackets(input, BracketType.Curly, topInfo.EndIndex);
             if (bodyInfo.EndIndex < 0)
             {
-                Helper.TranslationError(TranslationErrors.NthRoot_NoEndFound, ref errors);
+                errors |= TranslationErrors.NthRoot_NoEndFound;
+                Helper.PrintError(TranslationErrors.NthRoot_NoEndFound);
                 bodyInfo.EndIndex = input.Length;
             }
             bodyInfo.Content = Slicer.GetSpanSafely(input, topInfo.EndIndex..);

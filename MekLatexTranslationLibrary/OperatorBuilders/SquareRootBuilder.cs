@@ -7,7 +7,7 @@ internal class SquareRootBuilder
 
     const string OperatorStart = "\\sqrt{"; 
 
-    internal static string BuildAll(string input, ref List<TranslationErrors> errors)
+    internal static string BuildAll(string input, ref TranslationErrors errors)
     {
         // Find and change "\\sqrt{}" => "sqrt()"
         int startIndex;
@@ -20,12 +20,13 @@ internal class SquareRootBuilder
             input = Build(input, startIndex, ref errors);
         }
     }
-    internal static string Build(string input, int startIndex, ref List<TranslationErrors> errors)
+    internal static string Build(string input, int startIndex, ref TranslationErrors errors)
     {
         var body = BracketHandler.GetCharsBetweenBrackets(input, BracketType.Curly, startIndex);
         if (body.EndIndex < 0)
         {
-            Helper.TranslationError(TranslationErrors.Sqrt_NoStartBracketFound, ref errors);
+            errors |= TranslationErrors.Sqrt_NoStartBracketFound;
+            Helper.PrintError(TranslationErrors.Sqrt_NoStartBracketFound);
             body.EndIndex = input.Length;
             body.Content = input[startIndex..];
         }

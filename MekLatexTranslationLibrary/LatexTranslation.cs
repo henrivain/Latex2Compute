@@ -17,7 +17,7 @@ public static class LatexTranslation
     public static TranslationResult Translate(TranslationItem item)
     {
         string input = item.Latex;
-        List<TranslationErrors> errors = Enumerable.Empty<TranslationErrors>().ToList();
+        TranslationErrors errors = TranslationErrors.None;
 
         // start changes
         input = StartEdit.Run(input);
@@ -32,13 +32,12 @@ public static class LatexTranslation
         input = EndEdit.Run(input, item.Settings, ref errors);
 
         // finish and return value
-        return new(input, string.Join(", ", errors));
+        return new(input, errors);
     }
 
-    internal static string TranslateAllOperators(string input, ref List<TranslationErrors> errors)
+    internal static string TranslateAllOperators(string input, ref TranslationErrors errors)
     {
-        TranslationErrors erFlags = TranslationErrors.None;
-        input = Matrix.BuildAll(input, ref erFlags).ToString();
+        input = Matrix.BuildAll(input, ref errors).ToString();
         input = FractionBuilder.BuildAll(input, ref errors);
         input = PropabilityOperators.BuildAll(input, ref errors);
         input = CasesBuilder.BuildAll(input, ref errors);

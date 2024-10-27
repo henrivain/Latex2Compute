@@ -12,7 +12,7 @@ internal static class PropabilityOperators
     const string NPRTag = "#201#";
 
 
-    public static string BuildAll(string input, ref List<TranslationErrors> errors)
+    public static string BuildAll(string input, ref TranslationErrors errors)
     {
         input = BuildAllNCRs(input, ref errors);
         input = BuildAllNPRs(input, ref errors);
@@ -26,9 +26,9 @@ internal static class PropabilityOperators
         public string Equation { get; set; } = string.Empty;
         public string Parameter { get; set; } = string.Empty;
         public string TextAfter { get; set; } = string.Empty;
-        public override string ToString() => $"{TextBefore}{BinomTag}({Equation},{Parameter}){TextAfter}";
+        public override readonly string ToString() => $"{TextBefore}{BinomTag}({Equation},{Parameter}){TextAfter}";
     }
-    public static string BuildAllNCRs(string input, ref List<TranslationErrors> errors)
+    public static string BuildAllNCRs(string input, ref TranslationErrors errors)
     {
         int startIndex;
 
@@ -41,14 +41,15 @@ internal static class PropabilityOperators
             input = BuildNCR(input, startIndex, ref errors);
         }
     }
-    internal static string BuildNCR(string input, int startIndex, ref List<TranslationErrors> errors)
+    internal static string BuildNCR(string input, int startIndex, ref TranslationErrors errors)
     {
         Binom binom;
         var firstPart = BracketHandler.GetCharsBetweenBrackets(input, BracketType.Curly, startIndex);
 
         if (firstPart.EndIndex < 0)
         {
-            Helper.TranslationError(TranslationErrors.Binom_NoFirstStart, ref errors);
+            errors |= TranslationErrors.Binom_NoFirstStart;
+            Helper.PrintError(TranslationErrors.Binom_NoFirstStart);
             binom = new()
             {
                 TextBefore = input[..startIndex],
@@ -60,7 +61,8 @@ internal static class PropabilityOperators
         string? param = null;
         if (secondPart.EndIndex < 0)
         {
-            Helper.TranslationError(TranslationErrors.BinomNoSecondStart, ref errors);
+            errors |= TranslationErrors.BinomNoSecondStart;
+            Helper.PrintError(TranslationErrors.BinomNoSecondStart);
             param = Slicer.GetSpanSafely(input, firstPart.EndIndex..);
         }
         binom = new()
@@ -77,7 +79,7 @@ internal static class PropabilityOperators
 
 
 
-    public static string BuildAllNPRs(string input, ref List<TranslationErrors> errors)
+    public static string BuildAllNPRs(string input, ref TranslationErrors errors)
     {
         int indexerIndex = 0;
         int startIndex;
@@ -104,7 +106,7 @@ internal static class PropabilityOperators
             input = BuildNPR(input, startIndex, endIndex, ref errors);
         }
     }
-    internal static string BuildNPR(string input, int startIndex, int firstEndIndex, ref List<TranslationErrors> errors)
+    internal static string BuildNPR(string input, int startIndex, int firstEndIndex, ref TranslationErrors errors)
     {
         string textBefore = input[..startIndex];
         string content = BuildAllNPRs(input[startIndex..(firstEndIndex - NPREnd.Length)], ref errors);

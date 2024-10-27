@@ -16,11 +16,11 @@ public struct TranslationResult
     /// <param name="result"></param>
     /// <param name="erCodes"></param>
     /// <returns>string Result, string ErrorCodes</returns>
-    internal TranslationResult(string result, string erCodes)
+    internal TranslationResult(string result, TranslationErrors erCodes)
     {
         Result = result;
-        ErrorCodes = erCodes;
+        ErrorFlags = erCodes;
     }
     public string Result { get; private set; }
-    public string ErrorCodes { get; private set; }
+    public TranslationErrors ErrorFlags { get; private set; }
 }

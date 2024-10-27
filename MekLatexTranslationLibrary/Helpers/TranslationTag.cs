@@ -222,7 +222,7 @@ internal static class TranslationTag
         }
         if (input.Length < 5)
         {
-            Helper.DevPrintTranslationError($"Given input is not at least length of five (5); given input {input}");
+            Helper.PrintError($"Given input is not at least length of five (5); given input {input}");
             return false;
         }
         return true;

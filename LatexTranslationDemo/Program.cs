@@ -1,4 +1,5 @@
 ﻿using MekLatexTranslationLibrary;
+using System.Net.WebSockets;
 
 bool canContinue = true;
 
@@ -32,7 +33,7 @@ static bool RunTranslationProcess()
     Console.WriteLine();
     Console.WriteLine($"Translation result: {result.Result}");
     Console.WriteLine();
-    Console.WriteLine($"Error codes: {result.ErrorCodes}");
+    Console.WriteLine($"Error codes: {result.ErrorFlags.ToErrorString()}");
     Console.WriteLine();
     return true;
 }

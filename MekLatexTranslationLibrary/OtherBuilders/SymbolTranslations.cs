@@ -14,7 +14,7 @@ internal static class SymbolTranslations
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    internal static string Run(string input, TranslationArgs args, ref List<TranslationErrors> errors)
+    internal static string Run(string input, TranslationArgs args, ref TranslationErrors errors)
     {
         // translate symbols to ti-nspire form
 
@@ -42,10 +42,7 @@ internal static class SymbolTranslations
         {
             var parser = new PhysicsTwoParser(input);
             input = parser.Translate();
-            if (parser.Errors is not null)
-            {
-                errors.AddRange(parser.Errors);
-            }
+            errors |= parser.Errors;
         }
 
         // mathmode changes
@@ -165,7 +162,7 @@ internal static class SymbolTranslations
             .Replace("\\right|", ")");
     }
 
-    private static string CheckVectorBars(string input, ref List<TranslationErrors> errors)
+    private static string CheckVectorBars(string input, ref TranslationErrors errors)
     {
         // remove vector "\overline{}" element
         string overline = "\\overline{";
@@ -185,7 +182,8 @@ internal static class SymbolTranslations
             else
             {
                 // no end add error code => vector bar does not have end \overline{  } <=
-                Helper.TranslationError(TranslationErrors.VecBar_NoEndBracketFound, ref errors);
+                errors |= TranslationErrors.VecBar_NoEndBracketFound;
+                Helper.PrintError(TranslationErrors.VecBar_NoEndBracketFound);
             }
         }
     }

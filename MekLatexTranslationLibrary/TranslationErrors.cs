@@ -23,3 +23,31 @@ public enum TranslationErrors
     BinomNoSecondStart =                        1 << 16,
     MissinMatrixEnd =                           1 << 17,
 }
+
+
+public static class TranslationErrorsExtensions
+{
+    public static bool HasFlag(this TranslationErrors value, TranslationErrors flag)
+    {
+        return value.HasFlag(flag);
+    }
+
+    public static string[] GetErrors(this TranslationErrors value)
+    {
+        if (value is TranslationErrors.None)
+        {
+            return new string[] { TranslationErrors.None.ToString() };
+        }
+
+        return Enum.GetValues(typeof(TranslationErrors))
+            .Cast<TranslationErrors>()
+            .Where(v => value.HasFlag(v) && v != TranslationErrors.None)
+            .Select(v => v.ToString())
+            .ToArray();
+    }
+
+    public static string ToErrorString(this TranslationErrors value)
+    {
+        return string.Join(", ", value.GetErrors());
+    }
+}

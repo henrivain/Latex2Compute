@@ -7,7 +7,7 @@ internal static class Helper
     /// Writes error to Console if in develpment
     /// </summary>
     /// <param name="error"></param>
-    internal static void DevPrintTranslationError(string error)
+    internal static void PrintError(TranslationErrors error)
     {
         if (AssemblyInfoHelper.EntryAssembly.IsDebug is not false)
         {
@@ -16,16 +16,16 @@ internal static class Helper
     }
 
     /// <summary>
-    /// Add translation error to list and print it to console if in debug mode
+    /// Writes error to Console if in develpment
     /// </summary>
-    /// <param name="error">error to add to errors list</param>
-    /// <param name="errors">errors list which includes all errors in translate process</param>
-    internal static void TranslationError(TranslationErrors error, ref List<TranslationErrors> errors)
+    /// <param name="error"></param>
+    internal static void PrintError(string error)
     {
-        errors.Add(error);
-        DevPrintTranslationError(error.ToString());
+        if (AssemblyInfoHelper.EntryAssembly.IsDebug is not false)
+        {
+            Console.WriteLine($"[TranslationError] {error}");
+        }
     }
-
 
 
 

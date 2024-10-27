@@ -10,7 +10,7 @@ internal static partial class CasesBuilder
     const string RowChangeTag = "#122#";
     const string PiecedTag = "#123#";
 
-    public static string BuildAll(string input, ref List<TranslationErrors> errors)
+    public static string BuildAll(string input, ref TranslationErrors errors)
     {
         int startIndex;
         while (true)
@@ -26,7 +26,7 @@ internal static partial class CasesBuilder
         }
     }
 
-    private static string Build(string input, int startIndex, ref List<TranslationErrors> errors)
+    private static string Build(string input, int startIndex, ref TranslationErrors errors)
     {
         input = input.Replace(@"\\", RowChangeTag);
 
@@ -40,7 +40,9 @@ internal static partial class CasesBuilder
         if (bodyEndIndex < 0)
         {
             instance.Body = BuildAll(input[startIndex..], ref errors);
-            Helper.TranslationError(TranslationErrors.Cases_NoEndBracketFound, ref errors);
+
+            errors |= TranslationErrors.Cases_NoEndBracketFound;
+            Helper.PrintError(TranslationErrors.Cases_NoEndBracketFound);
         }
         else
         {

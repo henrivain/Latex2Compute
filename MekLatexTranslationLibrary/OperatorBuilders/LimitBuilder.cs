@@ -11,7 +11,7 @@ internal static class LimitBuilder
     const string Tag = "#151#";
     const string OperatorStart = "\\lim";
 
-    public static string BuildAll(string input, ref List<TranslationErrors> errors)
+    public static string BuildAll(string input, ref TranslationErrors errors)
     {
         int startIndex;
 
@@ -25,7 +25,7 @@ internal static class LimitBuilder
         }
     }
 
-    internal static string Build(string input, int startIndex, ref List<TranslationErrors> errors)
+    internal static string Build(string input, int startIndex, ref TranslationErrors errors)
     {
 
         var bottomInfo = HelperAlgorithms.CheckAndGetInconsistentStart(input, startIndex, "lim", "_{");
@@ -35,7 +35,8 @@ internal static class LimitBuilder
         if (bottomEnd is -1)
         {
             bottomEnd = startIndex - 1;
-            Helper.TranslationError(TranslationErrors.Lim_NoApproachValue, ref errors);
+            errors |= TranslationErrors.Lim_NoApproachValue;
+            Helper.PrintError(TranslationErrors.Lim_NoApproachValue);
         }
 
         bottom = ReplaceArrowWithComma(bottom);

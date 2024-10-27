@@ -22,7 +22,7 @@ internal class FractionBuilder
         {
             normalStartIndex = input.IndexOf(OperatorStart);
             dStartIndex = input.IndexOf(OperatorStartVariantD);
-            startIndex = GetSmallerButBiggerThan(dStartIndex, normalStartIndex, minValue:0);
+            startIndex = GetSmallerButBiggerThan(dStartIndex, normalStartIndex, minValue: 0);
             if (startIndex < 0) break;
             if (startIndex == normalStartIndex)
             {

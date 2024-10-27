@@ -22,8 +22,8 @@ internal static class BracketZeroMem
         int endCursor = 0;
         while (true)
         {
-            int nextStart = MemoryExtensions.IndexOf(input[startCursor..], start);
-            int nextEnd = MemoryExtensions.IndexOf(input[endCursor..], end);
+            int nextStart = input[startCursor..].IndexOf(start);
+            int nextEnd = input[endCursor..].IndexOf(end);
 
             if (nextEnd < 0)
             {
@@ -35,10 +35,15 @@ internal static class BracketZeroMem
                 return nextEnd + endCursor;
             }
 
+
             if (nextStart + startCursor < nextEnd + endCursor)
             {
                 startCursor += nextStart + start.Length;
                 endCursor += nextEnd + end.Length;
+            }
+            else
+            {
+                return endCursor + nextEnd;
             }
         }
     }

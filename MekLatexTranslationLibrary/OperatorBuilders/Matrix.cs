@@ -36,7 +36,7 @@ internal readonly ref struct Matrix
         ReadOnlySpan<char> columnSep =
             stackalloc char[] { '&' };
 
-        int startIndex = MemoryExtensions.IndexOf(latex, matrixStart);
+        int startIndex = latex.IndexOf(matrixStart);
         if (startIndex < 0)
         {
             return new Matrix (
@@ -47,18 +47,18 @@ internal readonly ref struct Matrix
                 0);
         }
 
-        ReadOnlySpan<char> chars = Slicer.GetSpanSafely(latex, (startIndex + matrixStart.Length)..);
-        int endIndex = BracketZeroMem.FindEnd(chars, matrixStart, matrixEnd);
+        ReadOnlySpan<char> input = latex.GetSpanSafely((startIndex + matrixStart.Length)..);
+        int endIndex = BracketZeroMem.FindEnd(input, matrixStart, matrixEnd);
         if (endIndex < 0)
         {
-            endIndex = chars.Length;
+            endIndex = input.Length;
             errors |= TranslationErrors.MissinMatrixEnd;
         }
 
         // Parse matrix pieces
         ReadOnlySpan<char> before = latex[..startIndex];
-        ReadOnlySpan<char> body = chars[..endIndex];    // TODO: Build matrix body here
-        ReadOnlySpan<char> after = Slicer.GetSpanSafely(chars, (endIndex + matrixEnd.Length)..);
+        ReadOnlySpan<char> body = input[..endIndex];    // TODO: Build matrix body here
+        ReadOnlySpan<char> after = input.GetSpanSafely((endIndex + matrixEnd.Length)..);
 
 
         int index = 0;
@@ -86,6 +86,21 @@ internal readonly ref struct Matrix
             index += rowEnd + rowSep.Length;
         }
         return new Matrix(before, matrix, after, errors, longestRow);
+    }
+
+    internal static ReadOnlySpan<char> BuildAll(ReadOnlySpan<char> input, ref TranslationErrors errors)
+    {
+        ReadOnlySpan<char> matrixStart =
+            stackalloc char[] { '\\', 'b', 'e', 'g', 'i', 'n', '{', 'm', 'a', 't', 'r', 'i', 'x', '}' };
+
+        while (true)
+        {
+            input = Parse(input).Build();
+            if (MemoryExtensions.Contains(input, matrixStart, StringComparison.Ordinal) is false)
+            {
+                return input;
+            }
+        }
     }
 
     internal string Build()

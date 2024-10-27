@@ -37,7 +37,8 @@ public static class LatexTranslation
 
     internal static string TranslateAllOperators(string input, ref List<TranslationErrors> errors)
     {
-        input = Matrix.Parse(input).Build();
+        TranslationErrors erFlags = TranslationErrors.None;
+        input = Matrix.BuildAll(input, ref erFlags).ToString();
         input = FractionBuilder.BuildAll(input, ref errors);
         input = PropabilityOperators.BuildAll(input, ref errors);
         input = CasesBuilder.BuildAll(input, ref errors);

@@ -1,9 +1,13 @@
 ﻿/// Copyright 2021 Henri Vainio 
-using MekLatexTranslationLibrary.OperatorBuilders;
+using MekLatexTranslationLibrary.Parsers;
 using MekLatexTranslationLibrary.OtherBuilders;
 
 namespace MekLatexTranslationLibrary;
 
+/// <summary>
+/// Result type for translation 
+/// </summary>
+public readonly record struct TranslationResult(string Result, TranslationErrors ErrorFlags);
 
 public static class LatexTranslation
 {
@@ -38,17 +42,17 @@ public static class LatexTranslation
     internal static string TranslateAllOperators(string input, ref TranslationErrors errors)
     {
         input = Matrix.BuildAll(input, ref errors).ToString();
-        input = FractionBuilder.BuildAll(input, ref errors);
-        input = PropabilityOperators.BuildAll(input, ref errors);
-        input = CasesBuilder.BuildAll(input, ref errors);
-        input = LogarithmBuilder.BuildAll(input, ref errors);
+        input = FractionParser.BuildAll(input, ref errors);
+        input = PropabilityOperatorParser.BuildAll(input, ref errors);
+        input = CasesParser.BuildAll(input, ref errors);
+        input = LogarithmParser.BuildAll(input, ref errors);
         input = SquareRootBuilder.BuildAll(input, ref errors);
-        input = NthRootBuilder.BuildAll(input, ref errors);
-        input = LimitBuilder.BuildAll(input, ref errors);
-        input = SumBuilder.BuildAll(input, ref errors);
-        input = IntegralBuilder.BuildAll(input);
-        input = TrigonBuilder.BuildAll(input);
-        input = RiseToPowerBuilder.BuildAll(input, ref errors);   //keep this last
+        input = NthRootParser.BuildAll(input, ref errors);
+        input = LimitParser.BuildAll(input, ref errors);
+        input = SumParser.BuildAll(input, ref errors);
+        input = IntegralParser.BuildAll(input);
+        input = TrigonParser.BuildAll(input);
+        input = ExponentParser.BuildAll(input, ref errors);   //keep this last
         return input;
     }
 }

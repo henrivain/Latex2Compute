@@ -1,9 +1,9 @@
 ﻿/// Copyright 2022 Henri Vainio 
-using MekLatexTranslationLibrary.Helpers;
 
-namespace MekLatexTranslationLibrary.OperatorBuilders;
+namespace MekLatexTranslationLibrary.Parsers;
 
-internal static class NthRootBuilder
+internal static class NthRootParser
+
 {
     struct Root
     {
@@ -12,11 +12,13 @@ internal static class NthRootBuilder
         public string TopText { get; set; } = string.Empty;
         public string Body { get; set; } = string.Empty;
         public string TextAfter { get; set; } = string.Empty;
-        public override readonly string ToString() => $"{TextBefore}{Tag}({Body},{TopText}){TextAfter}";
+        public override readonly string ToString()
+        {
+            return $"{TextBefore}{ConstSymbol.Root}({Body},{TopText}){TextAfter}";
+        }
     }
 
     const string OperatorStart = "\\sqrt[";
-    const string Tag = "#141#";
 
     public static string BuildAll(string input, ref TranslationErrors errors)
     {
@@ -24,7 +26,11 @@ internal static class NthRootBuilder
         while (true)
         {
             startIndex = input.IndexOf(OperatorStart);
-            if (startIndex < 0) return input;
+            if (startIndex < 0)
+            {
+                return input;
+            }
+
             input = input.Remove(startIndex, OperatorStart.Length - 1);
             input = Build(input, startIndex, ref errors);
         }

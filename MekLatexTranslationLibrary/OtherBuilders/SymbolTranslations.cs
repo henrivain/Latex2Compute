@@ -1,5 +1,4 @@
 ﻿/// Copyright 2021 Henri Vainio 
-using MekLatexTranslationLibrary.Helpers;
 using MekLatexTranslationLibrary.PhysicsMode;
 
 namespace MekLatexTranslationLibrary.OtherBuilders;
@@ -112,7 +111,7 @@ internal static class SymbolTranslations
         input = input.Replace("{,}", ".")
             .Replace("\\cdot", "*")
             .Replace("\\infty", "infinity")
-            .Replace("\\pi", "#161#");
+            .Replace("\\pi", ConstSymbol.Pi);
 
         input = TranslateAllBrackets(input);
 
@@ -158,7 +157,7 @@ internal static class SymbolTranslations
             .Replace("\\right\\}", ")")
             .Replace("\\left[", "(")
             .Replace("\\right]", ")")
-            .Replace("\\left|", "#171#(")
+            .Replace("\\left|", $"{ConstSymbol.Abs}(")
             .Replace("\\right|", ")");
     }
 

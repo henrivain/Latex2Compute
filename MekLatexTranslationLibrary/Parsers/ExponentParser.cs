@@ -1,7 +1,5 @@
-﻿using MekLatexTranslationLibrary.Helpers;
-
-namespace MekLatexTranslationLibrary.OperatorBuilders;
-internal class RiseToPowerBuilder
+﻿namespace MekLatexTranslationLibrary.Parsers;
+internal class ExponentParser
 {
     public static string BuildAll(string input, ref TranslationErrors errors)
     {
@@ -10,7 +8,10 @@ internal class RiseToPowerBuilder
         while (true)
         {
             int startBracket = input.IndexOf("^{");
-            if (startBracket < 0) return input;
+            if (startBracket < 0)
+            {
+                return input;
+            }
 
             input = input.Remove(startBracket, 2)
                          .Insert(startBracket, "^(");

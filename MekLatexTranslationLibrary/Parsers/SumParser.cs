@@ -1,17 +1,14 @@
 ﻿/// Copyright 2021 Henri Vainio 
-using MekLatexTranslationLibrary.Helpers;
-using MekLatexTranslationLibrary.Structures;
+namespace MekLatexTranslationLibrary.Parsers;
 
-namespace MekLatexTranslationLibrary.OperatorBuilders;
-
-internal static class SumBuilder
+internal static class SumParser
 {
     const string OperatorStart = "\\sum";
     const string Tag = "∑";
 
     internal static string Build(string input, int startIndex, ref TranslationErrors errors)
     {
-        ComplexSymbolReader reader = new(input, startIndex, "sum");
+        ComplexSymbolReader reader = new(input, startIndex, ComplexSymbolReader.SymbolType.Sum);
         SumInfo sumInfo = new SumInfo().SetReaderInfo(reader, ref errors);
         sumInfo = AddExpressionAfter(input, sumInfo, reader, ref errors);
         return $"{sumInfo.TextBefore}{Tag}({sumInfo.Equation},{sumInfo.Bottom},{sumInfo.Top}){sumInfo.TextAfter}";

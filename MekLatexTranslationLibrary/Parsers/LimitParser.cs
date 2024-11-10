@@ -1,14 +1,10 @@
 ﻿/// Copyright 2021 Henri Vainio 
-using MekLatexTranslationLibrary.Helpers;
-using MekLatexTranslationLibrary.Structures;
+namespace MekLatexTranslationLibrary.Parsers;
 
-namespace MekLatexTranslationLibrary.OperatorBuilders;
-
-internal static class LimitBuilder
+internal static class LimitParser
 {
     // call recursion after body.Content is initialized (like integral)
 
-    const string Tag = "#151#";
     const string OperatorStart = "\\lim";
 
     public static string BuildAll(string input, ref TranslationErrors errors)
@@ -45,7 +41,7 @@ internal static class LimitBuilder
         ContentAndEnd body = HelperAlgorithms.GetExpressionAfterOperator(input[(bottomEnd + 1)..]);
         string afterBody = body.EndIndex is -1 ? string.Empty : input[(bottomEnd + body.EndIndex + 1)..];
         
-        return $"{input[..startIndex]}{Tag}({BuildAll(body.Content, ref errors)},{bottom}){afterBody}";
+        return $"{input[..startIndex]}{ConstSymbol.Limit}({BuildAll(body.Content, ref errors)},{bottom}){afterBody}";
     }
     
     private static string ReplaceArrowWithComma(string bottom)

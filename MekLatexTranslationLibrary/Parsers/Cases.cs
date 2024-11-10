@@ -1,12 +1,10 @@
-﻿namespace MekLatexTranslationLibrary.OperatorBuilders;
+﻿namespace MekLatexTranslationLibrary.Parsers;
 
-internal static partial class CasesBuilder
+internal static partial class CasesParser
 {
     class Cases
     {
         string _body = string.Empty;
-
-        
 
         public string TextBefore { get; set; } = string.Empty;
         public string Body
@@ -20,8 +18,6 @@ internal static partial class CasesBuilder
         }
         public string TextAfter { get; set; } = string.Empty;
         private bool? IsPieced { get; set; } = null;
-
-
         public override string ToString()
         {
             if (IsPieced is null)
@@ -34,7 +30,8 @@ internal static partial class CasesBuilder
 
                 IsPieced = isPieced;    // IsPieced must be defined after Body, because setting Body will set IsPieced null
             }
-            string tag = (IsPieced ?? false) ? PiecedTag : NormalTag;
+            string tag = (IsPieced ?? false) ? 
+                ConstSymbol.Piecewise : ConstSymbol.System;
             
             return $"{TextBefore}{tag}({Body}){TextAfter}"
                 .Replace("&", string.Empty);
@@ -44,7 +41,7 @@ internal static partial class CasesBuilder
 
         private void ConvertBodyIntoPieced()
         {
-            string[] piecedBody = Body.Split(RowChangeTag);
+            string[] piecedBody = Body.Split(ConstSymbol.SystemRowChange);
             for (int i = 0; i < piecedBody.Length; i++)
             {
                 string line = piecedBody[i];
@@ -56,15 +53,15 @@ internal static partial class CasesBuilder
                 piecedBody[i] = line
                     .Remove(index, 4)
                     .Insert(index, ",")
-                    .Replace("or", "#124#")
-                    .Replace("tai", "#124#");
+                    .Replace("or", ConstSymbol.Or)
+                    .Replace("tai", ConstSymbol.Or);
             }
-            Body = string.Join(RowChangeTag, piecedBody);
+            Body = string.Join(ConstSymbol.SystemRowChange, piecedBody);
         }
 
         private bool CheckIfPieced()
         {
-            string[] piecedBody = Body.Split(RowChangeTag);
+            string[] piecedBody = Body.Split(ConstSymbol.SystemRowChange);
             for (int i = 0; i < piecedBody.Length; i++)
             {
                 // return false if one line does not contain range divider

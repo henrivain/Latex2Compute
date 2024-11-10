@@ -1,6 +1,4 @@
-﻿using MekLatexTranslationLibrary.Helpers;
-
-namespace MekLatexTranslationLibrary.OperatorBuilders;
+﻿namespace MekLatexTranslationLibrary.Parsers;
 internal readonly ref struct Matrix
 {
     private Matrix(
@@ -88,6 +86,12 @@ internal readonly ref struct Matrix
         return new Matrix(before, matrix, after, errors, longestRow);
     }
 
+    /// <summary>
+    /// Build all matrices in the input string.
+    /// </summary>
+    /// <param name="input"></param>
+    /// <param name="errors"></param>
+    /// <returns>Input string with all matrices translated.</returns>
     internal static ReadOnlySpan<char> BuildAll(ReadOnlySpan<char> input, ref TranslationErrors errors)
     {
         ReadOnlySpan<char> matrixStart =

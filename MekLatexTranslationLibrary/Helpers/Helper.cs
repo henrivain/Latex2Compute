@@ -41,7 +41,10 @@ internal static class Helper
         int bigger = Math.Max(value1, value2);
         int smaller = Math.Min(value1, value2);
 
-        if (bigger < minValue) return -1;
+        if (bigger < minValue)
+        {
+            return -1;
+        }
         return (smaller < minValue) ? bigger : smaller;
     }
 

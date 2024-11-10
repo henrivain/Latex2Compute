@@ -1,9 +1,7 @@
 ﻿/// Copyright 2021 Henri Vainio 
-using MekLatexTranslationLibrary.Helpers;
+namespace MekLatexTranslationLibrary.Parsers;
 
-namespace MekLatexTranslationLibrary.OperatorBuilders;
-
-internal class FractionBuilder
+internal class FractionParser
 {
     const string OperatorStart = "\\frac";
     const string OperatorStartVariantD = "\\dfrac";
@@ -23,7 +21,11 @@ internal class FractionBuilder
             normalStartIndex = input.IndexOf(OperatorStart);
             dStartIndex = input.IndexOf(OperatorStartVariantD);
             startIndex = GetSmallerButBiggerThan(dStartIndex, normalStartIndex, minValue: 0);
-            if (startIndex < 0) break;
+            if (startIndex < 0)
+            {
+                break;
+            }
+
             if (startIndex == normalStartIndex)
             {
                 input = input.Remove(startIndex, OperatorStart.Length);

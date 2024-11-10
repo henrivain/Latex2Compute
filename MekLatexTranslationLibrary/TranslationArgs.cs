@@ -1,8 +1,6 @@
-﻿/// Copyright 2021 Henri Vainio 
+﻿/// Copyright 2024 Henri Vainio 
 
 namespace MekLatexTranslationLibrary;
-
-
 
 
 /// <summary>
@@ -18,11 +16,20 @@ public struct TranslationArgs
     /// </summary>
     public TranslationArgs() { }
 
+    /// <summary>
+    /// Sets the way the units are translated.
+    /// </summary>
     public UnitTranslationMode UnitTranslationMode { get; set; } = UnitTranslationMode.None;
-    public Params Params { get; set; } = Params.Default;
-    public EndChanges EndChanges { get; set; } = EndChanges.All;
 
- 
+    /// <summary>
+    /// Additional parameters for the translation.
+    /// </summary>
+    public Params Params { get; set; } = Params.Default;
+
+    /// <summary>
+    /// Choose which cleanup actions are made to the output.
+    /// </summary>
+    public EndChanges EndChanges { get; set; } = EndChanges.All;
 
     public static TranslationArgs GetDefault()
     {

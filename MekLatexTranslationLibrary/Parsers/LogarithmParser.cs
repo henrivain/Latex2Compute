@@ -1,20 +1,17 @@
-﻿using MekLatexTranslationLibrary.Helpers;
-using MekLatexTranslationLibrary.Structures;
+﻿namespace MekLatexTranslationLibrary.Parsers;
 
-namespace MekLatexTranslationLibrary.OperatorBuilders;
-
-internal static class LogarithmBuilder
+internal static class LogarithmParser
 {
-    const string NormalTag = "#111#";
-    const string NaturalTag = "#112#";
-
     public static string BuildAll(string input, ref TranslationErrors errors)
     {
         LogStartInfo lsi;
         while (true)
         {
             lsi = new(input);
-            if (lsi.IsFound is false) return input;
+            if (lsi.IsFound is false)
+            {
+                return input;
+            }
 
             input = input.Remove(lsi.Index, lsi.StartType.Length);
             input = Build(input, lsi, ref errors);
@@ -39,7 +36,7 @@ internal static class LogarithmBuilder
             TextAfter = input[(antilogInfo.EndIndex + baseInfo.EndIndex)..]
         };
 
-        return $"{log.TextBefore}{NormalTag}({log.Body},{log.Base}){log.TextAfter}";
+        return $"{log.TextBefore}{ConstSymbol.Log}({log.Body},{log.Base}){log.TextAfter}";
     }
 
     private static string TranslateNaturalLog(string inp, LogStartInfo lsi)
@@ -54,7 +51,7 @@ internal static class LogarithmBuilder
             TextAfter = inp[(antilogInfo.EndIndex + lsi.Index)..]
         };
 
-        return $"{logItem.TextBefore}{NaturalTag}({logItem.Body}){logItem.TextAfter}";
+        return $"{logItem.TextBefore}{ConstSymbol.NaturalLog}({logItem.Body}){logItem.TextAfter}";
     }
 
     /// <summary>
@@ -67,7 +64,7 @@ internal static class LogarithmBuilder
     private static ContentAndEnd GetBase(string inp, LogStartInfo lsi, ref TranslationErrors errors)
     {
         // gets logarithm base from input string
-        if (!lsi.HasBase)
+        if (lsi.HasBase is false)
         {
             ContentAndEnd temp = HelperAlgorithms.CheckAndGetInconsistentStart(inp, lsi.Index, "log", "_{");
             return ValidateBase(temp, lsi, ref errors);

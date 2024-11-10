@@ -1,15 +1,12 @@
-﻿using MekLatexTranslationLibrary.Helpers;
-
-namespace MekLatexTranslationLibrary.OperatorBuilders;
-internal static class PropabilityOperators
+﻿
+namespace MekLatexTranslationLibrary.Parsers;
+internal static class ProbabilityOperatorParser
 {
 
     const string BinomStart = "\\binom";
-    const string BinomTag = "#202#";
 
     const string NPRStart = "\\left(";
     const string NPREnd = "\\right)_";
-    const string NPRTag = "#201#";
 
 
     public static string BuildAll(string input, ref TranslationErrors errors)
@@ -26,7 +23,7 @@ internal static class PropabilityOperators
         public string Equation { get; set; } = string.Empty;
         public string Parameter { get; set; } = string.Empty;
         public string TextAfter { get; set; } = string.Empty;
-        public override readonly string ToString() => $"{TextBefore}{BinomTag}({Equation},{Parameter}){TextAfter}";
+        public override readonly string ToString() => $"{TextBefore}{ConstSymbol.Binom}({Equation},{Parameter}){TextAfter}";
     }
     public static string BuildAllNCRs(string input, ref TranslationErrors errors)
     {
@@ -122,7 +119,7 @@ internal static class PropabilityOperators
                 textAfter = input[paramInfo.EndIndex..];
             }
         }
-        return $"{textBefore}{NPRTag}({content},{param}){textAfter}";
+        return $"{textBefore}{ConstSymbol.Npr}({content},{param}){textAfter}";
 
     }
 }

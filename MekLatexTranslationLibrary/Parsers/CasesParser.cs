@@ -1,14 +1,11 @@
-﻿using MekLatexTranslationLibrary.Helpers;
+﻿namespace MekLatexTranslationLibrary.Parsers;
 
-namespace MekLatexTranslationLibrary.OperatorBuilders;
-
-internal static partial class CasesBuilder
+internal static partial class CasesParser
 {
     const string OperatorStart = "\\begin{cases}";
     const string OperatorEnd = "\\end{cases}";
-    const string NormalTag = "#121#";
-    const string RowChangeTag = "#122#";
-    const string PiecedTag = "#123#";
+
+
 
     public static string BuildAll(string input, ref TranslationErrors errors)
     {
@@ -28,7 +25,7 @@ internal static partial class CasesBuilder
 
     private static string Build(string input, int startIndex, ref TranslationErrors errors)
     {
-        input = input.Replace(@"\\", RowChangeTag);
+        input = input.Replace(@"\\", ConstSymbol.SystemRowChange);
 
         Cases instance = new()
         {

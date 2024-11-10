@@ -1,10 +1,6 @@
-﻿using MekLatexTranslationLibrary.Helpers;
-
-namespace MekLatexTranslationLibrary.OperatorBuilders;
+﻿namespace MekLatexTranslationLibrary.Parsers;
 internal class SquareRootBuilder
 {
-    const string Tag = "#142#";
-
     const string OperatorStart = "\\sqrt{"; 
 
     internal static string BuildAll(string input, ref TranslationErrors errors)
@@ -14,7 +10,10 @@ internal class SquareRootBuilder
         while (true)
         {
             startIndex = input.IndexOf(OperatorStart);
-            if(startIndex < 0) return input;
+            if (startIndex < 0)
+            {
+                return input;
+            }
 
             input = input.Remove(startIndex, OperatorStart.Length - 1);
             input = Build(input, startIndex, ref errors);
@@ -32,6 +31,6 @@ internal class SquareRootBuilder
         }
 
         string textAfter = Slicer.GetSpanSafely(input, body.EndIndex..);
-        return $"{input[..startIndex]}{Tag}({body.Content}){textAfter}";
+        return $"{input[..startIndex]}{ConstSymbol.Sqrt}({body.Content}){textAfter}";
     }
 }

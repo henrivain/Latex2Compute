@@ -1,5 +1,4 @@
 ﻿/// Copyright 2021 Henri Vainio 
-using MekLatexTranslationLibrary.Structures;
 using System.Text.RegularExpressions;
 
 namespace MekLatexTranslationLibrary.Helpers;
@@ -18,39 +17,39 @@ internal static class TranslationTag
     {
         return inp
             //log
-            .Replace("#111#", "log")
-            .Replace("#112#", "ln")
+            .Replace(ConstSymbol.Log, "log")
+            .Replace(ConstSymbol.NaturalLog, "ln")
             //system
-            .Replace("#121#", "system")
-            .Replace("#122#", ",")
-            .Replace("#123#", "piecewise")
-            .Replace("#124#", " or ")   // include spaces!
+            .Replace(ConstSymbol.System, "system")
+            .Replace(ConstSymbol.SystemRowChange, ",")
+            .Replace(ConstSymbol.Piecewise, "piecewise")
+            .Replace(ConstSymbol.Or, " or ")   // include spaces!
             //trigonometry
-            .Replace("#131#", "arcsin")
-            .Replace("#132#", "sin")
-            .Replace("#133#", "arccos")
-            .Replace("#134#", "cos")
-            .Replace("#135#", "arctan")
-            .Replace("#136#", "tan")
+            .Replace(ConstSymbol.Arcsin, "arcsin")
+            .Replace(ConstSymbol.Sin, "sin")
+            .Replace(ConstSymbol.Arccos, "arccos")
+            .Replace(ConstSymbol.Cos, "cos")
+            .Replace(ConstSymbol.Arctan, "arctan")
+            .Replace(ConstSymbol.Tan, "tan")
             //sqrt 
-            .Replace("#142#", "sqrt")
-            .Replace("#141#", "root")
+            .Replace(ConstSymbol.Sqrt, "sqrt")
+            .Replace(ConstSymbol.Root, "root")
             //lim
-            .Replace("#151#", "lim")
+            .Replace(ConstSymbol.Limit, "lim")
             // pi
-            .Replace("#161#", "pi")
+            .Replace(ConstSymbol.Pi, "pi")
             // abs
-            .Replace("#171#", "abs")
+            .Replace(ConstSymbol.Abs, "abs")
             // integral
-            .Replace("#181#", "∫")
+            .Replace(ConstSymbol.Integral, "∫")
 
             // auto solve and derivative
-            .Replace("#192#", "solve")
-            .Replace("#191#", "derivative")
+            .Replace(ConstSymbol.Derivative, "derivative")
+            .Replace(ConstSymbol.Solve, "solve")
             
             // propability operators
-            .Replace("#201#", "nPr")
-            .Replace("#202#", "nCr")
+            .Replace(ConstSymbol.Npr, "nPr")
+            .Replace(ConstSymbol.Binom, "nCr")
             ;
     }
 
@@ -88,7 +87,10 @@ internal static class TranslationTag
         {
             index = GetFirstAvailableTagIndex(inp, tag, index);
 
-            if (index < 0) break;
+            if (index < 0)
+            {
+                break;
+            }
 
             if (IsOperatorSymbol(inp, index) is false)
             {
@@ -191,17 +193,12 @@ internal static class TranslationTag
     /// <returns>true if matches otherwise false</returns>
     private static bool DoesCharMatchTag(char tag, char input)
     {
-        switch (tag)
+        return tag switch
         {
-            case DigitWildCard:
-                return char.IsDigit(input);
-
-            case CharWildCard:
-                return char.IsLetter(input);
-
-            default:
-                return (tag == input);
-        }
+            DigitWildCard => char.IsDigit(input),
+            CharWildCard => char.IsLetter(input),
+            _ => (tag == input),
+        };
     }
 
 
@@ -240,13 +237,19 @@ internal static class TranslationTag
     /// <returns>true if matches, false if not</returns>
     private static bool ArgsMatch(string input, string tag)
     {
-        if (ArgsLongEnough(input, tag) is false) return false;
+        if (ArgsLongEnough(input, tag) is false)
+        {
+            return false;
+        }
 
         char[] inputSpan = input[..5].ToCharArray();
 
         for (short i = 0; i < inputSpan.Length; i++)
         {
-            if (DoesCharMatchTag(tag[i], inputSpan[i]) is false) return false;
+            if (DoesCharMatchTag(tag[i], inputSpan[i]) is false)
+            {
+                return false;
+            }
         }
         return true;
     }

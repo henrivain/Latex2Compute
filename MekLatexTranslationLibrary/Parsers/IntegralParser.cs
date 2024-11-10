@@ -85,10 +85,11 @@ internal class IntegralParser
                 return false;
             }
 
-            return
+            return (
                 reference is "d" &&
                 index - 2 >= 0 &&
-                Slicer.GetSpanSafely(input, (index - 2)..(index + 3)) is "\\cdot";
+                Slicer.GetSpanSafely(input, (index - 2)..(index + 3)) is "\\cdot"
+                ) is false;
         }
     }
     private static (string Body, string Argument, string TextAfter) SeparateBodyAndArgument(string input, int dIndex)

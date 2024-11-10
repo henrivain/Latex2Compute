@@ -17,7 +17,7 @@ internal class TrigonParser
         input = input.Replace("\\tan^{-1}", ConstSymbol.Arctan);
         input = input.Replace("\\tan", ConstSymbol.Tan);
 
-        input = TranslationTag.TryAddInsides(input, "#13N#", "#13");
+        input = TranslationTag.TryAddInsides(input, "#13");
         return input;
     }
 

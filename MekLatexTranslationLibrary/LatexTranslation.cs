@@ -43,7 +43,7 @@ public static class LatexTranslation
     {
         input = Matrix.BuildAll(input, ref errors).ToString();
         input = FractionParser.BuildAll(input, ref errors);
-        input = PropabilityOperatorParser.BuildAll(input, ref errors);
+        input = ProbabilityOperatorParser.BuildAll(input, ref errors);
         input = CasesParser.BuildAll(input, ref errors);
         input = LogarithmParser.BuildAll(input, ref errors);
         input = SquareRootBuilder.BuildAll(input, ref errors);

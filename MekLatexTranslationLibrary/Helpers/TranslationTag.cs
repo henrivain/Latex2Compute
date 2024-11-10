@@ -58,7 +58,7 @@ internal static class TranslationTag
     /// </summary>
     /// <param name="input"></param>
     /// <returns>string with insides initialized for some tag</returns>
-    internal static string TryAddInsides(string input, string tag, string charsBeforeWildCard)
+    internal static string TryAddInsides(string input, string charsBeforeWildCard)
     {
         int index = input.IndexOf(charsBeforeWildCard);
 

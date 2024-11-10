@@ -1,19 +1,6 @@
 ﻿namespace MekLatexTranslationLibraryTests;
 public class SymbolTests
 {
-    readonly TranslationArgs _normalArgs = new()
-    {
-        MathMode = true,
-        PhysicsMode1 = false,
-        PhysicsMode2 = false,
-    };
-
-    readonly TranslationArgs _physicsArgs = new()
-    {
-        MathMode = false,
-        PhysicsMode1 = true,
-        PhysicsMode2 = false,
-    };
 
     [Fact]
     public void Pi_ShouldBeTranslated_AndSeparatedWithMultiplicationSign_IfNeeded_Always()
@@ -21,8 +8,8 @@ public class SymbolTests
         // Arrange
         string input = "\\pi \\pi \\frac{\\pi }{\\pi } 22\\pi";
         string expectedResult = "pi*pi(pi)/(pi)22*pi";
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var normalItem = new TranslationItem(input, Testing.GetDefaultArgs());
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);
@@ -41,7 +28,7 @@ public class SymbolTests
                         {\text{mol}\cdot \text{K}}=0{,}083\ 1451\text{ }\ \frac{\text{bar}
                         \cdot \text{d}\text{m}^{\text{3}}}{\text{mol}\cdot \text{K}}";
         string expectedResult = "R=8.31451=0.0831451";
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
 
         // Act
         var physicsResult = LatexTranslation.Translate(physicsItem);
@@ -57,7 +44,7 @@ public class SymbolTests
         string input)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, _normalArgs);
+        var normalItem = new TranslationItem(input, Testing.GetDefaultArgs());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);
@@ -75,8 +62,8 @@ public class SymbolTests
         string input)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var normalItem = new TranslationItem(input, Testing.GetDefaultArgs());
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);
@@ -93,6 +80,7 @@ public class SymbolTests
     [InlineData("=++=5", "5")]
     [InlineData("=5", "5")]
     [InlineData("=", "")]
+    [InlineData("+++", "")]
     [InlineData("+5", "5")]
     [InlineData("++5", "5")]
     [InlineData("5", "5")]
@@ -101,8 +89,8 @@ public class SymbolTests
         string input, string expectedInput)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var normalItem = new TranslationItem(input, Testing.GetDefaultArgs());
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);
@@ -121,8 +109,8 @@ public class SymbolTests
     string input, string expectedInput)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var normalItem = new TranslationItem(input, Testing.GetDefaultArgs());
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);
@@ -158,7 +146,7 @@ public class SymbolTests
     public void SomeSymbols_ShouldBeRemoved_InPhysicsModeOne(string input)
     {
         // Arrange
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
 
         // Act
         var result = LatexTranslation.Translate(physicsItem);
@@ -174,7 +162,7 @@ public class SymbolTests
     public void PhysicsMode_ShouldRemove_Unnecessary_MultiplicationAndPlus_Signs(string input, string expectedReturn)
     {
         // Arrange
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
         
         // Act
         var result = LatexTranslation.Translate(physicsItem);

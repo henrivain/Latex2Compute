@@ -1,6 +1,4 @@
 ﻿/// Copyright 2021 Henri Vainio 
-using MekLatexTranslationLibrary.Helpers;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 namespace MekLatexTranslationLibrary.OtherBuilders;
@@ -16,21 +14,20 @@ static internal class EndEdit
     /// <returns>input with made end change</returns>
     internal static string Run(string input, TranslationArgs args, ref TranslationErrors errors)
     {
-
         // remove matcha document constructors (do before curly bracket removal)
-        if (args.MatchaEnabled)
+        if (args.IsSet(Params.MathchaEnabled))
         {
-            input = Matcha.MakeMatchaChanges(input, ref errors);
+            input = Mathcha.MakeMathchaChanges(input, ref errors);
         }
 
         // change special
-        if (args.SpecialSymbolTranslation)
+        if (args.IsSet(Params.SpecialSymbolTranslation))
         {
             input = SpecialSymbols(input);
         }
 
         // remove unused curly brackets
-        if (args.CurlyBracket)
+        if (args.IsSet(Params.RemoveCurlyBracket))
         {
             input = input.Replace("{", "");
             input = input.Replace("}", "");
@@ -38,26 +35,28 @@ static internal class EndEdit
         // remove not useful
         input = input.Replace("\\", "");
 
-        if (args.AutoSeparateOperators)
+        if (args.IsSet(Params.AutoSeparateOperators))
         {
             input = SeparateOperatorsWithCdot(input);
         }
 
         // auto solve
-        if (args.AutoSolve && input.Contains("#192#") is false)
+        if (args.IsSet(Params.AutoSolve) && 
+            input.Contains(ConstSymbol.Solve) is false)
         {
             // if auto solve is on => call autosolve method and check if conditions are true
             input = RunAutoSolve(input);
         }
 
         // auto derivative
-        if (args.AutoDerivative)
+        if (args.IsSet(Params.AutoDerivative))
         {
             input = RunAutoDerivative(input);
         }
         if (input.StartsWith('D'))
         {
-            input = RunAutoDerivative(input.Remove(0, 1));
+            // Skip first character
+            input = RunAutoDerivative(input.AsSpan(1));
         }
 
 
@@ -65,38 +64,32 @@ static internal class EndEdit
 
         switch (args.EndChanges)
         {
-            case "all":
+            case EndChanges.All:
                 // remove all not wanted items
                 input = RemoveEmptyFractions(input);
                 input = input.Replace("…", "");
                 break;
 
-            case "emptyFrac":
+            case EndChanges.EmptyFrac:
                 //remove empty fractions
                 input = RemoveEmptyFractions(input);
                 break;
         }
 
-        input = RemoveStartEqualSigns(input).ToString();
-
-        return input;
+        return RemoveStartEqualSigns(input).ToString();
     }
 
     private static ReadOnlySpan<char> RemoveStartEqualSigns(ReadOnlySpan<char> input)
     {
-        int index = 0;
-        foreach (char c in input) 
-        { 
-            if (c is '=' or '+')
-            {
-                index++;
-            }
-            else
-            {
-                return input[index..];
-            }
+        if (input.IsEmpty)
+        {
+            return ReadOnlySpan<char>.Empty;
         }
-        return ReadOnlySpan<char>.Empty;
+        if (input[0] is '=' or '+')
+        {
+            return RemoveStartEqualSigns(input[1..]);
+        }
+        return input;
     }
 
     /// <summary>
@@ -108,6 +101,7 @@ static internal class EndEdit
     {
         inp = RemoveUnnecessaryOperatorSigns(inp);
 
+        // TODO: source gen regex
         /*lang=regex*/
         string[] patterns =
 {
@@ -130,13 +124,14 @@ static internal class EndEdit
         inp ??= string.Empty;
 
         // if inp ends with any operator, remove it
-        char[] operators = { '+', '-', '/', '*' };
+        ReadOnlySpan<char> operators = stackalloc char[]{ '+', '-', '/', '*' };
         if (operators.Contains(Slicer.GetLastCharSafely(inp) ?? '\0'))
         {
             inp = inp[..^1];
         }
 
         // replace patterns
+        // TODO: source gen regex
         ReplacableRegexPattern[] patterns =
         {
             new($@"\((\*|\+|\-|/)\^", "(^"),        // '(*^', '(+^', '(-^' or '(/^'      
@@ -189,14 +184,14 @@ static internal class EndEdit
     /// </summary>
     /// <param name="inp"></param>
     /// <returns></returns>
-    private static string RunAutoDerivative(string inp)
+    private static string RunAutoDerivative(ReadOnlySpan<char> inp)
     {
-        char? variable = GetFirstVariableCharInInput(inp.AsSpan());
+        char? variable = GetFirstVariableCharInInput(inp);
         if (variable is null)
         {
-            return $"#191#({inp},)";
+            return $"{ConstSymbol.Derivative}({inp},)";
         }
-        return $"#191#({inp},{variable})";
+        return $"{ConstSymbol.Derivative}({inp},{variable})";
     }
 
 

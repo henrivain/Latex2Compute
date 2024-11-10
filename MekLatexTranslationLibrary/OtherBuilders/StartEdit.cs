@@ -1,6 +1,4 @@
-﻿using MekLatexTranslationLibrary.Helpers;
-
-namespace MekLatexTranslationLibrary.OtherBuilders;
+﻿namespace MekLatexTranslationLibrary.OtherBuilders;
 
 static internal class StartEdit
 {
@@ -17,8 +15,8 @@ static internal class StartEdit
             .Replace(" ", "")
             .Replace("\n", "")
             .Replace("\r", "")
-            .Replace("derivative", "#191#")
-            .Replace("solve", "#192#");
+            .Replace("derivative", ConstSymbol.Derivative)
+            .Replace("solve", ConstSymbol.Solve);
 
         // remove \text and \mathrm
         input = RemovePattern.RemovePatternAndBrackets(input, "\\text");

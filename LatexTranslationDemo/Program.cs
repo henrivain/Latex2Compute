@@ -24,9 +24,7 @@ static bool RunTranslationProcess()
 
     TranslationItem item = new(input, new()
     {
-        PhysicsMode2 = true,
-        MathMode = false,
-        PhysicsMode1 = false,
+        UnitTranslationMode = UnitTranslationMode.Translate,
     });
 
     TranslationResult result = LatexTranslation.Translate(item);

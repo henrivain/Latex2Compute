@@ -3,12 +3,8 @@ public class PhysicsMode2Tests
 {
     public PhysicsMode2Tests()
     {
-        _args = new()
-        {
-            MathMode = false,
-            PhysicsMode1 = false, 
-            PhysicsMode2 = true
-        };
+        _args = Testing.GetDefaultArgs();
+        _args.UnitTranslationMode = UnitTranslationMode.Translate;
     }
 
     readonly TranslationArgs _args;

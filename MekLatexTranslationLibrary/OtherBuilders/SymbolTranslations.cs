@@ -19,7 +19,7 @@ internal static class SymbolTranslations
         // translate symbols to ti-nspire form
 
         // geometry mode changes
-        if (args.GeometryMode)
+        if (args.IsSet(Params.UseGeometryModeSymbols))
         {
             input = GeometryModeSymbols(input);
         }
@@ -31,14 +31,14 @@ internal static class SymbolTranslations
         input = CheckVectorBars(input, ref errors);
 
         // physics mode 1 changes
-        if (args.PhysicsMode1)
+        if (args.IsSet(UnitTranslationMode.Remove))
         {
             // Remove physics symbols like m^3, V, N
             // => do not use g,l,m,s,A,C,F,N,W,V as variables in your Latex text
             input = RemoveGreekSymbols(input);
             input = RemovePhysics1ModeSymbols(input);
         }
-        if (args.PhysicsMode2)
+        if (args.IsSet(UnitTranslationMode.Translate))
         {
             var parser = new PhysicsTwoParser(input);
             input = parser.Translate();
@@ -46,7 +46,7 @@ internal static class SymbolTranslations
         }
 
         // mathmode changes
-        if (args.MathMode)
+        if (args.IsSet(UnitTranslationMode.None))
         {
             // remove greek letters
             input = RemoveGreekSymbols(input);
@@ -117,7 +117,7 @@ internal static class SymbolTranslations
         input = TranslateAllBrackets(input);
 
         // remove angles
-        if (args.PhysicsMode2 is false)
+        if (args.IsSet(UnitTranslationMode.Translate) is false)
         {
             input = input
                 .Replace("°", string.Empty)
@@ -170,7 +170,10 @@ internal static class SymbolTranslations
         while (true)
         {
             int start = input.IndexOf(overline);
-            if (start < 0) return input;
+            if (start < 0)
+            {
+                return input;
+            }
 
             input = input.Remove(start, 10);
             int end = BracketHandler.FindBrackets(input, BracketType.Curly, start);

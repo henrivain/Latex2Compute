@@ -1,20 +1,6 @@
 ﻿namespace MekLatexTranslationLibraryTests;
 public class PropabilityOperatorTests
 {
-    readonly TranslationArgs _normalArgs = new()
-    {
-        MathMode = true,
-        PhysicsMode1 = false,
-        PhysicsMode2 = false,
-    };
-
-    readonly TranslationArgs _physicsArgs = new()
-    {
-        MathMode = false,
-        PhysicsMode1 = true,
-        PhysicsMode2 = false,
-    };
-
 
     [Theory]
     [InlineData("\\binom{23}{2}", "nCr(23,2)")]
@@ -25,8 +11,8 @@ public class PropabilityOperatorTests
         string input, string expectedResult)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var normalItem = new TranslationItem(input, Testing.GetDefaultArgs());
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);
@@ -45,8 +31,8 @@ public class PropabilityOperatorTests
         string input, string expectedResult)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var normalItem = new TranslationItem(input, Testing.GetDefaultArgs());
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);
@@ -64,8 +50,8 @@ public class PropabilityOperatorTests
     string input, string expectedResult)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var normalItem = new TranslationItem(input, Testing.GetDefaultArgs());
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);
@@ -83,8 +69,8 @@ public class PropabilityOperatorTests
         string input, string expectedResult)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var normalItem = new TranslationItem(input, Testing.GetDefaultArgs());
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);
@@ -102,8 +88,8 @@ public class PropabilityOperatorTests
         string input, string expectedResult)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var normalItem = new TranslationItem(input, Testing.GetDefaultArgs());
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);
@@ -126,8 +112,8 @@ public class PropabilityOperatorTests
         string input, string expectedResult)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var normalItem = new TranslationItem(input, Testing.GetDefaultArgs());
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);
@@ -147,8 +133,8 @@ public class PropabilityOperatorTests
         string input, string expectedResult)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var normalItem = new TranslationItem(input, Testing.GetDefaultArgs());
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);

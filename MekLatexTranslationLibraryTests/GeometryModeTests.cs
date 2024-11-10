@@ -1,29 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MekLatexTranslationLibraryTests;
+﻿namespace MekLatexTranslationLibraryTests;
 public class GeometryModeTests
 {
-
-    readonly TranslationArgs _normalArgs = new()
-    {
-        MathMode = true,
-        PhysicsMode1 = false,
-        PhysicsMode2 = false,
-        GeometryMode = true
-    };
-
-    readonly TranslationArgs _physicsArgs = new()
-    {
-        MathMode = false,
-        PhysicsMode1 = true,
-        PhysicsMode2 = false,
-        GeometryMode = true
-    };
-
     // GeometryMode is enabled in these tests
 
     [Theory]
@@ -34,8 +11,14 @@ public class GeometryModeTests
     public void GeometryMode_ShouldTranslate_FourGreekLetters_Always(string input, string expectedResult)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        TranslationArgs normalArgs = Testing.GetDefaultArgs();
+        normalArgs.Enable(Params.UseGeometryModeSymbols);
+        
+        TranslationArgs physicsArgs = Testing.GetDefaultArgs();
+        physicsArgs.Enable(Params.UseGeometryModeSymbols);
+
+        var normalItem = new TranslationItem(input, normalArgs);
+        var physicsItem = new TranslationItem(input, physicsArgs);
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);

@@ -1,19 +1,6 @@
 ﻿namespace MekLatexTranslationLibraryTests;
 public class LogarithmTests
 {
-    readonly TranslationArgs _normalArgs = new()
-    {
-        MathMode = true,
-        PhysicsMode1 = false,
-        PhysicsMode2 = false,
-    };
-
-    readonly TranslationArgs _physicsArgs = new()
-    {
-        MathMode = false,
-        PhysicsMode1 = true,
-        PhysicsMode2 = false,
-    };
 
     [Theory]
     [InlineData("\\log _345", "log(45,3)")]
@@ -26,8 +13,8 @@ public class LogarithmTests
         string input, string expectedResult)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var normalItem = new TranslationItem(input, Testing.GetDefaultArgs());
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);
@@ -50,8 +37,8 @@ public class LogarithmTests
         string input, string expectedResult)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var normalItem = new TranslationItem(input, Testing.GetDefaultArgs());
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);
@@ -71,8 +58,8 @@ public class LogarithmTests
         string input, string expectedResult)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var normalItem = new TranslationItem(input, Testing.GetDefaultArgs());
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);
@@ -90,8 +77,8 @@ public class LogarithmTests
     string input, string expectedResult)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var normalItem = new TranslationItem(input, Testing.GetDefaultArgs());
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);

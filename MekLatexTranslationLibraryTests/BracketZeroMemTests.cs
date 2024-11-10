@@ -2,9 +2,6 @@
 
 namespace MekLatexTranslationLibraryTests;
 
-
-
-
 public class BracketZeroMemTests
 {
     [Theory]

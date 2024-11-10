@@ -29,11 +29,11 @@ namespace MekLatexTranslationLibrary.Helpers
 
             // normal operators
             indexes.AddRange(
-                GetFirstIndexes(inp.Replace("\\cdot", "*"), CommonOperators.BasicMathOperators));
+                GetFirstIndexes(inp.Replace("\\cdot", "*"), CommonOperators._basicMathOperators));
             
             // equal separators
             indexes.AddRange(
-                GetFirstIndexes(inp, CommonOperators.EqualSigns));
+                GetFirstIndexes(inp, CommonOperators._equalSigns));
             
             // brackets
             indexes.AddRange(

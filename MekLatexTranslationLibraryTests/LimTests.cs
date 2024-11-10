@@ -1,19 +1,6 @@
 ﻿namespace MekLatexTranslationLibraryTests;
 public class LimTests
 {
-    readonly TranslationArgs _normalArgs = new()
-    {
-        MathMode = true,
-        PhysicsMode1 = false,
-        PhysicsMode2 = false,
-    };
-
-    readonly TranslationArgs _physicsArgs = new()
-    {
-        MathMode = false,
-        PhysicsMode1 = true,
-        PhysicsMode2 = false,
-    };
 
     [Theory]
     [InlineData("\\lim _{x\\to 4}\\left(3x\\right)", "lim(3x,x,4)")]
@@ -22,8 +9,8 @@ public class LimTests
     public void ValidLim_ShouldReturn_ValidTranslation_Always(string input, string expectedResult)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var normalItem = new TranslationItem(input, Testing.GetDefaultArgs());
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);
@@ -40,8 +27,8 @@ public class LimTests
     public void ValidLim_IfBodyWithBrackets_BodyShouldBeSeparated_FromEnd_Always(string input, string expectedResult)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var normalItem = new TranslationItem(input, Testing.GetDefaultArgs());
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);
@@ -60,8 +47,8 @@ public class LimTests
         string input = "\\lim \\left(y\\right)";
         string expectedResult = "lim(y,x,å)";
 
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var normalItem = new TranslationItem(input, Testing.GetDefaultArgs());
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);
@@ -79,8 +66,8 @@ public class LimTests
         string input = "\\lim _{\\to å}y";
         string expectedResult = "lim(y,x,å)";
 
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var normalItem = new TranslationItem(input, Testing.GetDefaultArgs());
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);
@@ -98,8 +85,8 @@ public class LimTests
         string input = "\\lim _{x\\to}y";
         string expectedResult = "lim(y,x,å)";
 
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var normalItem = new TranslationItem(input, Testing.GetDefaultArgs());
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);
@@ -118,8 +105,8 @@ public class LimTests
     public void Lim_WithLim_ShouldBeTranslated_Normally_Always(string input, string expectedResult)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var normalItem = new TranslationItem(input, Testing.GetDefaultArgs());
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);

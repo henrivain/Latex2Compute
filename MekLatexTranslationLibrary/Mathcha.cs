@@ -5,9 +5,9 @@ namespace MekLatexTranslationLibrary;
 /// <summary>
 /// Translation algorithms for Matcha io symbols and constructors
 /// </summary>
-internal static class Matcha
+internal static class Mathcha
 {
-    public static string MakeMatchaChanges(string input, ref TranslationErrors errors)
+    public static string MakeMathchaChanges(string input, ref TranslationErrors errors)
     {
         // method removes unuseful latex groups that matcha.io adds to their latex documents
         input = input.Replace("\\displaystyle", "");

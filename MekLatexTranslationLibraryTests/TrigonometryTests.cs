@@ -1,21 +1,6 @@
 ﻿namespace MekLatexTranslationLibraryTests;
 public class TrigonometryTests
 {
-    readonly TranslationArgs _normalArgs = new()
-    {
-        MathMode = true,
-        PhysicsMode1 = false,
-        PhysicsMode2 = false,
-    };
-
-    readonly TranslationArgs _physicsArgs = new()
-    {
-        MathMode = false,
-        PhysicsMode1 = true,
-        PhysicsMode2 = false,
-    };
-
-
     [Theory]
     [InlineData("\\sin \\left(8\\right)", "sin(8)")]
     [InlineData("\\cos \\left(8\\right)", "cos(8)")]
@@ -39,8 +24,8 @@ public class TrigonometryTests
         string input, string expectedResult)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        TranslationItem normalItem = new (input, Testing.GetDefaultArgs());
+        TranslationItem physicsItem = new (input, Testing.GetPhysics1Args());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);
@@ -63,8 +48,8 @@ public class TrigonometryTests
     string input, string expectedResult)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        TranslationItem normalItem = new(input, Testing.GetDefaultArgs());
+        TranslationItem physicsItem = new(input, Testing.GetPhysics1Args());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);
@@ -86,8 +71,8 @@ public class TrigonometryTests
         string input, string expectedResult)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        TranslationItem normalItem = new(input, Testing.GetDefaultArgs());
+        TranslationItem physicsItem = new(input, Testing.GetPhysics1Args());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);

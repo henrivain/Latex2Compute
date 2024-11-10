@@ -1,33 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MekLatexTranslationLibraryTests;
+﻿namespace MekLatexTranslationLibraryTests;
 public class TranslationArgumentTests
 {
-    readonly TranslationArgs _normalArgs = new()
-    {
-        MathMode = true,
-        PhysicsMode1 = false,
-        PhysicsMode2 = false,
-        GeometryMode = true
-    };
-
-    readonly TranslationArgs _physicsArgs = new()
-    {
-        MathMode = false,
-        PhysicsMode1 = true,
-        PhysicsMode2 = false,
-        GeometryMode = true
-    };
-
-    // Physics mode and math mode are both enabled in most of these tests, to make the highest possiblity to break tests
-    // Both modes should not be enabled in production code at the same time
-
-
-
     [Theory]
     [InlineData("x=0", "solve(x=0,x)")]
     [InlineData("x+b=0", "solve(x+b=0,b,x)")]
@@ -43,12 +16,10 @@ public class TranslationArgumentTests
     public void AutoSolve_ShouldAdd_Solve_AndVariable_IfHasEqualityOperator_AndVariable(string input, string expectedResult)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, new()
-        {
-            PhysicsMode1 = true,
-            MathMode = true,
-            AutoSolve = true,
-        });
+        TranslationArgs args = Testing.GetDefaultArgs();
+        args.Enable(Params.AutoSolve);
+
+        TranslationItem normalItem = new(input, args);
 
         // Act
         var result = LatexTranslation.Translate(normalItem);
@@ -68,11 +39,7 @@ public class TranslationArgumentTests
     public void AutoDerivative_ShouldAdd_Derivative_AndVariable_IfStartsWithD(string input, string expectedResult)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, new()
-        {
-            PhysicsMode1 = true,
-            MathMode = true,
-        });
+        TranslationItem normalItem = new(input, Testing.GetDefaultArgs());
 
         // Act
         var result = LatexTranslation.Translate(normalItem);
@@ -90,12 +57,10 @@ public class TranslationArgumentTests
     public void AutoDerivativeSetting_DerivatesAlways(string input, string expectedResult)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, new()
-        {
-            PhysicsMode1 = true,
-            MathMode = true,
-            AutoDerivative = true,
-        });
+        var args = Testing.GetDefaultArgs();
+        args.Enable(Params.AutoDerivative);
+
+        TranslationItem normalItem = new(input, args);
 
         // Act
         var result = LatexTranslation.Translate(normalItem);
@@ -111,33 +76,29 @@ public class TranslationArgumentTests
     public void AutoSeparateOperators_ShouldSeparateOperators_ByAsterisk(string input, string expectedResult)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, new()
-        {
-            PhysicsMode1 = true,
-            MathMode = true,
-            AutoSeparateOperators = true
-        });
+        TranslationArgs args = Testing.GetDefaultArgs();
+        args.Enable(Params.AutoSeparateOperators);
+
+        TranslationItem normalItem = new(input, args);
 
         // Act
         var result = LatexTranslation.Translate(normalItem);
 
         // Assert
         Assert.Equal(expectedResult, result.Result);
-    }    
-    
-    
+    }
+
+
     [Theory]
     [InlineData("\\frac{}{}", "")]
     [InlineData("\\frac{mol}{\\frac{km}{h}}", "")]
     public void EmptyFracs_ShouldBeRemoved_IfEndChanges_IsAll(string input, string expectedResult)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, new()
-        {
-            PhysicsMode1 = true,
-            MathMode = true,
-            EndChanges = "all"
-        });
+        TranslationArgs args = Testing.GetPhysics1Args();
+        args.EndChanges = EndChanges.All;
+
+        var normalItem = new TranslationItem(input, args);
 
         // Act
         var result = LatexTranslation.Translate(normalItem);

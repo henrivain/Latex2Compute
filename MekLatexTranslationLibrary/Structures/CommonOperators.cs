@@ -6,10 +6,10 @@ namespace MekLatexTranslationLibrary.Structures;
 /// GetBottom char array of some type of basic math operator
 /// <para/>EqualSigns, BasicMathOperators, StartBrackets, EndBrackets
 /// </summary>
-internal struct CommonOperators
+internal readonly struct CommonOperators
 {
-    internal static readonly char[] EqualSigns = { '=', '<', '>' };
-    internal static readonly char[] BasicMathOperators = { '+', '-', '*' };     // does not include /, because most of the time it is not significant
-    internal static readonly char[] StartBrackets = { '(', '[', '{' };
-    internal static readonly char[] EndBrackets = { ')', ']', '}' };
+    internal static readonly char[] _equalSigns = { '=', '<', '>' };
+    internal static readonly char[] _basicMathOperators = { '+', '-', '*' };     // does not include /, because most of the time it is not significant
+    internal static readonly char[] _startBrackets = { '(', '[', '{' };
+    internal static readonly char[] _endBrackets = { ')', ']', '}' };
 }

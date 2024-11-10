@@ -280,10 +280,10 @@ internal static class TranslationTag
     {
         if (index <= 0) return true;   // can't get index -1
 
-        char[] symbolToCheck = CommonOperators.EqualSigns
-                                    .Union(CommonOperators.EndBrackets)
-                                        .Union(CommonOperators.BasicMathOperators)
-                                            .Union(CommonOperators.StartBrackets)
+        char[] symbolToCheck = CommonOperators._equalSigns
+                                    .Union(CommonOperators._endBrackets)
+                                        .Union(CommonOperators._basicMathOperators)
+                                            .Union(CommonOperators._startBrackets)
                                                 .ToArray();
 
         return Array.Exists(symbolToCheck, element => element == inp[index - 1]);

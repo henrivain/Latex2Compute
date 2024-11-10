@@ -1,19 +1,6 @@
 ﻿namespace MekLatexTranslationLibraryTests;
 public class DerivativeTests
 {
-    readonly TranslationArgs _normalArgs = new()
-    {
-        MathMode = true,
-        PhysicsMode1 = false,
-        PhysicsMode2 = false,
-    };
-
-    readonly TranslationArgs _physicsArgs = new()
-    {
-        MathMode = false,
-        PhysicsMode1 = true,
-        PhysicsMode2 = false,
-    };
 
     [Theory]
     [InlineData("D\\ ", "derivative(,)")]
@@ -24,8 +11,8 @@ public class DerivativeTests
         string input, string expectedResult)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var normalItem = new TranslationItem(input, Testing.GetDefaultArgs());
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);
@@ -44,8 +31,8 @@ public class DerivativeTests
         string input, string expectedResult)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, _normalArgs);
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var normalItem = new TranslationItem(input, Testing.GetDefaultArgs());
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);
@@ -64,10 +51,10 @@ public class DerivativeTests
         string input, string expectedResult)
     {
         // Arrange
-        var normalArgs = _normalArgs;
-        normalArgs.AutoDerivative = true;
-        var physicsArgs = _physicsArgs;
-        physicsArgs.AutoDerivative = true;
+        var normalArgs = Testing.GetDefaultArgs();
+        normalArgs.Enable(Params.AutoDerivative);
+        var physicsArgs = Testing.GetPhysics1Args();
+        physicsArgs.Enable(Params.AutoDerivative);
 
         var normalItem = new TranslationItem(input, normalArgs);
         var physicsItem = new TranslationItem(input, physicsArgs);
@@ -89,7 +76,7 @@ public class DerivativeTests
         string input, string expectedResult)
     {
         // Arrange
-        var physicsItem = new TranslationItem(input, _physicsArgs);
+        var physicsItem = new TranslationItem(input, Testing.GetPhysics1Args());
 
         // Act
         var physicsResult = LatexTranslation.Translate(physicsItem);
@@ -107,7 +94,7 @@ public class DerivativeTests
         string input, string expectedResult)
     {
         // Arrange
-        var normalItem = new TranslationItem(input, _normalArgs);
+        var normalItem = new TranslationItem(input, Testing.GetDefaultArgs());
 
         // Act
         var normalResult = LatexTranslation.Translate(normalItem);

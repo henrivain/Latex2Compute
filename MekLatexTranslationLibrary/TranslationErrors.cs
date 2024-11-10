@@ -21,7 +21,7 @@ public enum TranslationErrors
     Cases_NoEndBracketFound =                   1 << 14,
     Binom_NoFirstStart =                        1 << 15,
     BinomNoSecondStart =                        1 << 16,
-    MissinMatrixEnd =                           1 << 17,
+    MissingMatrixEnd =                          1 << 17,
 }
 
 

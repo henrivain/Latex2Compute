@@ -148,10 +148,13 @@ static internal class EndEdit
 
     private static string SeparateOperatorsWithCdot(string inp)
     {
-        if (inp.Contains("#13") is false && inp.Contains("#161#") is false) return inp;
+        if (inp.Contains("#13") is false && inp.Contains(ConstSymbol.Pi) is false)
+        {
+            return inp;
+        }
 
-        inp = TranslationTag.SeparateOperatorByTag(inp, "#13N#");
-        inp = TranslationTag.SeparateOperatorByTag(inp, "#161#");
+        inp = TranslationTag.SeparateOperatorByTag(inp, ConstSymbol.AnyTrigon);
+        inp = TranslationTag.SeparateOperatorByTag(inp, ConstSymbol.Pi);
 
         return inp;
     }

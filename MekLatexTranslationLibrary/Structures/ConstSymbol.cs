@@ -17,6 +17,7 @@ class ConstSymbol
     public const string Cos = "#134#";
     public const string Arctan = "#135#";
     public const string Tan = "#136#";
+    public const string AnyTrigon = "#13N#";    // Wildcard, N can be any number
     //sqrt 
     public const string Root = "#141#";
     public const string Sqrt = "#142#";

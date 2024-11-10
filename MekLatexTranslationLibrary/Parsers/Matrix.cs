@@ -1,4 +1,14 @@
 ﻿namespace MekLatexTranslationLibrary.Parsers;
+
+
+
+
+internal class MatrixBuilder : IBodyBuilder
+{
+    public MatrixBuilder(){ }
+}
+
+
 internal readonly ref struct Matrix
 {
     private Matrix(
@@ -50,7 +60,7 @@ internal readonly ref struct Matrix
         if (endIndex < 0)
         {
             endIndex = input.Length;
-            errors |= TranslationErrors.MissinMatrixEnd;
+            errors |= TranslationErrors.MissingMatrixEnd;
         }
 
         // Parse matrix pieces

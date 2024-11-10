@@ -28,8 +28,6 @@ internal static class Slicer
         }
     }
 
-
-    /// <returns>substring of input, if fails returns ""</returns>
     internal static string GetSpanSafely(string input, int startIndex, int length)
     {
         return GetSpanSafely(input, startIndex..(startIndex + length));
@@ -48,9 +46,8 @@ internal static class Slicer
         }
     }
 
-    internal static char? GetLastCharSafely(string input)
+    internal static char? GetLastCharSafely(ReadOnlySpan<char> input)
     {
-        if (string.IsNullOrEmpty(input)) return null;
-        return input[^1];
+        return input.IsEmpty ? null : input[^1];
     }
 }

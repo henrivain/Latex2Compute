@@ -27,7 +27,7 @@ public static class LatexTranslation
         input = StartEdit.Run(input);
 
         // translate all operators
-        input = TranslateAllOperators(input, ref errors);
+        input = TranslateAllOperators(input, item.Settings, ref errors);
 
         // connect to symbol translations
         input = SymbolTranslations.Run(input, item.Settings, ref errors);
@@ -39,9 +39,10 @@ public static class LatexTranslation
         return new(input, errors);
     }
 
-    internal static string TranslateAllOperators(string input, ref TranslationErrors errors)
+    internal static string TranslateAllOperators(
+        string input, TranslationArgs args, ref TranslationErrors errors)
     {
-        input = Matrix.BuildAll(input, ref errors).ToString();
+        input = Matrix.BuildAll(input, args, ref errors);
         input = FractionParser.BuildAll(input, ref errors);
         input = ProbabilityOperatorParser.BuildAll(input, ref errors);
         input = CasesParser.BuildAll(input, ref errors);

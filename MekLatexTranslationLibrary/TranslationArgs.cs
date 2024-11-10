@@ -27,15 +27,23 @@ public struct TranslationArgs
     public Params Params { get; set; } = Params.Default;
 
     /// <summary>
+    /// Which math system to target like Ti-Nspire or Matlab.
+    /// </summary>
+    public TargetSystem TargetSystem { get; set; } = TargetSystem.Ti;
+
+
+    /// <summary>
     /// Choose which cleanup actions are made to the output.
     /// </summary>
     public EndChanges EndChanges { get; set; } = EndChanges.All;
+
 
     public static TranslationArgs GetDefault()
     {
         return new TranslationArgs
         {
             UnitTranslationMode = UnitTranslationMode.None,
+            TargetSystem = TargetSystem.Ti,
             EndChanges = EndChanges.All,
             Params =
               Params.RemoveCurlyBracket |

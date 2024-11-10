@@ -1,40 +1,37 @@
-﻿namespace MekLatexTranslationLibrary.Parsers;
+﻿using MekLatexTranslationLibrary.Flexibility;
+
+namespace MekLatexTranslationLibrary.Parsers;
 
 
 
 
-internal class MatrixBuilder : IBodyBuilder
-{
-    public MatrixBuilder(){ }
-}
-
-
-internal readonly ref struct Matrix
+internal readonly struct Matrix
 {
     private Matrix(
-        ReadOnlySpan<char> before, 
-        List<List<string>> body, 
-        ReadOnlySpan<char> after,
+        string latex,
+        Range before,
+        List<List<Range>> body,
+        Range after,
         TranslationErrors errors,
         int longestRow)
     {
+        Latex = latex;
         Before = before;
         Body = body;
         After = after;
         Errors = errors;
         LongestRow = longestRow;
     }
-
-    private ReadOnlySpan<char> Before { get; }
-    private List<List<string>> Body { get; }
-    private ReadOnlySpan<char> After { get; }
+    private string Latex { get; }
+    private Range Before { get; }
+    private List<List<Range>> Body { get; }
+    private Range After { get; }
     private TranslationErrors Errors { get; }
     private int LongestRow { get; }
 
-    internal static Matrix Parse(ReadOnlySpan<char> latex)
-    {
-        TranslationErrors errors = TranslationErrors.None;
 
+    internal static Matrix Parse(in string latex)
+    {
         ReadOnlySpan<char> matrixStart =
             stackalloc char[] { '\\', 'b', 'e', 'g', 'i', 'n', '{', 'm', 'a', 't', 'r', 'i', 'x', '}' };
         ReadOnlySpan<char> matrixEnd =
@@ -44,57 +41,47 @@ internal readonly ref struct Matrix
         ReadOnlySpan<char> columnSep =
             stackalloc char[] { '&' };
 
-        int startIndex = latex.IndexOf(matrixStart);
-        if (startIndex < 0)
-        {
-            return new Matrix (
-                latex, 
-                new(), 
-                ReadOnlySpan<char>.Empty, 
-                errors,
-                0);
-        }
+        RowSymbolParser parser = RowSymbolParser.Parse(
+            latex, matrixStart, matrixEnd, TranslationErrors.MissingMatrixEnd);
 
-        ReadOnlySpan<char> input = latex.GetSpanSafely((startIndex + matrixStart.Length)..);
-        int endIndex = BracketZeroMem.FindEnd(input, matrixStart, matrixEnd);
-        if (endIndex < 0)
+        if (parser.HasSymbol is false)
         {
-            endIndex = input.Length;
-            errors |= TranslationErrors.MissingMatrixEnd;
+            return new Matrix(latex, before: 0..^0,
+                body: new(), after: 0..0, parser.Errors, longestRow: 0);
         }
 
         // Parse matrix pieces
-        ReadOnlySpan<char> before = latex[..startIndex];
-        ReadOnlySpan<char> body = input[..endIndex];    // TODO: Build matrix body here
-        ReadOnlySpan<char> after = input.GetSpanSafely((endIndex + matrixEnd.Length)..);
+        var (beforeRange, bodyRange, afterRange, _, _) = parser;
+        ReadOnlySpan<char> body = latex[bodyRange];    // TODO: Build matrix body here
 
-
-        int index = 0;
         int longestRow = 0;
-        List<List<string>> matrix = new();
-        while (true)
+        List<List<Range>> matrixRanges = new();
+
+        foreach (Range rowRange in latex.AsSpan().Split(rowSep, bodyRange))
         {
-            int rowEnd = body[index..].IndexOf(rowSep) ;
-            
-
-            ReadOnlySpan<char> row = rowEnd < 0 ? 
-                body[index..] : body[index..(rowEnd + index)];
-
-            List<string> columns = ParseRow(row, columnSep);
-            matrix.Add(columns);
-            if (columns.Count > longestRow)
+            List<Range> columns = latex.AsSpan().Split(columnSep, rowRange).ToList();
+            if (longestRow < columns.Count)
             {
                 longestRow = columns.Count;
             }
-            if (rowEnd < 0)
-            {
-                break;
-            }
-
-            index += rowEnd + rowSep.Length;
+            matrixRanges.Add(columns);
         }
-        return new Matrix(before, matrix, after, errors, longestRow);
+
+        List<List<string>> matrix = new();
+        foreach (List<Range> row in matrixRanges)
+        {
+            List<string> columns = new();
+            foreach (Range column in row)
+            {
+                columns.Add(latex[column].ToString());
+            }
+            matrix.Add(columns);
+        }
+
+        return new Matrix(latex, beforeRange, matrixRanges,
+            afterRange, parser.Errors, longestRow);
     }
+
 
     /// <summary>
     /// Build all matrices in the input string.
@@ -102,56 +89,36 @@ internal readonly ref struct Matrix
     /// <param name="input"></param>
     /// <param name="errors"></param>
     /// <returns>Input string with all matrices translated.</returns>
-    internal static ReadOnlySpan<char> BuildAll(ReadOnlySpan<char> input, ref TranslationErrors errors)
+    internal static string BuildAll(string input, TranslationArgs args, ref TranslationErrors errors)
     {
         ReadOnlySpan<char> matrixStart =
             stackalloc char[] { '\\', 'b', 'e', 'g', 'i', 'n', '{', 'm', 'a', 't', 'r', 'i', 'x', '}' };
 
         while (true)
         {
-            input = Parse(input).Build();
-            if (MemoryExtensions.Contains(input, matrixStart, StringComparison.Ordinal) is false)
+            input = Parse(input).Build(args);
+            if (input.AsSpan().Contains(matrixStart, StringComparison.Ordinal) is false)
             {
                 return input;
             }
         }
     }
 
-    internal string Build()
+    internal string Build(TranslationArgs args)
     {
-        return $"{Before}{BuildMatrixBody()}{After}";
+        return $"{Latex[Before]}{BuildMatrixBody(args)}{Latex[After]}";
     }
 
-    private string BuildMatrixBody()
+    private string BuildMatrixBody(TranslationArgs args)
     {
-        // Empty matrix
-        if (Body.Count == 0)
+        if (Builders._matrixBuilders.ContainsKey(args.TargetSystem) is false)
         {
-            return string.Empty;
+            throw new NotSupportedException($"Invalid math system target {args.TargetSystem}",
+                new KeyNotFoundException(args.TargetSystem.ToString()));
         }
 
-        // Horizontal 1 row matrix
-        if (Body.Count == 1)
-        {
-            return $"[{string.Join(',', Body[0])}]";
-        }
-
-        // Vertical 1 col matrix
-        if (Body.All(x => x.Count == 1))
-        {
-            return $"[{string.Join(',', Body.Select(x => x.First()))}]";
-        }
-
-        int longestRow = LongestRow;
-        IEnumerable<string> rows = Body.Select(x => 
-        {
-            if (x.Count < longestRow)
-            {
-                x.AddRange(Enumerable.Repeat("", longestRow - x.Count));
-            }
-            return $"[{string.Join(',', x)}]";
-        });
-        return $"[{string.Join("", rows)}]";
+        var builder = Builders._matrixBuilders[args.TargetSystem];
+        return builder(Latex.ToString(), Body, LongestRow).ToString();
     }
 
     private static List<string> ParseRow(ReadOnlySpan<char> row, ReadOnlySpan<char> separator)

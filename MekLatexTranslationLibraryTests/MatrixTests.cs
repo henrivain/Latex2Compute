@@ -31,7 +31,7 @@ public class MatrixTests
     
     [Theory]
     [InlineData(@"\begin{matrix}1\\2\\3\end{matrix}", "[1,2,3]")]
-    public void ParseBuild_ShouldFlip_OneColMatrix(string input, string expected)
+    public void ParseBuild_ShouldTranspose_VerticalVector(string input, string expected)
     {
         // Arrange & Act
         string matrix = Matrix.Parse(input).Build();

@@ -7,6 +7,7 @@ class Testing
         return new TranslationArgs
         {
             UnitTranslationMode = UnitTranslationMode.None,
+            TargetSystem = TargetSystem.Ti,
             EndChanges = EndChanges.All,
             Params =
               Params.RemoveCurlyBracket |
@@ -20,6 +21,7 @@ class Testing
         return new TranslationArgs
         {
             UnitTranslationMode = UnitTranslationMode.Remove,
+            TargetSystem = TargetSystem.Ti,
             EndChanges = EndChanges.All,
             Params =
                Params.RemoveCurlyBracket |

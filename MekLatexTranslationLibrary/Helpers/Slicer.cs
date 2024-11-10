@@ -50,4 +50,31 @@ internal static class Slicer
     {
         return input.IsEmpty ? null : input[^1];
     }
+
+    internal static List<Range> Split(
+        this ReadOnlySpan<char> latex,
+        ReadOnlySpan<char> separator,
+        Range? splittableSpan = null)
+    {
+        // If no range is given, start from the beginning and search entire span.
+        int last = splittableSpan?.Start.Value ?? 0;
+        int endIndex = splittableSpan?.End.Value ?? latex.Length;
+
+        List<Range> result = new();
+        while (true)
+        {
+
+            int find = latex[last..].IndexOf(separator);
+            int current = find + last;
+            // Find is -1 if not found, current is the real index.
+            if (find < 0 || endIndex < current)
+            {
+                result.Add(last..endIndex);
+                return result;
+            }
+
+            result.Add(last..current);
+            last = current + separator.Length;
+        }
+    }
 }

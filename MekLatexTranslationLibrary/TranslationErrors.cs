@@ -22,6 +22,7 @@ public enum TranslationErrors
     Binom_NoFirstStart =                        1 << 15,
     BinomNoSecondStart =                        1 << 16,
     MissingMatrixEnd =                          1 << 17,
+    MatrixInvalidTarget = 1 << 18,
 }
 
 

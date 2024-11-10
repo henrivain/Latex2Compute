@@ -1,31 +1,39 @@
 ﻿using MekLatexTranslationLibrary;
 using System.Net.WebSockets;
 
-bool canContinue = true;
 
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 Console.WriteLine("Translation Lib version: " + 
     typeof(TranslationItem).Assembly.GetName().Version?.ToString() ?? "NULL");
-while (canContinue)
+
+while (true)
 {
-    canContinue = RunTranslationProcess();
+    if (RunTranslationProcess() is false)
+    {
+        break;
+    }
 }
+
 Console.WriteLine("exit");
 Console.ReadKey();
 
 
+
+
+
 static bool RunTranslationProcess()
 {
-    Console.Write("leave empty to exit or give input: ");
-    var input = Console.ReadLine();
-    if (string.IsNullOrWhiteSpace(input)) return false;
-   
-
-
-    TranslationItem item = new(input, new()
+    Console.Write("Give input. Leave empty to translate or type exit to quit >\n");
+    var input = ReadInput();
+    if (input is null)
     {
-        UnitTranslationMode = UnitTranslationMode.Translate,
-    });
+        return false;
+    }
+
+    TranslationArgs args = TranslationArgs.GetDefault();
+    args.TargetSystem = TargetSystem.Matlab;
+
+    TranslationItem item = new(input, args);
 
     TranslationResult result = LatexTranslation.Translate(item);
     Console.WriteLine();
@@ -34,4 +42,22 @@ static bool RunTranslationProcess()
     Console.WriteLine($"Error codes: {result.ErrorFlags.ToErrorString()}");
     Console.WriteLine();
     return true;
+}
+
+static string? ReadInput()
+{
+    List<string> lines = new();
+    while (true)
+    {
+        string? line = Console.ReadLine();
+        if (line is "quit")
+        {
+            return null;
+        }
+        if (string.IsNullOrEmpty(line))
+        {
+            return string.Join("", lines);
+        }
+        lines.Add(line);
+    }
 }

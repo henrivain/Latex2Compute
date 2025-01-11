@@ -1,22 +1,37 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Version>3.2.1</Version>
 		<TargetFramework>net9.0</TargetFramework>
-		<TargetFrameworks>net9.0;net6.0</TargetFrameworks>
+		<TargetFrameworks>net9.0;net7.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Title>MekTranslationLatexLibrary</Title>
-		<Authors>Henri Vainio</Authors>
+		<PackageIcon>logo v2.1 128x128.png</PackageIcon>
+		<NoWarn>CS1591;CS1573;CS1572;CS1570;CS1587</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<Version>3.2.1</Version>
+		<Title>Latex2Compute</Title>
+		<PackageId>Latex2Compute</PackageId>
+		<Authors>henrivain</Authors>
 		<Description>Translate LaTeX into calculator form</Description>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageProjectUrl>https://github.com/henrivain/Latex2Compute</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/henrivain/Latex2Compute</RepositoryUrl>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageIcon>logo v2.1 128x128.png</PackageIcon>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>latex;ti-nspire;matlab;translate</PackageTags>
+		<PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<Copyright>Copyright 2025 Henri Vainio</Copyright>
+		<!-- Output will be found inside this folder locally -->
 		<PackageOutputPath>C:\Nugets</PackageOutputPath>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<NoWarn>CS1591;CS1573;CS1572;CS1570;CS1587</NoWarn>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Release' ">
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	</PropertyGroup>
 
 	<ItemGroup>

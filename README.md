@@ -29,7 +29,7 @@ Code is written in C#. At the beginning this project was written in .NET framewo
 The project is based on latex used by Finnish Matriculation Exam board [Abitti Latex -editor](https://math-demo.abitti.fi/). Targetted calculator syntax is Texas Instruments TI-Nspire CX CAS. Currently TI-Nspire is the only main target platform, but in the future I might add support for Matlab.
 
 ### Nuget package
-
+This package can be found with same name from [Nuget package manager](https://www.nuget.org/packages/Latex2Compute/)
 
 ## Getting started
 

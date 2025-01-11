@@ -1,20 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Version>3.1.10</Version>
-		<TargetFramework>net6.0</TargetFramework>
+		<Version>3.2.0</Version>
+		<TargetFramework>net9.0</TargetFramework>
+		<TargetFrameworks>net9.0;net7.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>MekTranslationLatexLibrary</Title>
 		<Authors>Henri Vainio</Authors>
-		<Company>Matikkaeditorinkääntäjä</Company>
 		<Description>Translate LaTeX into calculator form</Description>
-		<PackageProjectUrl>https://github.com/matikkaeditorinkaantaja/MekLatexTranslationLibrary</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/matikkaeditorinkaantaja/MekTranslationLibraryProject</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/henrivain/MekLatexTranslationLibrary</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/henrivain/MekTranslationLibraryProject</RepositoryUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageIcon>logo v2.1 128x128.png</PackageIcon>
 		<PackageOutputPath>C:\Nugets</PackageOutputPath>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>CS1591;CS1573;CS1572;CS1570;CS1587</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>

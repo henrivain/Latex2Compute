@@ -1,4 +1,4 @@
-﻿/// Copyright 2024 Henri Vainio 
+﻿// Copyright 2024 Henri Vainio 
 
 namespace MekLatexTranslationLibrary;
 

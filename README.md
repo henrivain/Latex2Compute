@@ -14,7 +14,7 @@ Actually, you don't have to do that anymore! Latex2Compute takes LaTex code as i
 
 In finnish upper secondary schools a lot of studying happens electronically. Even though some like to do their maths by hand, I liked to write the answers as you would write in Matriculation exams, electronically. I got somewhat annoyed after needing to write both latex and calculator input in every time, even though the differences weren't very big. 
 
-[Matikkaeditorinkaantaja](https://github.com/henrivain/Matikkaeditorinkaantaja) is the product created by that annoyance. Just translate the latex into correct form by a press of a button. 
+[Matikkaeditorinkaantaja](https://github.com/henrivain/Matikkaeditorinkaantaja) is the product created by that annoyance. Just translate the latex into correct form by a press of a button. How simple is that?
 
 Creating this project has been a very interesting for me. I actually had zero experience in coding when I firstly started to explore this problem with python back in 2021. After some time I fell in love with programming and problem solving. Currently in 2025 I am studying computer science in Tampere University so this problem literally changed my life. Some of the code is farely old, so when you look at it just remember back then I was a noob.  :)
 

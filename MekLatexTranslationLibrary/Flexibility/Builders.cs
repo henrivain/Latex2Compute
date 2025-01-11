@@ -66,6 +66,10 @@ internal static class Builders
         [TargetSystem.Matlab] = static (latex, matrix, longestRow) =>
         {
             StringBuilder b = new();
+            if (matrix.Count is 0)
+            {
+                return b;
+            }
 
             b.Append('[');
             for (int i = 0; i < matrix.Count; i++)

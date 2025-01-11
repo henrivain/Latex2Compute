@@ -80,4 +80,19 @@ public class MatrixTests
         // Assert
         Assert.Equal(expected, matrix);
     }
+
+    [Theory]
+    [InlineData(@"")]
+    [InlineData(@"3\cdot3")]
+    public void ParseBuild_ShouldDoNothing_IfNoMatrix(string input)
+    {
+        // Arrange
+        TranslationArgs args = new() { TargetSystem = TargetSystem.Matlab };
+
+        // Act
+        string matrix = Matrix.Parse(input).Build(args);
+
+        // Assert
+        Assert.Equal(input, matrix);
+    }
 }

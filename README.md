@@ -32,7 +32,24 @@ The project is based on latex used by Finnish Matriculation Exam board [Abitti L
 
 
 ## Getting started
-1) Clone the repository
-2) Open Latex2ComputeProject.sln in Visual Studio 2022 (or use Dotnet cli)
-3) Open the class library project file `Latex2Compute/Latex2Compute.csproj`
-4) 
+
+### Using the library 
+1) Open your own C# project
+2) Add line below inside a <ItemGroup> in your .csproj file
+``` xml
+<PackageReference Include="Latex2Compute" Version="3.2.1" />
+```
+or use dotnet cli
+```ps
+dotnet add package Latex2Compute
+```
+
+## Licence
+This repository is licenced under GNU General Public License v3.0. See LICENCE -file.
+
+## Support
+
+If you have any questions about anything related to this project, open a issue on Github or send me an email.
+
+Henri Vainio
+matikkaeditorinkaantaja(at)gmail.com

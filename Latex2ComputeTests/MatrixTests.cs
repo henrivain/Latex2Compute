@@ -1,6 +1,6 @@
-﻿using MekLatexTranslationLibrary.Parsers;
+﻿using Latex2Compute.Parsers;
 
-namespace MekLatexTranslationLibraryTests;
+namespace Latex2ComputeTests;
 public class MatrixTests
 {
 

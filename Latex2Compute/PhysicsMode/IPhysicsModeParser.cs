@@ -1,4 +1,4 @@
-﻿namespace MekLatexTranslationLibrary.PhysicsMode;
+﻿namespace Latex2Compute.PhysicsMode;
 
 internal interface IPhysicsModeParser
 {

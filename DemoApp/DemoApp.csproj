@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MekLatexTranslationLibrary\Latex2Compute.csproj" />
+    <ProjectReference Include="..\Latex2Compute\Latex2Compute.csproj" />
   </ItemGroup>
 
 

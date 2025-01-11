@@ -1,2 +1,2 @@
 global using Xunit;
-global using MekLatexTranslationLibrary;
+global using Latex2Compute;

@@ -1,4 +1,6 @@
-﻿namespace MekLatexTranslationLibrary.Parsers;
+﻿using Latex2Compute.Helpers;
+
+namespace Latex2Compute.Parsers;
 
 internal static partial class CasesParser
 {

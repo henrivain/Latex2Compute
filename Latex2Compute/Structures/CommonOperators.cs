@@ -1,6 +1,6 @@
 ﻿/// Copyright 2021 Henri Vainio 
 
-namespace MekLatexTranslationLibrary.Structures;
+namespace Latex2Compute.Structures;
 
 /// <summary>
 /// GetBottom char array of some type of basic math operator

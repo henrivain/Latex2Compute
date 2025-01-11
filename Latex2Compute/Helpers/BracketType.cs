@@ -1,6 +1,6 @@
 ﻿/// Copyright 2021 Henri Vainio 
 
-namespace MekLatexTranslationLibrary.Helpers;
+namespace Latex2Compute.Helpers;
 
 public enum BracketType
 {

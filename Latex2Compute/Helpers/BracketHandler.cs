@@ -1,10 +1,9 @@
 ﻿/// Copyright 2021 Henri Vainio 
-using MekLatexTranslationLibrary.Structures;
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("MekLatexTranslationLibraryTests")]
+[assembly: InternalsVisibleTo("Latex2ComputeTests")]
 
-namespace MekLatexTranslationLibrary.Helpers;
+namespace Latex2Compute.Helpers;
 
 internal static class BracketHandler
 {
@@ -24,7 +23,7 @@ internal static class BracketHandler
         [BracketType.IntegralBody_D] = ("\\int", "d"),
         [BracketType.RoundLong_RoundLongUnderScore] = (LeftBracket, $"{RightBracket}_")
     };
-    
+
     /// <summary>
     /// Add new string representation for brackettype, if it doesn't already exist
     /// </summary>
@@ -58,7 +57,7 @@ internal static class BracketHandler
         var (opening, closing) = BracketAsString[type];
 
         // use this validation method if no other is given
-        matchValidatorFunc ??= (string input, string reference, int index) =>
+        matchValidatorFunc ??= (input, reference, index) =>
         {
             return Slicer.GetSpanSafely(input, index, reference.Length) == reference;
         };
@@ -85,7 +84,7 @@ internal static class BracketHandler
     }
 
 
-    public static int FindBrackets(ReadOnlySpan<char> input, Brackets brackets, int startIndex = 0) 
+    public static int FindBrackets(ReadOnlySpan<char> input, Brackets brackets, int startIndex = 0)
         => FindBrackets(input, brackets.Opening, brackets.Closing, startIndex);
 
     /// <summary>
@@ -102,7 +101,7 @@ internal static class BracketHandler
         // (bracket type doesn't have to be brackets, can also be "¤&")
         // if None => -1
         // Example: 236{7}33}33 => 8
-        
+
         int bracketDepth = 1;
         for (int i = startPoint; i < input.Length; i++)
         {

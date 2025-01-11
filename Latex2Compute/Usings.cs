@@ -1,2 +1,2 @@
-﻿global using MekLatexTranslationLibrary.Helpers;
-global using MekLatexTranslationLibrary.Structures;
+﻿global using Latex2Compute.Helpers;
+global using Latex2Compute.Structures;

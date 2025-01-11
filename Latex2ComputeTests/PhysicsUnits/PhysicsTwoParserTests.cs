@@ -1,6 +1,6 @@
-﻿using MekLatexTranslationLibrary.PhysicsMode;
+﻿using Latex2Compute.PhysicsMode;
 
-namespace MekLatexTranslationLibraryTests.PhysicsUnits;
+namespace Latex2ComputeTests.PhysicsUnits;
 public class PhysicsTwoParserTests
 {
     [Fact]

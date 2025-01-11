@@ -1,8 +1,9 @@
 ﻿
-using MekLatexTranslationLibrary.Helpers;
-using MekLatexTranslationLibrary.Structures;
+using Latex2Compute.Helpers;
+using Latex2Compute.Helpers;
+using Latex2Compute.Structures;
 
-namespace MekLatexTranslationLibraryTests;
+namespace Latex2ComputeTests;
 public class BracketAlgorithmTests
 {
     [Theory]

@@ -1,13 +1,14 @@
 ﻿/// Copyright 2021 Henri Vainio 
-using MekLatexTranslationLibrary.Structures;
-using MekLatexTranslationLibrary;
+using Latex2Compute.Structures;
+using Latex2Compute;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Latex2Compute.Helpers;
 
-namespace MekLatexTranslationLibrary.Helpers
+namespace Latex2Compute.Helpers
 {
     /// <summary>
     /// Algoritms to get string or char indexes from string

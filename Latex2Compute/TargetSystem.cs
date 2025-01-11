@@ -1,4 +1,4 @@
-﻿namespace MekLatexTranslationLibrary;
+﻿namespace Latex2Compute;
 
 /// <summary>
 /// Target math application system translation targets.

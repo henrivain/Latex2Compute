@@ -1,4 +1,6 @@
-﻿namespace MekLatexTranslationLibrary.Parsers;
+﻿using Latex2Compute.Helpers;
+
+namespace Latex2Compute.Parsers;
 internal class ExponentParser
 {
     public static string BuildAll(string input, ref TranslationErrors errors)

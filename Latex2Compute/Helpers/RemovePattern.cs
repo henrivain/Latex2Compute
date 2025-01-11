@@ -1,8 +1,9 @@
 ﻿
-using MekLatexTranslationLibrary.Structures;
+using Latex2Compute.Helpers;
+using Latex2Compute.Structures;
 using System.Text.RegularExpressions;
 /// Copyright 2021 Henri Vainio 
-namespace MekLatexTranslationLibrary.Helpers;
+namespace Latex2Compute.Helpers;
 
 internal class RemovePattern
 {

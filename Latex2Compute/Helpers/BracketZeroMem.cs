@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MekLatexTranslationLibrary.Helpers;
+namespace Latex2Compute.Helpers;
 
 internal static class BracketZeroMem
 {

@@ -1,4 +1,4 @@
-﻿namespace MekLatexTranslationLibraryTests;
+﻿namespace Latex2ComputeTests;
 public class CasesTests
 {
 

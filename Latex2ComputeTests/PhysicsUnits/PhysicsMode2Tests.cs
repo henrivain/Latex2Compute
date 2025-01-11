@@ -1,4 +1,4 @@
-﻿namespace MekLatexTranslationLibraryTests.PhysicsUnits;
+﻿namespace Latex2ComputeTests.PhysicsUnits;
 public class PhysicsMode2Tests
 {
     public PhysicsMode2Tests()

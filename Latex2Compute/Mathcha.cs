@@ -1,6 +1,7 @@
 ﻿/// Copyright 2021 Henri Vainio 
-using MekLatexTranslationLibrary.Helpers;
-namespace MekLatexTranslationLibrary;
+using Latex2Compute.Helpers;
+
+namespace Latex2Compute;
 
 /// <summary>
 /// Translation algorithms for Matcha io symbols and constructors

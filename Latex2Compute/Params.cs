@@ -1,5 +1,5 @@
 ﻿/// Copyright 2021 Henri Vainio 
-namespace MekLatexTranslationLibrary;
+namespace Latex2Compute;
 
 [Flags]
 public enum Params

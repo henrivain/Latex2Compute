@@ -2,7 +2,7 @@
 
 using System.Security;
 
-namespace MekLatexTranslationLibrary.Helpers;
+namespace Latex2Compute.Helpers;
 internal readonly struct RowSymbolParser
 {
     private RowSymbolParser(

@@ -1,5 +1,4 @@
-﻿using MekLatexTranslationLibrary;
-using System.Net.WebSockets;
+﻿using Latex2Compute;
 
 
 Console.OutputEncoding = System.Text.Encoding.UTF8;

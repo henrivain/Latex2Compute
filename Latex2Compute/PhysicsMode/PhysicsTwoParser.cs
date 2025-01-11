@@ -1,8 +1,8 @@
-﻿using MekLatexTranslationLibrary.Helpers;
+﻿using Latex2Compute.Helpers;
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 
-namespace MekLatexTranslationLibrary.PhysicsMode;
+namespace Latex2Compute.PhysicsMode;
 internal sealed class PhysicsTwoParser : IPhysicsModeParser
 {
     public PhysicsTwoParser(string latex)

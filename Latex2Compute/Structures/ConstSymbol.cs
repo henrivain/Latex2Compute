@@ -1,4 +1,4 @@
-﻿namespace MekLatexTranslationLibrary.Structures;
+﻿namespace Latex2Compute.Structures;
 
 class ConstSymbol
 {

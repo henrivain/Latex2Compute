@@ -1,5 +1,5 @@
 ﻿/// Copyright 2021 Henri Vainio 
-namespace MekLatexTranslationLibrary.Parsers;
+namespace Latex2Compute.Parsers;
 
 internal static class SumParser
 {

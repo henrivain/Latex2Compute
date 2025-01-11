@@ -1,4 +1,4 @@
-﻿namespace MekLatexTranslationLibrary.OtherBuilders;
+﻿namespace Latex2Compute.OtherBuilders;
 
 static internal class StartEdit
 {

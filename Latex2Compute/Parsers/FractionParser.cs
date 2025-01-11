@@ -1,5 +1,7 @@
-﻿/// Copyright 2021 Henri Vainio 
-namespace MekLatexTranslationLibrary.Parsers;
+﻿using Latex2Compute.Helpers;
+
+/// Copyright 2021 Henri Vainio 
+namespace Latex2Compute.Parsers;
 
 internal class FractionParser
 {

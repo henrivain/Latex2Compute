@@ -1,6 +1,6 @@
-﻿using MekLatexTranslationLibrary.Helpers;
+﻿using Latex2Compute.Helpers;
 
-namespace MekLatexTranslationLibraryTests;
+namespace Latex2ComputeTests;
 
 public class BracketZeroMemTests
 {

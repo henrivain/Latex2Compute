@@ -1,6 +1,6 @@
 ﻿/// Copyright 2024 Henri Vainio 
 
-namespace MekLatexTranslationLibrary;
+namespace Latex2Compute;
 
 public static class TranslationItemExtensions
 {

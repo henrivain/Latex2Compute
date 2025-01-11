@@ -1,8 +1,8 @@
 ﻿/// Copyright 2021 Henri Vainio 
-using MekLatexTranslationLibrary.Parsers;
-using MekLatexTranslationLibrary.OtherBuilders;
+using Latex2Compute.Parsers;
+using Latex2Compute.OtherBuilders;
 
-namespace MekLatexTranslationLibrary;
+namespace Latex2Compute;
 
 /// <summary>
 /// Result type for translation 

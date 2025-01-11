@@ -1,7 +1,7 @@
 ﻿/// Copyright 2021 Henri Vainio 
 using System.Text.RegularExpressions;
 
-namespace MekLatexTranslationLibrary.OtherBuilders;
+namespace Latex2Compute.OtherBuilders;
 
 static internal class EndEdit
 {

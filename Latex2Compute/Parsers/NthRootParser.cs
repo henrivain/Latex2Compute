@@ -1,6 +1,8 @@
-﻿/// Copyright 2022 Henri Vainio 
+﻿
+using Latex2Compute.Helpers;
 
-namespace MekLatexTranslationLibrary.Parsers;
+/// Copyright 2022 Henri Vainio 
+namespace Latex2Compute.Parsers;
 
 internal static class NthRootParser
 

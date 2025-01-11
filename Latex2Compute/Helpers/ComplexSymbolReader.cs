@@ -1,7 +1,7 @@
 ﻿/// Copyright 2021 Henri Vainio 
-using MekLatexTranslationLibrary.Structures;
+using Latex2Compute.Structures;
 
-namespace MekLatexTranslationLibrary.Helpers;
+namespace Latex2Compute.Helpers;
 
 /// <summary>
 /// Read complex Latex structure and return contents and end index ( compile structure "_{}^{}" ) 

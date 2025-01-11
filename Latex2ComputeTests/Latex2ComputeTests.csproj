@@ -21,7 +21,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\MekLatexTranslationLibrary\MekLatexTranslationLibrary.csproj" />
+		<ProjectReference Include="..\Latex2Compute\Latex2Compute.csproj" />
 	</ItemGroup>
 
 </Project>

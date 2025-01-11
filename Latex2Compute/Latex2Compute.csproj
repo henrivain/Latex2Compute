@@ -10,8 +10,8 @@
 		<Title>MekTranslationLatexLibrary</Title>
 		<Authors>Henri Vainio</Authors>
 		<Description>Translate LaTeX into calculator form</Description>
-		<PackageProjectUrl>https://github.com/henrivain/MekLatexTranslationLibrary</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/henrivain/MekTranslationLibraryProject</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/henrivain/Latex2Compute</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/henrivain/Latex2Compute</RepositoryUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageIcon>logo v2.1 128x128.png</PackageIcon>
 		<PackageOutputPath>C:\Nugets</PackageOutputPath>

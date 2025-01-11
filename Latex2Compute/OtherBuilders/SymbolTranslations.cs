@@ -1,7 +1,8 @@
 ﻿// Copyright 2021 Henri Vainio 
-using MekLatexTranslationLibrary.PhysicsMode;
+using Latex2Compute.Helpers;
+using Latex2Compute.PhysicsMode;
 
-namespace MekLatexTranslationLibrary.OtherBuilders;
+namespace Latex2Compute.OtherBuilders;
 
 /// <summary>
 /// Change or remove LaTeX symbols in LaTeX to acsii translation

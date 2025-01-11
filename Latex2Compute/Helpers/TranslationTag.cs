@@ -1,7 +1,7 @@
 ﻿/// Copyright 2021 Henri Vainio 
 using System.Text.RegularExpressions;
 
-namespace MekLatexTranslationLibrary.Helpers;
+namespace Latex2Compute.Helpers;
 
 internal static class TranslationTag
 {

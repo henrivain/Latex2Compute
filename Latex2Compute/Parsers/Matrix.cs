@@ -1,6 +1,6 @@
-﻿using MekLatexTranslationLibrary.Flexibility;
+﻿using Latex2Compute.Flexibility;
 
-namespace MekLatexTranslationLibrary.Parsers;
+namespace Latex2Compute.Parsers;
 
 
 

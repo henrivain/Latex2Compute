@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace MekLatexTranslationLibrary.Flexibility;
+namespace Latex2Compute.Flexibility;
 
 internal static class Builders
 {

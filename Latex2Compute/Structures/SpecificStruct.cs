@@ -1,7 +1,7 @@
 ﻿/// Copyright 2021 Henri Vainio 
-using MekLatexTranslationLibrary.Helpers;
+using Latex2Compute.Helpers;
 
-namespace MekLatexTranslationLibrary.Structures;
+namespace Latex2Compute.Structures;
 
 /// <summary>
 /// Store values to during the logarithm translation

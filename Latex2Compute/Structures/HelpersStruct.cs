@@ -1,12 +1,12 @@
 ﻿/// Copyright 2021 Henri Vainio 
-using MekLatexTranslationLibrary.Helpers;
+using Latex2Compute.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MekLatexTranslationLibrary.Structures;
+namespace Latex2Compute.Structures;
 
 /// <summary>
 /// Defines different bracket types

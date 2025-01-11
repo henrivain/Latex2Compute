@@ -1,5 +1,5 @@
 ﻿
-namespace MekLatexTranslationLibrary;
+namespace Latex2Compute;
 
 [Flags]
 public enum TranslationErrors

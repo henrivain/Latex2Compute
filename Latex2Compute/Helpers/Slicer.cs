@@ -1,4 +1,4 @@
-﻿namespace MekLatexTranslationLibrary.Helpers;
+﻿namespace Latex2Compute.Helpers;
 internal static class Slicer
 {
     /// <returns>substring of input, if fails returns string.Empty</returns>

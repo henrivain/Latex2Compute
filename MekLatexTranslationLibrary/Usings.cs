@@ -1,2 +1,0 @@
-﻿global using MekLatexTranslationLibrary.Helpers;
-global using MekLatexTranslationLibrary.Structures;

@@ -118,7 +118,7 @@ internal readonly struct Matrix
         }
 
         var builder = Builders._matrixBuilders[args.TargetSystem];
-        return builder(Latex.ToString(), Body, LongestRow).ToString();
+        return builder(Latex, Body, LongestRow).ToString();
     }
 
     private static List<string> ParseRow(ReadOnlySpan<char> row, ReadOnlySpan<char> separator)

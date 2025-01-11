@@ -89,9 +89,7 @@ internal static class Builders
                 {
                     b.Append(',', requiredLen - columns.Count);
                 }
-
             }
-            
         }
     };
 

@@ -13,44 +13,14 @@ internal static class TranslationTag
     /// </summary>
     /// <param name="inp"></param>
     /// <returns>inp with tags translated into nspire form</returns>
-    internal static string ToNspireOperator(string inp)
+    internal static string TranslateOperators(string inp, TargetSystem system)
     {
-        return inp
-            //log
-            .Replace(ConstSymbol.Log, "log")
-            .Replace(ConstSymbol.NaturalLog, "ln")
-            //system
-            .Replace(ConstSymbol.System, "system")
-            .Replace(ConstSymbol.SystemRowChange, ",")
-            .Replace(ConstSymbol.Piecewise, "piecewise")
-            .Replace(ConstSymbol.Or, " or ")   // include spaces!
-            //trigonometry
-            .Replace(ConstSymbol.Arcsin, "arcsin")
-            .Replace(ConstSymbol.Sin, "sin")
-            .Replace(ConstSymbol.Arccos, "arccos")
-            .Replace(ConstSymbol.Cos, "cos")
-            .Replace(ConstSymbol.Arctan, "arctan")
-            .Replace(ConstSymbol.Tan, "tan")
-            //sqrt 
-            .Replace(ConstSymbol.Sqrt, "sqrt")
-            .Replace(ConstSymbol.Root, "root")
-            //lim
-            .Replace(ConstSymbol.Limit, "lim")
-            // pi
-            .Replace(ConstSymbol.Pi, "pi")
-            // abs
-            .Replace(ConstSymbol.Abs, "abs")
-            // integral
-            .Replace(ConstSymbol.Integral, "∫")
-
-            // auto solve and derivative
-            .Replace(ConstSymbol.Derivative, "derivative")
-            .Replace(ConstSymbol.Solve, "solve")
-            
-            // propability operators
-            .Replace(ConstSymbol.Npr, "nPr")
-            .Replace(ConstSymbol.Binom, "nCr")
-            ;
+        foreach (string key in OperatorMap.GetAllOperatorKeys())
+        {
+            string replacement = OperatorMap.GetOperator(key, system);
+            inp = inp.Replace(key, replacement);
+        }
+        return inp;
     }
 
     /// <summary>

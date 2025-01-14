@@ -1,4 +1,5 @@
 ﻿/// Copyright 2021 Henri Vainio 
+using System;
 using System.Text.RegularExpressions;
 
 namespace Latex2Compute.OtherBuilders;
@@ -23,7 +24,7 @@ static internal class EndEdit
         // change special
         if (args.IsSet(Params.SpecialSymbolTranslation))
         {
-            input = SpecialSymbols(input);
+            input = SpecialSymbols(input, args.TargetSystem);
         }
 
         // remove unused curly brackets
@@ -51,16 +52,16 @@ static internal class EndEdit
         // auto derivative
         if (args.IsSet(Params.AutoDerivative))
         {
-            input = RunAutoDerivative(input);
+            input = RunAutoDerivative(input, args.TargetSystem);
         }
         if (input.StartsWith('D'))
         {
             // Skip first character
-            input = RunAutoDerivative(input.AsSpan(1));
+            input = RunAutoDerivative(input.AsSpan(1), args.TargetSystem);
         }
 
 
-        input = TranslationTag.ToNspireOperator(input);
+        input = TranslationTag.TranslateOperators(input, args.TargetSystem);
 
         switch (args.EndChanges)
         {
@@ -187,14 +188,21 @@ static internal class EndEdit
     /// </summary>
     /// <param name="inp"></param>
     /// <returns></returns>
-    private static string RunAutoDerivative(ReadOnlySpan<char> inp)
+    private static string RunAutoDerivative(ReadOnlySpan<char> inp, TargetSystem target)
     {
         char? variable = GetFirstVariableCharInInput(inp);
         if (variable is null)
         {
             return $"{ConstSymbol.Derivative}({inp},)";
         }
-        return $"{ConstSymbol.Derivative}({inp},{variable})";
+        return target switch
+        {
+            TargetSystem.Matlab
+                => $"syms {variable}\n{ConstSymbol.Derivative}({inp},{variable})",
+            
+            TargetSystem.Ti or TargetSystem.Default or _
+                => $"{ConstSymbol.Derivative}({inp},{variable})",
+        };
     }
 
 
@@ -242,48 +250,45 @@ static internal class EndEdit
     /// </summary>
     /// <param name="inp"></param>
     /// <returns>input with translated i and e</returns>
-    private static string SpecialSymbols(string inp)
+    private static string SpecialSymbols(string inp, TargetSystem system)
     {
         // change special symbols
         inp = inp.Replace("e", "@e");
 
-        if (inp.Contains('i') is false) return inp;
+        var replacement = OperatorMap.GetSymbol(OperatorMap.Symbol.ImaginaryUnit, system);
 
-        for (int i = 0; i < inp.Length; i++)
+        bool isSame = replacement.Length is 1 && replacement[0] == 'i';
+        if (isSame || inp.Contains('i') is false)
         {
-            inp = TranslateImaginaryUnit(inp, ref i);
-        }
-
-        return inp;
-    }
-
-    /// <summary>
-    /// if input[index] is 'i', make checks and add @ if needed
-    /// </summary>
-    /// <param name="inp"></param>
-    /// <param name="index"></param>
-    /// <returns>input with one more @i translated</returns>
-    private static string TranslateImaginaryUnit(string inp, ref int index)
-    {
-        if (inp[index] is not 'i') return inp;
-
-        if (index == 0)
-        {
-            index++;
-            return $"@{inp}";       // add @-symbol in front of input
-        }
-
-        char charBeforeIndex = inp[index - 1];
-
-        if (charBeforeIndex is not 'p')
-        {
-            inp = $"{inp[..index]}@{inp[index..]}";     // add @-symbol before index
-            index++;
             return inp;
         }
-        return inp;
-    }
 
+        int cursor = 0;
+        while (true)
+        {
+            cursor = inp.IndexOf('i', cursor);
+            if (cursor < 0)
+            {
+                return inp;
+            }
+
+            if (cursor is 0)
+            {
+                inp = inp.Insert(0, "@");
+                cursor++;
+                continue;
+            }
+            if (Slicer.GetCharSafely(inp, cursor - 1) is 'p')
+            {
+                // Skip if pi
+                cursor++;
+                continue;
+            }
+            
+            inp = $"{inp[..cursor]}@{inp[cursor..]}";     // add @-symbol before index
+            cursor++;
+        }
+    }
 
 
     static char[] WeightedVariableLetters { get; } = new char[] { 'x', 'y', 'z' }.Concat(GetLowerCaseChars()).ToArray();

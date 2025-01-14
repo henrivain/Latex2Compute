@@ -2,7 +2,7 @@
 
 internal static class LogarithmParser
 {
-    public static string BuildAll(string input, ref TranslationErrors errors)
+    public static string BuildAll(string input, ref Errors errors)
     {
         LogStartInfo lsi;
         while (true)
@@ -18,7 +18,7 @@ internal static class LogarithmParser
         }
     }
 
-    internal static string Build(string input, LogStartInfo lsi, ref TranslationErrors errors)
+    internal static string Build(string input, LogStartInfo lsi, ref Errors errors)
     {
         if (lsi.StartType == "\\ln")
         {
@@ -61,7 +61,7 @@ internal static class LogarithmParser
     /// <param name="lsi"></param>
     /// <param name="item"></param>
     /// <returns>(Content, EndIndex)</returns>
-    private static ContentAndEnd GetBase(string inp, LogStartInfo lsi, ref TranslationErrors errors)
+    private static ContentAndEnd GetBase(string inp, LogStartInfo lsi, ref Errors errors)
     {
         // gets logarithm base from input string
         if (lsi.HasBase is false)
@@ -71,7 +71,7 @@ internal static class LogarithmParser
         }
         return new(lsi.Index, lsi.Base);
     }
-    private static ContentAndEnd ValidateBase(ContentAndEnd temp, LogStartInfo lsi, ref TranslationErrors errors)
+    private static ContentAndEnd ValidateBase(ContentAndEnd temp, LogStartInfo lsi, ref Errors errors)
     {
         // validates or edits base if needed
         if (temp.EndIndex != -1)
@@ -80,8 +80,8 @@ internal static class LogarithmParser
             return new ContentAndEnd(temp.EndIndex + 1, temp.Content);
         }
 
-        errors |= TranslationErrors.Log_BasisNotFound;
-        Helper.PrintError(TranslationErrors.Log_BasisNotFound);
+        errors |= Errors.Log_BasisNotFound;
+        Helper.PrintError(Errors.Log_BasisNotFound);
 
         return new(lsi.Index + 1, "10");    // set base to 10
 

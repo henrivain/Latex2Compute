@@ -12,7 +12,7 @@ static internal class EndEdit
     /// </summary>
     /// <param name="input"></param>
     /// <returns>input with made end change</returns>
-    internal static string Run(string input, TranslationArgs args, ref TranslationErrors errors)
+    internal static string Run(string input, TranslationArgs args, ref Errors errors)
     {
         // remove matcha document constructors (do before curly bracket removal)
         if (args.IsSet(Params.MathchaEnabled))

@@ -9,7 +9,7 @@ internal readonly struct RowSymbolParser
         Range before,
         Range body,
         Range after,
-        TranslationErrors errors)
+        Errors errors)
     {
         // If symbol exists in input
         Before = before;
@@ -19,7 +19,7 @@ internal readonly struct RowSymbolParser
         HasSymbol = true;
     }
 
-    private RowSymbolParser(TranslationErrors errors)
+    private RowSymbolParser(Errors errors)
     {
         // If symbol does not exist in input
         Before = 0..^0;
@@ -32,16 +32,16 @@ internal readonly struct RowSymbolParser
     internal Range Before { get; }
     internal Range Body { get; }
     internal Range After { get; }
-    internal TranslationErrors Errors { get; }
+    internal Errors Errors { get; }
     public bool HasSymbol { get; }
 
     internal static RowSymbolParser Parse(
         ReadOnlySpan<char> latex,
         ReadOnlySpan<char> symbolStart,
         ReadOnlySpan<char> symbolEnd,
-        TranslationErrors endNotFoundError)
+        Errors endNotFoundError)
     {
-        TranslationErrors errors = TranslationErrors.None;
+        Errors errors = Errors.None;
 
         // Find start
         int startIndex = latex.IndexOf(symbolStart);
@@ -78,7 +78,7 @@ internal readonly struct RowSymbolParser
         out Range before, 
         out Range body, 
         out Range after, 
-        out TranslationErrors errors,
+        out Errors errors,
         out bool hasSymbol)
     {
         before = Before;

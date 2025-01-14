@@ -1,5 +1,6 @@
 ﻿/// Copyright 2021 Henri Vainio 
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 [assembly: InternalsVisibleTo("Latex2ComputeTests")]
 
@@ -135,18 +136,19 @@ internal static class BracketHandler
         var (opening, closing) = BracketAsString[type];
 
         // leave opening bracket in input
-        if (Slicer.GetSpanSafely(input, startIndex, opening.Length) == opening)
+        if (Slicer.GetSpanSafely(input, startIndex, opening.Length) != opening)
         {
-            int endIndex = FindBrackets(input, type, startIndex + opening.Length);
-            if (endIndex < 0)
-            {
-                return new(input.Length, input[(startIndex + 1)..]);
-            }
-
-            string output = input[(startIndex + opening.Length)..(endIndex - closing.Length)];
-            return new(endIndex, output);
+            // if is not continuing or does not start with bracket
+            return new(-1, string.Empty);
         }
-        // if is not continuing or does not start with bracket
-        return new(-1, string.Empty);
+
+        int endIndex = FindBrackets(input, type, startIndex + opening.Length);
+        if (endIndex < 0)
+        {
+            return new(input.Length, input[(startIndex + 1)..]);
+        }
+
+        string output = input[(startIndex + opening.Length)..(endIndex - closing.Length)];
+        return new(endIndex, output);
     }
 }

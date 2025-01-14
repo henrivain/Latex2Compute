@@ -6,6 +6,11 @@
 public enum TargetSystem
 {
     /// <summary>
+    /// Default target system (Ti)
+    /// </summary>
+    Default,
+
+    /// <summary>
     /// Texas Instruments TI-Nspire
     /// </summary>
     Ti, 

@@ -25,7 +25,4 @@ public readonly struct TranslationItem
 
     public string Latex { get; }
     public TranslationArgs Settings { get; }
-
-
-
 }

@@ -1,9 +1,7 @@
-﻿using Latex2Compute.Helpers;
-
-namespace Latex2Compute.Parsers;
+﻿namespace Latex2Compute.Parsers;
 internal class ExponentParser
 {
-    public static string BuildAll(string input, ref TranslationErrors errors)
+    public static string BuildAll(string input, ref Errors errors)
     {
         //find and translate longer rise to power    ^{x} => ^(x) 
 
@@ -30,8 +28,8 @@ internal class ExponentParser
             {
                 //if no ending bracket => closing = end
                 input += ")";
-                errors |= TranslationErrors.Power_NoEndingBracketFound;
-                Helper.PrintError(TranslationErrors.Power_NoEndingBracketFound);
+                errors |= Errors.Power_NoEndingBracketFound;
+                Helper.PrintError(Errors.Power_NoEndingBracketFound);
             }
         }
     }

@@ -31,7 +31,7 @@ public class PhysicsTwoParserTests
 
         // Assert
         Assert.Equal(expectedResult, result);
-        Assert.Equal(TranslationErrors.None, parser.Errors);
+        Assert.Equal(Errors.None, parser.Errors);
     }
 
     [Theory]
@@ -51,7 +51,7 @@ public class PhysicsTwoParserTests
 
         // Assert
         Assert.Equal(expectedResult, result);
-        Assert.Equal(TranslationErrors.None, parser.Errors);
+        Assert.Equal(Errors.None, parser.Errors);
     }
 
     [Theory]
@@ -66,7 +66,7 @@ public class PhysicsTwoParserTests
 
         // Assert
         Assert.Equal(expectedResult, result);
-        Assert.Equal(TranslationErrors.None, parser.Errors);
+        Assert.Equal(Errors.None, parser.Errors);
     }
 
     [Theory]
@@ -82,7 +82,7 @@ public class PhysicsTwoParserTests
 
         // Assert
         Assert.Equal(expectedResult, result);
-        Assert.Equal(TranslationErrors.None, parser.Errors);
+        Assert.Equal(Errors.None, parser.Errors);
     }
 
     [Theory]
@@ -100,6 +100,6 @@ public class PhysicsTwoParserTests
 
         // Assert
         Assert.Equal(expectedResult, result);
-        Assert.Equal(TranslationErrors.None, parser.Errors);
+        Assert.Equal(Errors.None, parser.Errors);
     }
 }

@@ -33,7 +33,7 @@ internal static class Slicer
         return GetSpanSafely(input, startIndex..(startIndex + length));
     }
 
-    internal static char? GetCharSafely(in string input, int startIndex)
+    internal static char? GetCharSafely(ReadOnlySpan<char> input, int startIndex)
     {
         try
         {

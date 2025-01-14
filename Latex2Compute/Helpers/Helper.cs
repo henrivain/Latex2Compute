@@ -7,7 +7,7 @@ internal static class Helper
     /// Writes error to Console if in develpment
     /// </summary>
     /// <param name="error"></param>
-    internal static void PrintError(TranslationErrors error)
+    internal static void PrintError(Errors error)
     {
         if (AssemblyInfoHelper.EntryAssembly.IsDebug is not false)
         {

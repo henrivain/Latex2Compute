@@ -46,7 +46,7 @@ static internal class EndEdit
             input.Contains(ConstSymbol.Solve) is false)
         {
             // if auto solve is on => call autosolve method and check if conditions are true
-            input = RunAutoSolve(input);
+            input = RunAutoSolve(input, args.TargetSystem);
         }
 
         // auto derivative
@@ -166,7 +166,7 @@ static internal class EndEdit
     /// </summary>
     /// <param name="inp"></param>
     /// <returns>solve(input,x) wrapped input</returns>
-    private static string RunAutoSolve(string inp)
+    private static string RunAutoSolve(string inp, TargetSystem target)
     {
         string[] symbols = { ">", "<", "=" };
         if (symbols.Any(inp.Contains) is false)
@@ -179,8 +179,14 @@ static internal class EndEdit
             .Select(x => $",{x}")
             );
 
-        inp = $"#192#({inp}{variables})";
-        return inp;
+        return target switch
+        {
+            TargetSystem.Matlab
+                => $"syms {variables}\n{ConstSymbol.Solve}({inp}{variables})",
+
+            TargetSystem.Ti or TargetSystem.Default or _
+                => $"{ConstSymbol.Solve}({inp}{variables})"
+        };
     }
 
     /// <summary>

@@ -1,5 +1,4 @@
 ﻿/// Copyright 2021 Henri Vainio 
-using System;
 using System.Text.RegularExpressions;
 
 namespace Latex2Compute.OtherBuilders;
@@ -261,7 +260,7 @@ static internal class EndEdit
         // change special symbols
         inp = inp.Replace("e", "@e");
 
-        var replacement = OperatorMap.GetSymbol(OperatorMap.Symbol.ImaginaryUnit, system);
+        var replacement = OperatorMap.GetSymbolOrDefault(OperatorMap.Symbol.ImaginaryUnit, system);
 
         bool isSame = replacement.Length is 1 && replacement[0] == 'i';
         if (isSame || inp.Contains('i') is false)

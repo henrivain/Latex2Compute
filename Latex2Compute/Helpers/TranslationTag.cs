@@ -17,7 +17,7 @@ internal static class TranslationTag
     {
         foreach (string key in OperatorMap.GetAllOperatorKeys())
         {
-            string replacement = OperatorMap.GetOperator(key, system);
+            string replacement = OperatorMap.GetOperatorOrDefault(key, system);
             inp = inp.Replace(key, replacement);
         }
         return inp;

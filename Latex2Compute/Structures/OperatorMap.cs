@@ -74,7 +74,7 @@ internal static class OperatorMap
             [TargetSystem.Matlab] = _symbolsMatlab.AsReadOnly(),
         });
 
-    internal static string GetOperator(string key, TargetSystem target = TargetSystem.Default)
+    internal static string GetOperatorOrDefault(string key, TargetSystem target = TargetSystem.Default)
     {
         // Get value for target, if not found, get default
         if (Operators.TryGetValue(target, out var dict))
@@ -90,7 +90,7 @@ internal static class OperatorMap
         }
         throw new NotImplementedException($"Operator {key} not found (for target {target})");
     }
-    internal static string GetSymbol(Symbol symbol, TargetSystem target = TargetSystem.Default)
+    internal static string GetSymbolOrDefault(Symbol symbol, TargetSystem target = TargetSystem.Default)
     {
         if (Symbols.TryGetValue(target, out var dict))
         {

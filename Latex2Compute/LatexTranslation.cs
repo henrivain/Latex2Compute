@@ -7,7 +7,7 @@ namespace Latex2Compute;
 /// <summary>
 /// Result type for translation 
 /// </summary>
-public readonly record struct TranslationResult(string Result, TranslationErrors ErrorFlags);
+public readonly record struct TranslationResult(string Result, Errors ErrorFlags);
 
 public static class LatexTranslation
 {
@@ -21,7 +21,12 @@ public static class LatexTranslation
     public static TranslationResult Translate(TranslationItem item)
     {
         string input = item.Latex;
-        TranslationErrors errors = TranslationErrors.None;
+        Errors errors = Errors.None;
+
+        if (item.Settings.TargetSystem == TargetSystem.Default)
+        {
+            item.Settings = item.Settings with { TargetSystem = TargetSystem.Ti };
+        }
 
         // start changes
         input = StartEdit.Run(input);
@@ -40,7 +45,7 @@ public static class LatexTranslation
     }
 
     internal static string TranslateAllOperators(
-        string input, TranslationArgs args, ref TranslationErrors errors)
+        string input, TranslationArgs args, ref Errors errors)
     {
         input = Matrix.BuildAll(input, args, ref errors);
         input = FractionParser.BuildAll(input, ref errors);

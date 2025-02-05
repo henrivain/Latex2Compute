@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Latex2Compute.Helpers;
+﻿namespace Latex2Compute.Helpers;
 
 internal static class BracketZeroMem
 {
@@ -16,10 +14,11 @@ internal static class BracketZeroMem
     internal static int FindEnd(
             ReadOnlySpan<char> input,
             ReadOnlySpan<char> start,
-            ReadOnlySpan<char> end)
+            ReadOnlySpan<char> end, 
+            int startIndex = 0)
     {
-        int startCursor = 0;
-        int endCursor = 0;
+        int startCursor = startIndex;
+        int endCursor = startIndex;
         while (true)
         {
             int nextStart = input[startCursor..].IndexOf(start);
@@ -46,5 +45,22 @@ internal static class BracketZeroMem
                 return endCursor + nextEnd;
             }
         }
+    }
+
+
+
+    internal static ReadOnlyMemory<char> GetSpanSafely(ReadOnlyMemory<char> input, Range range)
+    {
+        // Is start index out of bounds
+        if (range.Start.Value >= input.Length)
+        {
+            return Memory<char>.Empty;
+        }
+        // Is end index out of bounds
+        if (range.End.Value >= input.Length)
+        {
+            return input[range.Start..];
+        }
+        return input[range];
     }
 }

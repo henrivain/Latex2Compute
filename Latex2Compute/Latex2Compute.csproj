@@ -6,11 +6,15 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<PackageIcon>logo v2.1 128x128.png</PackageIcon>
-		<NoWarn>CS1591;CS1573;CS1572;CS1570;CS1587</NoWarn>
+		
+		<!-- Disable warnings for missing XML documentation -->
+		<!-- Disable use Primary Constructors (IDE0290)-->
+		<NoWarn>CS1591;CS1573;CS1572;CS1570;CS1587;IDE0290</NoWarn>
+
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<Version>3.2.1</Version>
+		<Version>3.2.3</Version>
 		<Title>Latex2Compute</Title>
 		<PackageId>Latex2Compute</PackageId>
 		<Authors>henrivain</Authors>

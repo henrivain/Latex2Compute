@@ -2,12 +2,12 @@
 namespace Latex2Compute;
 
 [Flags]
-public enum TranslationErrors
+public enum Errors
 {
     None = 0,
-    Frac_NoFirstEndBracket =                    1 << 1,
-    Frac_NoSecondStartBracket =                 1 << 2,
-    Frac_NoSecondEndBracket =                   1 << 3,
+    Frac_NoNumerEnd =                    1 << 1,
+    Frac_NoDenomStart =                 1 << 2,
+    Frac_NoDenomEnd =                   1 << 3,
     Matcha_PageConstructorEndBracketNotFound =  1 << 4,
     Log_BasisNotFound =                         1 << 5,
     Lim_NoApproachValue =                       1 << 6,
@@ -28,26 +28,26 @@ public enum TranslationErrors
 
 public static class TranslationErrorsExtensions
 {
-    public static bool HasFlag(this TranslationErrors value, TranslationErrors flag)
+    public static bool HasFlag(this Errors value, Errors flag)
     {
         return value.HasFlag(flag);
     }
 
-    public static string[] GetErrors(this TranslationErrors value)
+    public static string[] GetErrors(this Errors value)
     {
-        if (value is TranslationErrors.None)
+        if (value is Errors.None)
         {
-            return new string[] { TranslationErrors.None.ToString() };
+            return new string[] { Errors.None.ToString() };
         }
 
-        return Enum.GetValues(typeof(TranslationErrors))
-            .Cast<TranslationErrors>()
-            .Where(v => value.HasFlag(v) && v != TranslationErrors.None)
+        return Enum.GetValues<Errors>()
+            .Cast<Errors>()
+            .Where(v => value.HasFlag(v) && v != Errors.None)
             .Select(v => v.ToString())
             .ToArray();
     }
 
-    public static string ToErrorString(this TranslationErrors value)
+    public static string ToErrorString(this Errors value)
     {
         return string.Join(", ", value.GetErrors());
     }

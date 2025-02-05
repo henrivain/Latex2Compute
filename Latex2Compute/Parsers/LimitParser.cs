@@ -7,7 +7,7 @@ internal static class LimitParser
 
     const string OperatorStart = "\\lim";
 
-    public static string BuildAll(string input, ref TranslationErrors errors)
+    public static string BuildAll(string input, ref Errors errors)
     {
         int startIndex;
 
@@ -21,7 +21,7 @@ internal static class LimitParser
         }
     }
 
-    internal static string Build(string input, int startIndex, ref TranslationErrors errors)
+    internal static string Build(string input, int startIndex, ref Errors errors)
     {
 
         var bottomInfo = HelperAlgorithms.CheckAndGetInconsistentStart(input, startIndex, "lim", "_{");
@@ -31,8 +31,8 @@ internal static class LimitParser
         if (bottomEnd is -1)
         {
             bottomEnd = startIndex - 1;
-            errors |= TranslationErrors.Lim_NoApproachValue;
-            Helper.PrintError(TranslationErrors.Lim_NoApproachValue);
+            errors |= Errors.Lim_NoApproachValue;
+            Helper.PrintError(Errors.Lim_NoApproachValue);
         }
 
         bottom = ReplaceArrowWithComma(bottom);

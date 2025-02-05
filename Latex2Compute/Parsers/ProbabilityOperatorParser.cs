@@ -11,7 +11,7 @@ internal static class ProbabilityOperatorParser
     const string NPREnd = "\\right)_";
 
 
-    public static string BuildAll(string input, ref TranslationErrors errors)
+    public static string BuildAll(string input, ref Errors errors)
     {
         input = BuildAllNCRs(input, ref errors);
         input = BuildAllNPRs(input, ref errors);
@@ -27,7 +27,7 @@ internal static class ProbabilityOperatorParser
         public string TextAfter { get; set; } = string.Empty;
         public override readonly string ToString() => $"{TextBefore}{ConstSymbol.Binom}({Equation},{Parameter}){TextAfter}";
     }
-    public static string BuildAllNCRs(string input, ref TranslationErrors errors)
+    public static string BuildAllNCRs(string input, ref Errors errors)
     {
         int startIndex;
 
@@ -40,15 +40,15 @@ internal static class ProbabilityOperatorParser
             input = BuildNCR(input, startIndex, ref errors);
         }
     }
-    internal static string BuildNCR(string input, int startIndex, ref TranslationErrors errors)
+    internal static string BuildNCR(string input, int startIndex, ref Errors errors)
     {
         Binom binom;
         var firstPart = BracketHandler.GetCharsBetweenBrackets(input, BracketType.Curly, startIndex);
 
         if (firstPart.EndIndex < 0)
         {
-            errors |= TranslationErrors.Binom_NoFirstStart;
-            Helper.PrintError(TranslationErrors.Binom_NoFirstStart);
+            errors |= Errors.Binom_NoFirstStart;
+            Helper.PrintError(Errors.Binom_NoFirstStart);
             binom = new()
             {
                 TextBefore = input[..startIndex],
@@ -60,8 +60,8 @@ internal static class ProbabilityOperatorParser
         string? param = null;
         if (secondPart.EndIndex < 0)
         {
-            errors |= TranslationErrors.BinomNoSecondStart;
-            Helper.PrintError(TranslationErrors.BinomNoSecondStart);
+            errors |= Errors.BinomNoSecondStart;
+            Helper.PrintError(Errors.BinomNoSecondStart);
             param = Slicer.GetSpanSafely(input, firstPart.EndIndex..);
         }
         binom = new()
@@ -78,7 +78,7 @@ internal static class ProbabilityOperatorParser
 
 
 
-    public static string BuildAllNPRs(string input, ref TranslationErrors errors)
+    public static string BuildAllNPRs(string input, ref Errors errors)
     {
         int indexerIndex = 0;
         int startIndex;
@@ -105,7 +105,7 @@ internal static class ProbabilityOperatorParser
             input = BuildNPR(input, startIndex, endIndex, ref errors);
         }
     }
-    internal static string BuildNPR(string input, int startIndex, int firstEndIndex, ref TranslationErrors errors)
+    internal static string BuildNPR(string input, int startIndex, int firstEndIndex, ref Errors errors)
     {
         string textBefore = input[..startIndex];
         string content = BuildAllNPRs(input[startIndex..(firstEndIndex - NPREnd.Length)], ref errors);

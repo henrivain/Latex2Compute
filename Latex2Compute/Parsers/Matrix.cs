@@ -12,7 +12,7 @@ internal readonly struct Matrix
         Range before,
         List<List<Range>> body,
         Range after,
-        TranslationErrors errors,
+        Errors errors,
         int longestRow)
     {
         Latex = latex;
@@ -26,7 +26,7 @@ internal readonly struct Matrix
     private Range Before { get; }
     private List<List<Range>> Body { get; }
     private Range After { get; }
-    private TranslationErrors Errors { get; }
+    private Errors Errors { get; }
     private int LongestRow { get; }
 
 
@@ -42,7 +42,7 @@ internal readonly struct Matrix
             stackalloc char[] { '&' };
 
         RowSymbolParser parser = RowSymbolParser.Parse(
-            latex, matrixStart, matrixEnd, TranslationErrors.MissingMatrixEnd);
+            latex, matrixStart, matrixEnd, Errors.MissingMatrixEnd);
 
         if (parser.HasSymbol is false)
         {
@@ -89,7 +89,7 @@ internal readonly struct Matrix
     /// <param name="input"></param>
     /// <param name="errors"></param>
     /// <returns>Input string with all matrices translated.</returns>
-    internal static string BuildAll(string input, TranslationArgs args, ref TranslationErrors errors)
+    internal static string BuildAll(string input, TranslationArgs args, ref Errors errors)
     {
         ReadOnlySpan<char> matrixStart =
             stackalloc char[] { '\\', 'b', 'e', 'g', 'i', 'n', '{', 'm', 'a', 't', 'r', 'i', 'x', '}' };

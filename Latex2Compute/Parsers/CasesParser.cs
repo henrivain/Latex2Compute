@@ -9,7 +9,7 @@ internal static partial class CasesParser
 
 
 
-    public static string BuildAll(string input, ref TranslationErrors errors)
+    public static string BuildAll(string input, ref Errors errors)
     {
         int startIndex;
         while (true)
@@ -25,7 +25,7 @@ internal static partial class CasesParser
         }
     }
 
-    private static string Build(string input, int startIndex, ref TranslationErrors errors)
+    private static string Build(string input, int startIndex, ref Errors errors)
     {
         input = input.Replace(@"\\", ConstSymbol.SystemRowChange);
 
@@ -40,8 +40,8 @@ internal static partial class CasesParser
         {
             instance.Body = BuildAll(input[startIndex..], ref errors);
 
-            errors |= TranslationErrors.Cases_NoEndBracketFound;
-            Helper.PrintError(TranslationErrors.Cases_NoEndBracketFound);
+            errors |= Errors.Cases_NoEndBracketFound;
+            Helper.PrintError(Errors.Cases_NoEndBracketFound);
         }
         else
         {

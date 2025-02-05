@@ -22,7 +22,7 @@ internal static class NthRootParser
 
     const string OperatorStart = "\\sqrt[";
 
-    public static string BuildAll(string input, ref TranslationErrors errors)
+    public static string BuildAll(string input, ref Errors errors)
     {
         int startIndex;
         while (true)
@@ -38,7 +38,7 @@ internal static class NthRootParser
         }
     }
 
-    internal static string Build(string input, int startIndex, ref TranslationErrors errors)
+    internal static string Build(string input, int startIndex, ref Errors errors)
     {
         // Find and change "\\sqrt[x]{y}" => "root(y,x)"
         Root root = new()
@@ -49,8 +49,8 @@ internal static class NthRootParser
         var topInfo = BracketHandler.GetCharsBetweenBrackets(input, BracketType.Square, startIndex);
         if (topInfo.EndIndex < 0)
         {
-            errors |= TranslationErrors.NthRoot_NoFirstClosingBracket;
-            Helper.PrintError(TranslationErrors.NthRoot_NoFirstClosingBracket);
+            errors |= Errors.NthRoot_NoFirstClosingBracket;
+            Helper.PrintError(Errors.NthRoot_NoFirstClosingBracket);
 
             topInfo.Content = input[(startIndex + 1)..];
             topInfo.EndIndex = input.Length;
@@ -61,14 +61,14 @@ internal static class NthRootParser
         var bodyInfo = BracketHandler.GetCharsBetweenBrackets(input, BracketType.Curly, topInfo.EndIndex);
         if (bodyInfo.EndIndex < 0)
         {
-            errors |= TranslationErrors.NthRoot_NoSecondStartBracket;
-            Helper.PrintError(TranslationErrors.NthRoot_NoSecondStartBracket);
+            errors |= Errors.NthRoot_NoSecondStartBracket;
+            Helper.PrintError(Errors.NthRoot_NoSecondStartBracket);
 
             bodyInfo.EndIndex = BracketHandler.FindBrackets(input, BracketType.Curly, topInfo.EndIndex);
             if (bodyInfo.EndIndex < 0)
             {
-                errors |= TranslationErrors.NthRoot_NoEndFound;
-                Helper.PrintError(TranslationErrors.NthRoot_NoEndFound);
+                errors |= Errors.NthRoot_NoEndFound;
+                Helper.PrintError(Errors.NthRoot_NoEndFound);
                 bodyInfo.EndIndex = input.Length;
             }
             bodyInfo.Content = Slicer.GetSpanSafely(input, topInfo.EndIndex..);

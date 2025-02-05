@@ -11,7 +11,7 @@ internal sealed class PhysicsTwoParser : IPhysicsModeParser
     }
     private string Latex { get; }
 
-    public TranslationErrors Errors => TranslationErrors.None;
+    public Errors Errors => Errors.None;
 
     public string? Result { get; private set; }
 
@@ -243,8 +243,8 @@ internal sealed class PhysicsTwoParser : IPhysicsModeParser
     /// <returns>True if separator '*' is needed, othewise false.</returns>
     private static bool IsSeparatorNeeded(in string latex, int replacementIndex, in string replacement)
     {
-        char? charBefore = Slicer.GetCharSafely(in latex, replacementIndex - 1);
-        char? firstOfReplacement = Slicer.GetCharSafely(in replacement, 0);
+        char? charBefore = Slicer.GetCharSafely(latex, replacementIndex - 1);
+        char? firstOfReplacement = Slicer.GetCharSafely(replacement, 0);
         if (charBefore is null)
         {
             return false;

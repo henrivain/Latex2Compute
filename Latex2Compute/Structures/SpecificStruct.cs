@@ -85,7 +85,7 @@ internal struct SumInfo
     /// <para/>Changes bottom to right format to use variable
     /// </summary>
     /// <param name="reader"></param>
-    internal SumInfo SetReaderInfo(ComplexSymbolReader reader, ref TranslationErrors errors)
+    internal SumInfo SetReaderInfo(ComplexSymbolReader reader, ref Errors errors)
     {
         TextBefore = reader.TextBefore;            
         Top = reader.TopContent;
@@ -93,8 +93,8 @@ internal struct SumInfo
         int equalDivider = reader.BottomContent.IndexOf('=');
         if (equalDivider is -1)
         {
-            errors |= TranslationErrors.Sum_NoVariableFound;
-            Helper.PrintError(TranslationErrors.Sum_NoVariableFound);
+            errors |= Errors.Sum_NoVariableFound;
+            Helper.PrintError(Errors.Sum_NoVariableFound);
             Bottom = $"n,{reader.BottomContent}";
             return this;
         }

@@ -9,7 +9,7 @@ namespace Latex2Compute;
 /// <remarks>
 /// (string text, TranslationArgs settings)
 /// </remarks>
-public readonly struct TranslationItem
+public struct TranslationItem
 {
     /// <summary>
     /// Define Translation item
@@ -24,8 +24,5 @@ public readonly struct TranslationItem
     }
 
     public string Latex { get; }
-    public TranslationArgs Settings { get; }
-
-
-
+    public TranslationArgs Settings { get; internal set; }
 }

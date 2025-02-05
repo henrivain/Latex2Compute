@@ -23,6 +23,11 @@ public static class LatexTranslation
         string input = item.Latex;
         Errors errors = Errors.None;
 
+        if (item.Settings.TargetSystem == TargetSystem.Default)
+        {
+            item.Settings = item.Settings with { TargetSystem = TargetSystem.Ti };
+        }
+
         // start changes
         input = StartEdit.Run(input);
 

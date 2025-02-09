@@ -74,7 +74,7 @@ public class LogarithmTests
     [InlineData("\\lg 2", "log(2,10)")]
     [InlineData("\\lg \\lg2", "log(log(2,10),10)")]
     public void TenBaseLogarithm_ShouldAdd_TenAsBase_Always(
-    string input, string expectedResult)
+        string input, string expectedResult)
     {
         // Arrange
         var normalItem = new TranslationItem(input, Testing.GetDefaultArgs());
@@ -88,4 +88,26 @@ public class LogarithmTests
         Assert.Equal(expectedResult, normalResult.Result);
         Assert.Equal(expectedResult, physicsResult.Result);
     }
+
+    [Fact]
+    public void LogartihmWith_SpecialSymbolsOn_ShouldNotSeparateInfinity()
+    {
+        // Arrange
+        string input = @"\lim _{n\to \infty }\left(\frac{6n^2+12n+6}{n^2}\right)";
+        var args = new TranslationArgs
+        {
+            TargetSystem = TargetSystem.Ti,
+            UnitTranslationMode = UnitTranslationMode.None,
+            EndChanges = EndChanges.All,
+            Params = Params.Default | Params.SpecialSymbolTranslation
+        };
+        var item = new TranslationItem(input, args);
+
+        // Act
+        var result = LatexTranslation.Translate(item);
+
+        Assert.Equal(@"lim((6n^2+12n+6)/(n^2),n,infinity)", result.Result);
+    }
+
+
 }

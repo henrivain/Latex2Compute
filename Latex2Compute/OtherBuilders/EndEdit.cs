@@ -1,4 +1,5 @@
 ﻿/// Copyright 2021 Henri Vainio 
+using System;
 using System.Text.RegularExpressions;
 
 namespace Latex2Compute.OtherBuilders;
@@ -268,6 +269,8 @@ static internal class EndEdit
             return inp;
         }
 
+        ReadOnlySpan<char> infinity = stackalloc char[] { 'i', 'n', 'f', 'i', 'n', 'i', 't', 'y' };
+
         int cursor = 0;
         while (true)
         {
@@ -276,22 +279,31 @@ static internal class EndEdit
             {
                 return inp;
             }
-
             if (cursor is 0)
             {
                 inp = inp.Insert(0, "@");
                 cursor++;
                 continue;
             }
-            if (Slicer.GetCharSafely(inp, cursor - 1) is 'p')
+
+            char? before = Slicer.GetCharSafely(inp, cursor - 1);
+            if (LowerCaseLetters.Any(x => x == before))
             {
-                // Skip if pi
+                // Skip if part of variable name
                 cursor++;
+                continue;
+            }
+
+            // is math const infinity
+            var span = Slicer.GetSpanSafely(inp.AsSpan(), cursor..(cursor + infinity.Length));
+            if (span.Equals(infinity, StringComparison.Ordinal))
+            {
+                cursor += infinity.Length;
                 continue;
             }
             
             inp = $"{inp[..cursor]}@{inp[cursor..]}";     // add @-symbol before index
-            cursor++;
+            cursor += 2;    // Because symbol was added
         }
     }
 

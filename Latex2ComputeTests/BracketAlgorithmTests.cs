@@ -1,6 +1,5 @@
 ﻿
 using Latex2Compute.Helpers;
-using Latex2Compute.Helpers;
 using Latex2Compute.Structures;
 
 namespace Latex2ComputeTests;

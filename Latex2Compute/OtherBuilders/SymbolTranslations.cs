@@ -1,6 +1,7 @@
 ﻿// Copyright 2021 Henri Vainio 
 using Latex2Compute.Helpers;
-using Latex2Compute.PhysicsMode;
+using Latex2Compute.StaticSymbols;
+using System.Text;
 
 namespace Latex2Compute.OtherBuilders;
 
@@ -30,79 +31,30 @@ internal static class SymbolTranslations
         // vectors
         input = CheckVectorBars(input, ref errors);
 
+        // Remove greek symbols if needed
+        if (args.IsSet(UnitTranslationMode.None) || args.IsSet(UnitTranslationMode.Remove))
+        {
+            input = Erase(input, SymbolCatalog.GreekSymbols);
+        }
+
         // physics mode 1 changes
         if (args.IsSet(UnitTranslationMode.Remove))
         {
             // Remove physics symbols like m^3, V, N
             // => do not use g,l,m,s,A,C,F,N,W,V as variables in your Latex text
-            input = RemoveGreekSymbols(input);
-            input = RemovePhysics1ModeSymbols(input);
-        }
-        if (args.IsSet(UnitTranslationMode.Translate))
-        {
-            var parser = new PhysicsTwoParser(input);
-            input = parser.Translate();
-            errors |= parser.Errors;
+            input = Erase(input, SymbolCatalog.PhysicsEraseable);
         }
 
-        // mathmode changes
-        if (args.IsSet(UnitTranslationMode.None))
+        if (args.IsSet(UnitTranslationMode.Translate))
         {
-            // remove greek letters
-            input = RemoveGreekSymbols(input);
+            var parser = new SymbolParsers();
+            input = parser.Translate(input);
         }
 
         return input;
     }
 
-    private static string[] GetPhysicsSymbols()
-    {
-        // storage to physics symbols
-        // return [string array {symbols}]
-        string[] PhysicsSymbols =
-        {
-            "mm^3", "cm^3", "dm^3", "nm^3", "km^3", "m^3",
-            "mm^2", "cm^2", "dm^2", "nm^2", "km^2", "m^2",
-            "keV", "MeV", "GeV", "TeV", "eV",
-            "MHz", "kHz", "Hz",
-            "kcal", "cal",
-            "MWh", "GWh", "TWh", "kWh", "PWh", "kW",
-            "mmol", "mol",
-            "kpl",
-            "\\min", "\\max",
-            "kPa", "bar", "Pa",
-            "dam", "cm", "dm", "nm", "pm", "km", "hm", "mm",
-            "lx", "lm", "Wb", "sr",
-            "kN",
-            "kJ", "MJ", "GJ",
-            "kg", "mg",
-            "°F", "°C",
-            "cd",
-            "kA", "mA",
-            "kV", "mV",
-            "ms", "ns",
-            "ml", "cl", "dl",
-            "A","C", "F", "g", "G", "h", "J", "K", "l",
-            "m", "N", "r", "s", "T", "V", "W",
-        };
-        return PhysicsSymbols;
-    }
 
-    private static string[] GetGreekSymbolsArray()
-    {
-        // storage to math and physics greek symbols
-        // return [string array {symbols}]
-        return new[]
-        {
-            "k\\Omega", "\\Omega", "\\Gamma", "\\Delta",
-            "\\varepsilon", "\\zeta", "\\eta", "\\theta",
-            "\\vartheta", "\\iota", "\\kappa", "\\lambda",
-            "\\Lambda", "\\mu", "\\nu", "\\xi", "\\Xi", "\\Pi",
-            "\\rho", "\\sigma", "\\Sigma", "\\tau", "\\upsilon",
-            "\\Upsilon", "\\phi", "\\Phi", "\\chi", "\\psi",
-            "\\Psi", "\\omega", "\\partial", "\\varphi"
-        };
-    }
 
     private static string BasicSymbols(string input, in TranslationArgs args)
     {
@@ -191,8 +143,6 @@ internal static class SymbolTranslations
         }
     }
 
-
-
     private static string GeometryModeSymbols(string input)
     {
         // Translate symbols which will be translated same way every time
@@ -203,25 +153,15 @@ internal static class SymbolTranslations
             .Replace("\\delta", "δ");
     }
 
-    private static string RemoveGreekSymbols(string input)
+    private static string Erase(string input, string[] symbolsToErase)
     {
-        // Translate symbols which will be translated same way every time
-        string[] SymbolsArray = GetGreekSymbolsArray();
-        foreach (string symbol in SymbolsArray)
-        {
-            input = input.Replace(symbol, string.Empty);
-        }
-        return input;
-    }
+        StringBuilder builder = new(input);
 
-    private static string RemovePhysics1ModeSymbols(string input)
-    {
-        // Translate symbols which will be translated same way every time
-        string[] SymbolsArray = GetPhysicsSymbols();
-        foreach (string symbol in SymbolsArray)
+        // Erase all symbols in symbolsToErase from input
+        foreach (string symbol in symbolsToErase)
         {
-            input = input.Replace(symbol, string.Empty);
+            builder.Replace(symbol, string.Empty);
         }
-        return input;
+        return builder.ToString();
     }
 }

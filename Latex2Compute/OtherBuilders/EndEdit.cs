@@ -84,7 +84,7 @@ static internal class EndEdit
     {
         if (input.IsEmpty)
         {
-            return ReadOnlySpan<char>.Empty;
+            return [];
         }
         if (input[0] is '=' or '+')
         {

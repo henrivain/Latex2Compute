@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
-		<TargetFrameworks>net9.0;net7.0</TargetFrameworks>
+		<TargetFramework>net10.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<PackageIcon>logo v2.1 128x128.png</PackageIcon>
@@ -14,7 +13,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<Version>3.2.4</Version>
+		<Version>3.3.0</Version>
 		<Title>Latex2Compute</Title>
 		<PackageId>Latex2Compute</PackageId>
 		<Authors>henrivain</Authors>
@@ -26,7 +25,7 @@
 		<PackageTags>latex;ti-nspire;matlab;translate</PackageTags>
 		<PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-		<Copyright>Copyright 2025 Henri Vainio</Copyright>
+		<Copyright>Copyright 2026 Henri Vainio</Copyright>
 		<!-- Output will be found inside this folder locally -->
 		<PackageOutputPath>C:\Nugets</PackageOutputPath>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -42,8 +41,6 @@
 		<None Remove="Resources\logo v2.1 128x128.png" />
 	</ItemGroup>
 
-
-
 	<ItemGroup>
 		<None Include="..\README.md">
 			<Pack>True</Pack>
@@ -51,14 +48,10 @@
 		</None>
 	</ItemGroup>
 
-
-
 	<ItemGroup>
 		<Resource Include="Resources\logo v2.1 128x128.png">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</Resource>
 	</ItemGroup>
-
-
 </Project>

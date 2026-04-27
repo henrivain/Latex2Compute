@@ -37,6 +37,11 @@ public struct TranslationArgs
     /// </summary>
     public EndChanges EndChanges { get; set; } = EndChanges.All;
 
+    /// <summary>
+    /// Add static symbols to be Translated. For example, if you want to translate "c" to "_c", add {"c", "_c"} to the dictionary.
+    /// </summary>
+    public Dictionary<string, string> UserStaticSymbols { get; set; } = [];
+
 
     public static TranslationArgs GetDefault()
     {
@@ -48,7 +53,8 @@ public struct TranslationArgs
             Params =
               Params.RemoveCurlyBracket |
               Params.MathchaEnabled |
-              Params.AutoSeparateOperators
+              Params.AutoSeparateOperators,
+            UserStaticSymbols = []
         };
     }
 }

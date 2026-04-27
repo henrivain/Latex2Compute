@@ -1,4 +1,4 @@
-﻿using Latex2Compute.PhysicsMode;
+﻿using Latex2Compute.StaticSymbols;
 
 namespace Latex2ComputeTests.PhysicsUnits;
 public class PhysicsTwoParserTests
@@ -7,10 +7,10 @@ public class PhysicsTwoParserTests
     public void Translate_ShouldRemove_Rads()
     {
         // Arrange
-        var parser = new PhysicsTwoParser("5rad+6(rad)");
+        var parser = new SymbolParsers();
 
         // Act
-        var result = parser.Translate();
+        var result = parser.Translate("5rad+6(rad)");
 
         // Assert
         Assert.Equal("5+6", result);
@@ -24,14 +24,13 @@ public class PhysicsTwoParserTests
     public void Translate_ShouldTranslate_TimeUnits(string input, string expectedResult)
     {
         // Arrange
-        var parser = new PhysicsTwoParser(input);
+        var parser = new SymbolParsers();
 
         // Act
-        var result = parser.Translate();
+        var result = parser.Translate(input);
 
         // Assert
         Assert.Equal(expectedResult, result);
-        Assert.Equal(Errors.None, parser.Errors);
     }
 
     [Theory]
@@ -44,14 +43,13 @@ public class PhysicsTwoParserTests
     public void Translate_ShouldTranslate_Lengths(string input, string expectedResult)
     {
         // Arrange
-        var parser = new PhysicsTwoParser(input);
+        var parser = new SymbolParsers();
 
         // Act
-        var result = parser.Translate();
+        var result = parser.Translate(input);
 
         // Assert
         Assert.Equal(expectedResult, result);
-        Assert.Equal(Errors.None, parser.Errors);
     }
 
     [Theory]
@@ -59,14 +57,13 @@ public class PhysicsTwoParserTests
     public void Translate_ShouldAdd_TenPowers_IfNeeded(string input, string expectedResult)
     {
         // Arrange
-        var parser = new PhysicsTwoParser(input);
+        var parser = new SymbolParsers();
 
         // Act
-        var result = parser.Translate();
+        var result = parser.Translate(input);
 
         // Assert
         Assert.Equal(expectedResult, result);
-        Assert.Equal(Errors.None, parser.Errors);
     }
 
     [Theory]
@@ -75,14 +72,13 @@ public class PhysicsTwoParserTests
     public void Translate_ShouldAdd_MultiplicationSign_IfNeeded(string input, string expectedResult)
     {
         // Arrange
-        var parser = new PhysicsTwoParser(input);
+        var parser = new SymbolParsers();
 
         // Act
-        var result = parser.Translate();
+        var result = parser.Translate(input);
 
         // Assert
         Assert.Equal(expectedResult, result);
-        Assert.Equal(Errors.None, parser.Errors);
     }
 
     [Theory]
@@ -93,13 +89,12 @@ public class PhysicsTwoParserTests
     public void Translate_ShouldNotAdd_PowersIfNotNeeded(string input, string expectedResult)
     {
         // Arrange
-        var parser = new PhysicsTwoParser(input);
+        var parser = new SymbolParsers();
 
         // Act
-        var result = parser.Translate();
+        var result = parser.Translate(input);
 
         // Assert
         Assert.Equal(expectedResult, result);
-        Assert.Equal(Errors.None, parser.Errors);
     }
 }

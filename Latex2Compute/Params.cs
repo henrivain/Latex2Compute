@@ -43,5 +43,5 @@ public enum Params
     /// <summary>
     /// Automatically separate operators with multiplication sign "*".
     /// </summary>
-    AutoSeparateOperators = 1 << 7
+    AutoSeparateOperators = 1 << 7,
 }

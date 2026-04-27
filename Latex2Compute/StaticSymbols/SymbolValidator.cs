@@ -26,6 +26,10 @@ internal class SymbolValidator
     {
         return _symbolCatalog[key];
     }
+    internal bool IsEmpty()
+    {
+        return _symbolCatalog.Count <= 0;
+    }
 
     internal bool AddOrOverrideSymbol(string key, string value)
     {

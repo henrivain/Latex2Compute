@@ -22,7 +22,7 @@ internal static class SymbolTranslations
         // geometry mode changes
         if (args.IsSet(Params.UseGeometryModeSymbols))
         {
-            input = GeometryModeSymbols(input);
+            input = new GeometryLetterParser().Translate(input);
         }
 
         // make basic everytime translations
@@ -45,73 +45,33 @@ internal static class SymbolTranslations
             input = Erase(input, SymbolCatalog.PhysicsEraseable);
         }
 
-        if (args.IsSet(UnitTranslationMode.Translate))
-        {
-            var parser = new SymbolParsers();
-            input = parser.Translate(input);
-        }
-
-        return input;
+        // Get parser for mode specific translation or for user symbols only
+        StaticSymbolParser parser = args.IsSet(UnitTranslationMode.Translate)
+            ? new PhysicsParser() 
+            : new StaticSymbolParser([], SymbolCatalog.MathOperators);
+        
+        // Add user defined overrides
+        parser.OverrideSymbols(args.UserStaticSymbols);
+        
+        // Translate symbols
+        return parser.Translate(input);
     }
-
-
 
     private static string BasicSymbols(string input, in TranslationArgs args)
     {
         // Translate symbols which will be translated same way every time
 
         // basic symbols
-        input = input.Replace("{,}", ".")
-            .Replace("\\cdot", "*")
-            .Replace("\\infty", "infinity")
-            .Replace("\\pi", ConstSymbol.Pi);
-
-        input = TranslateAllBrackets(input);
+        input = new CommonSymbolParser().Translate(input);
 
         // remove angles
         if (args.IsSet(UnitTranslationMode.Translate) is false)
         {
-            input = input
-                .Replace("°", string.Empty)
-                .Replace("(rad)", string.Empty)
-                .Replace("rad", string.Empty)
-                .Replace("\\degree", string.Empty);
+            input = Erase(input, ["°", "(rad)", "rad", "\\degree"]);
         }
 
-        input = input
-            // less than, greater han
-            .Replace("\\le", "<=")
-            .Replace("\\ge", ">=")
-            .Replace("\\mp", "±")
-            .Replace("\\pm", "±")
-            .Replace("\\ne", "≠")
-            .Replace("\\%", "%")
-
-        // remove if not geometrymode
-            .Replace("\\alpha", string.Empty)
-            .Replace("\\beta", string.Empty)
-            .Replace("\\gamma", string.Empty)
-            .Replace("\\delta", string.Empty)
-
         // other symbols
-            .Replace("\\ldots", string.Empty)
-            .Replace("\\...", string.Empty);
-
-        return input;
-    }
-
-    private static string TranslateAllBrackets(string input)
-    {
-        // different brackets and abs
-        return input
-            .Replace("\\left(", "(")
-            .Replace("\\right)", ")")
-            .Replace("\\left\\{", "(")
-            .Replace("\\right\\}", ")")
-            .Replace("\\left[", "(")
-            .Replace("\\right]", ")")
-            .Replace("\\left|", $"{ConstSymbol.Abs}(")
-            .Replace("\\right|", ")");
+        return Erase(input, ["\\alpha", "\\beta", "\\gamma", "\\delta", "\\ldots", "\\..."]);
     }
 
     private static string CheckVectorBars(string input, ref Errors errors)
@@ -141,16 +101,6 @@ internal static class SymbolTranslations
                 Helper.PrintError(Errors.VecBar_NoEndBracketFound);
             }
         }
-    }
-
-    private static string GeometryModeSymbols(string input)
-    {
-        // Translate symbols which will be translated same way every time
-        return input
-            .Replace("\\alpha", "α")
-            .Replace("\\beta", "β")
-            .Replace("\\gamma", "γ")
-            .Replace("\\delta", "δ");
     }
 
     private static string Erase(string input, string[] symbolsToErase)

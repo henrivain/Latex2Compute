@@ -7,7 +7,7 @@ public class PhysicsTwoParserTests
     public void Translate_ShouldRemove_Rads()
     {
         // Arrange
-        var parser = new SymbolParsers();
+        var parser = new PhysicsParser();
 
         // Act
         var result = parser.Translate("5rad+6(rad)");
@@ -24,7 +24,7 @@ public class PhysicsTwoParserTests
     public void Translate_ShouldTranslate_TimeUnits(string input, string expectedResult)
     {
         // Arrange
-        var parser = new SymbolParsers();
+        var parser = new PhysicsParser();
 
         // Act
         var result = parser.Translate(input);
@@ -43,7 +43,7 @@ public class PhysicsTwoParserTests
     public void Translate_ShouldTranslate_Lengths(string input, string expectedResult)
     {
         // Arrange
-        var parser = new SymbolParsers();
+        var parser = new PhysicsParser();
 
         // Act
         var result = parser.Translate(input);
@@ -57,7 +57,7 @@ public class PhysicsTwoParserTests
     public void Translate_ShouldAdd_TenPowers_IfNeeded(string input, string expectedResult)
     {
         // Arrange
-        var parser = new SymbolParsers();
+        var parser = new PhysicsParser();
 
         // Act
         var result = parser.Translate(input);
@@ -72,7 +72,7 @@ public class PhysicsTwoParserTests
     public void Translate_ShouldAdd_MultiplicationSign_IfNeeded(string input, string expectedResult)
     {
         // Arrange
-        var parser = new SymbolParsers();
+        var parser = new PhysicsParser();
 
         // Act
         var result = parser.Translate(input);
@@ -89,7 +89,7 @@ public class PhysicsTwoParserTests
     public void Translate_ShouldNotAdd_PowersIfNotNeeded(string input, string expectedResult)
     {
         // Arrange
-        var parser = new SymbolParsers();
+        var parser = new PhysicsParser();
 
         // Act
         var result = parser.Translate(input);

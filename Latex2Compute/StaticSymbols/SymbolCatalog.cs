@@ -4,6 +4,46 @@ internal static class SymbolCatalog
 {
     public static char[] MathOperators { get; } = ['/', '*', '-', '+', '(', ')', '[', ']', '{', '}'];
 
+
+    public static Dictionary<string, string> CommonSymbols { get; } = new()
+    {
+        ["{,}"] = ".",
+        ["\\cdot"] = "*",
+        ["\\infty"] = "infinity",
+        ["\\pi"] = ConstSymbol.Pi
+    };
+
+    public static Dictionary<string, string> Brackets { get; } = new()
+    {
+        ["\\left("] = "(",
+        ["\\right)"] = ")",
+        ["\\left\\{"] = "(",
+        ["\\right\\}"] = ")",
+        ["\\left["] = "(",
+        ["\\right]"] = ")",
+        ["\\left|"] = $"{ConstSymbol.Abs}(",
+        ["\\right|"] = ")",
+    };
+
+    public static Dictionary<string, string> ComparisonOperators { get; } = new()
+    {
+        ["\\le"] = "<=",
+        ["\\ge"] = ">=",
+        ["\\mp"] = "±",
+        ["\\pm"] = "±",
+        ["\\ne"] = "≠",
+        ["\\%"] = "%",
+    };
+    
+    public static Dictionary<string, string> GeometryGreekLetters { get; } = new()
+    {
+        ["\\alpha"] = "α",
+        ["\\beta"] = "β",
+        ["\\gamma"] = "γ",
+        ["\\delta"] = "δ"
+    };
+
+
     public static Dictionary<string, string> PhysicsTranslations { get; } = new()
     {
         // Rise to power does not matter, because it is translated automatically

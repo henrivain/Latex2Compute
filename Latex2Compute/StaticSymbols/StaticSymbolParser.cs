@@ -11,8 +11,13 @@ internal class StaticSymbolParser
         _operators = operators;
     }
 
-    public string Translate(string latex)
+    public virtual string Translate(string latex)
     {
+        if (_validator.IsEmpty())
+        {
+            return latex;
+        }
+
         int lastValidIndex = -1;
         string symbolKey = string.Empty;
         for (int index = 0; index < latex.Length; index++)
@@ -48,6 +53,20 @@ internal class StaticSymbolParser
             }
         }
         return Build(latex, symbolKey, lastValidIndex, out _);
+    }
+
+    public void OverrideSymbols(Dictionary<string, string> overrides)
+    {
+        SymbolValidator validator = GetValidator();
+        foreach (var d in overrides)
+        {
+            validator.AddOrOverrideSymbol(d.Key, d.Value);
+        }
+    }
+
+    protected SymbolValidator GetValidator()
+    {
+        return _validator;
     }
 
     private void Reset(ref string symbolKey, ref int lastValidIndex, ref int index)

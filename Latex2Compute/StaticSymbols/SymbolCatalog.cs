@@ -183,6 +183,12 @@ internal static class SymbolCatalog
         ["GBq"] = "10^(9)*(1/_s)",
     };
 
+    public static string[] AngleSingns = ["°", "(rad)", "rad", "\\degree"];
+
+    public static string[] CommonRemovableSymbols = [
+        "\\alpha", "\\beta", "\\gamma", "\\delta", "\\ldots", "\\..."
+        ];
+
     public static string[] PhysicsEraseable = [
             "mm^3", "cm^3", "dm^3", "nm^3", "km^3", "m^3",
             "mm^2", "cm^2", "dm^2", "nm^2", "km^2", "m^2",

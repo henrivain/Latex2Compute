@@ -1,10 +1,42 @@
 ﻿namespace Latex2Compute.StaticSymbols;
 
+using static ParserHelpers;
+
 internal class PhysicsParser : StaticSymbolParser
 {
     public PhysicsParser() 
         : base(SymbolCatalog.PhysicsTranslations, SymbolCatalog.MathOperators)
     {
+    }
+}
+
+internal class PhycicsEraserParser : StaticSymbolParser
+{
+    public PhycicsEraserParser()
+        : base(GetSymbols(), [])
+    {
+    }
+    
+    private static Dictionary<string, string> GetSymbols()
+    {
+        // This should no be cached as same dictionary reference is used 
+        // internally, so if you add to it, it will affect all instances
+        return MergeDictionaries(
+                MakeEraseable(SymbolCatalog.PhysicsEraseable),
+                MakeEraseable(SymbolCatalog.GreekSymbols));
+    }
+}
+
+internal class MathModeParser : StaticSymbolParser
+{
+    public MathModeParser()
+       : base(GetGreekSymbols(), [])
+    {
+    }
+
+    private static Dictionary<string, string> GetGreekSymbols()
+    {
+        return MakeEraseable(SymbolCatalog.GreekSymbols);
     }
 }
 
@@ -28,7 +60,8 @@ internal class CommonSymbolParser : StaticSymbolParser
         return ParserHelpers.MergeDictionaries(
             SymbolCatalog.CommonSymbols,
             SymbolCatalog.ComparisonOperators,
-            SymbolCatalog.Brackets
+            SymbolCatalog.Brackets,
+            MakeEraseable(SymbolCatalog.CommonRemovableSymbols)
         );
     }
 }
@@ -40,5 +73,10 @@ file static class ParserHelpers
         return dictionaries
             .SelectMany(x => x)
             .ToDictionary();
+    }
+
+    internal static Dictionary<string, string> MakeEraseable(params string[] symbols)
+    {
+        return symbols.ToDictionary(x => x, x => "");
     }
 }

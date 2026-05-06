@@ -31,24 +31,8 @@ internal static class SymbolTranslations
         // vectors
         input = CheckVectorBars(input, ref errors);
 
-        // Remove greek symbols if needed
-        if (args.IsSet(UnitTranslationMode.None) || args.IsSet(UnitTranslationMode.Remove))
-        {
-            input = Erase(input, SymbolCatalog.GreekSymbols);
-        }
-
-        // physics mode 1 changes
-        if (args.IsSet(UnitTranslationMode.Remove))
-        {
-            // Remove physics symbols like m^3, V, N
-            // => do not use g,l,m,s,A,C,F,N,W,V as variables in your Latex text
-            input = Erase(input, SymbolCatalog.PhysicsEraseable);
-        }
-
         // Get parser for mode specific translation or for user symbols only
-        StaticSymbolParser parser = args.IsSet(UnitTranslationMode.Translate)
-            ? new PhysicsParser() 
-            : new StaticSymbolParser([], SymbolCatalog.MathOperators);
+        StaticSymbolParser parser = GetParser(args);
         
         // Add user defined overrides
         parser.OverrideSymbols(args.UserStaticSymbols);
@@ -57,21 +41,33 @@ internal static class SymbolTranslations
         return parser.Translate(input);
     }
 
+    private static StaticSymbolParser GetParser(TranslationArgs args)
+    {
+        // Physics 2
+        if (args.IsSet(UnitTranslationMode.Translate)) 
+            return new PhysicsParser();
+        
+        // Physics 1
+        if (args.IsSet(UnitTranslationMode.Remove))
+            return new PhycicsEraserParser();
+
+        // Math mode
+        return new MathModeParser();
+    }
+
     private static string BasicSymbols(string input, in TranslationArgs args)
     {
         // Translate symbols which will be translated same way every time
-
         // basic symbols
-        input = new CommonSymbolParser().Translate(input);
+        CommonSymbolParser parser = new ();
 
-        // remove angles
         if (args.IsSet(UnitTranslationMode.Translate) is false)
         {
-            input = Erase(input, ["°", "(rad)", "rad", "\\degree"]);
+            parser.OverrideSymbols(
+                SymbolCatalog.AngleSingns.ToDictionary(x => x, x => ""));
         }
 
-        // other symbols
-        return Erase(input, ["\\alpha", "\\beta", "\\gamma", "\\delta", "\\ldots", "\\..."]);
+        return parser.Translate(input);
     }
 
     private static string CheckVectorBars(string input, ref Errors errors)

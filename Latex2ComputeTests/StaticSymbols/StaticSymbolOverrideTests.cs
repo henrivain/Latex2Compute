@@ -45,4 +45,25 @@ public class StaticSymbolOverrideTests
         // Assert
         Assert.Equal(expectedResult, result.Result);
     }
+   
+    
+    [Theory]
+    [InlineData("\\lambda", "λ")]
+    public void Translate_ShouldOverride_Physics1Symbols(string input, string expectedResult)
+    {
+        // Arrange
+        var args = Testing.GetDefaultArgs();
+        args.UnitTranslationMode = UnitTranslationMode.Remove;
+        args.UserStaticSymbols = new Dictionary<string, string>
+        {
+            ["\\lambda"] = "λ"
+        };
+        var item = new TranslationItem(input, args);
+
+        // Act
+        var result = LatexTranslation.Translate(item);
+
+        // Assert
+        Assert.Equal(expectedResult, result.Result);
+    }
 }
